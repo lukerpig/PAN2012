@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
+        <title>Vimeo Froogaloop API Playground</title>
+        <style>
+            body {margin: 20px 0px 0px 0px; padding: 0 10%;}
+
+            iframe {
+                display:block;
+                border:0;
+            }
+
+            .console .clear {
+                margin-top: 10px;
+            }
+			
+			.notYet {
+				color: #999;
+			}
+			
+			.current {
+				color: #3CF;
+			}
+			
+			.already { 
+				color: #30C;
+			}
+			
+			#links p {
+				display: inline;
+				margin-right: 10px;
+			}
+        </style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>   
+
+		<script type="text/javascript">
+			var wh=window.innerHeight, ww=window.innerWidth;
+			var videoTime=0, videoPercent=0;
+			var numbers;
+			var storyActive;
+			var froogaloop;
+			var iconsDiv=document.getElementById("links");
+			var data = [
+				{
+					label : "story1",
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story2",
+					cuePointBegin: 12.000,
+					cuePointEnd: 20.000,
+					story: "reveal2"
+					
+				},
+				{
+					label : "story3",
+					cuePointBegin: 20.000,
+					cuePointEnd: 30.000,
+					story: "reveal3"
+				}
+			];
+			
+			function setLayout(){
+				//alert(iconsDiv.offsetHeight);
+				//d3.select("body").style("margin-bottom",iconsDiv+"px")	
+			}
+			
+			function currentIcon(videoTime) {
+				for(var i in data) {
+					var d = data[i];
+					if (d.cuePointBegin <= videoTime && videoTime < d.cuePointEnd) {
+						return d;
+					}
+				}
+				return null
+			}
+	   
+			function iconColor(d){
+				if (videoTime < d.cuePointBegin){
+					return "#999";	
+				} 
+				if (videoTime >= d.cuePointEnd) {
+					return "#30C";
+				}
+				return "#3CF";
+			}
+			
+			function iconSize(d){
+				var normalSize = "16px";
+				var highlightedSize = "40px";
+				if (videoTime < d.cuePointBegin){
+					return normalSize;	
+				} 
+			
+				if (videoTime >= d.cuePointEnd) {
+					return normalSize;
+				}
+			
+				return highlightedSize;
+			}
+
+			var previousIcon = null;
+			function updateIcons(){
+				
+				var current = currentIcon(videoTime);
+
+				if (videoTime < 5){
+					current="begin";
+				} else if (videoTime > 10 && videoTime < 12){
+					current="betwee1and2";
+				} else if (videoTime > 30){
+					current="afterstories";
+				}				
+
+				if (previousIcon != current) {
+					previousIcon = current;			
+	   				numbers.transition()
+				 	   .duration(1000)
+					   .style("color",iconColor)
+					   .style("font-size",iconSize);
+				}
+			}
+			
+			function pageLoad(){
+				
+				numbers= d3.select("#links").selectAll("p").data(data);
+				numbers.enter().append("p")
+					.text(function(d){return d.label})
+					.style("color",iconColor)
+					.style("fontSize",iconSize);
+					
+				var curStory, prevStory="undefined";
+				
+				var onclickDuration=1000;
+				var clickedVidWidth = 300;
+				
+				function showReveal(){
+					d3.select("#"+curStory)
+						.style("display","block");
+					d3.select("#revealContainer")
+						.transition()
+							.duration(onclickDuration)
+							.style("margin-top","90px")
+				}
+				
+				function hideReveal(){
+					d3.select("#revealContainer")
+						.transition()
+							.duration(onclickDuration-250)
+							.style("margin-top",wh*1+"px")
+							.each("end",function(){
+								d3.selectAll("#revealContainer div")
+									.style("display","none");
+								if(storyActive){
+									showReveal();
+								}
+							})
+				}
+				var container = document.getElementById("container")
+				function returnVid(){
+					window.location.hash="";
+					var containerWidth = container.offsetWidth;
+					d3.select("#player_1")
+						.transition()
+							.duration(onclickDuration)
+							.style("width",containerWidth+"px")
+							.style("height",containerWidth*9/16+"px");
+					prevStory="undefined"
+				}
+				
+				
+				numbers.on("click", function(d){
+					window.location.hash=d.story;
+					curStory = d.story;
+					storyActive = true;
+					froogaloop.api('pause');
+					d3.select("#player_1")
+						.transition()
+							.duration(onclickDuration)
+							.style("width",clickedVidWidth+"px")
+							.style("height", clickedVidWidth*9/16+"px");
+					
+					if(prevStory=="undefined"){
+						showReveal();	
+					} else if (curStory != prevStory){
+						hideReveal();	
+					} else {
+						return;	
+					}
+					prevStory = curStory;
+				});
+				
+				updateIcons();
+				
+				//WINDOW RESIZING
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var wh2=window.innerHeight;
+					var ww2=window.innerWidth;
+					
+					if(wh2!=wh){//NEW HEIGHT
+						wh = wh2;
+						revealChange();
+					} 
+					if(ww2!=ww){//NEW WIDTH
+						ww = ww2;
+						vidSize();
+					} 
+				}
+				
+				var videoFrame=document.getElementById("player_1");
+				vidSize();
+				function vidSize(){
+					var vidFrameWidth = videoFrame.offsetWidth;
+					vidFrameHieght = vidFrameWidth*9/16;
+					videoFrame.style.height = vidFrameHieght+"px";
+				}
+	
+				var revealContainer = document.getElementById("revealContainer");
+				revealChange();
+				function revealChange(){
+					if(!storyActive){
+						revealContainer.style.marginTop = wh*1+"px";
+					}
+					revealContainer.style.maxHeight = wh-90+"px";
+				}
+				
+				//VIMEO VIMEO VIMEO//
+				//DURATION = video time length; VIMEOPLAYERS = how froogaloop finds the right iFrame; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
+				var duration;
+                var vimeoPlayers = document.querySelectorAll('iframe');
+				var timeInt;
+				var isPlaying = false;
+
+				function onPlay(){
+					froogaloop.addEvent('play', function(data) {
+						timeInt=setInterval(function(){getTime()},50);
+						if(storyActive){
+							storyActive=false;
+							hideReveal();
+							returnVid();
+						}
+					});
+				}
+
+				function onPause(){
+					froogaloop.addEvent('pause', function(data) {
+						isPlaying = false;
+						window.clearInterval(timeInt)
+					});
+				}
+				
+				function onSeek(){
+					froogaloop.addEvent('seek', function(data) { 
+						timeManip (data.seconds);
+					});
+				}
+				
+				function getTime(){
+					froogaloop.api('getCurrentTime', function (value, player_id) {
+						timeManip (value);
+					});
+				}
+				
+				function timeManip(seconds){
+					console.log(seconds);
+					//alert("TEST2");
+					videoTime = seconds;
+					videoPercent = seconds/duration;
+					updateIcons();
+				}
+
+                $f(vimeoPlayers[0]).addEvent('ready', ready);
+                function ready(player_id) {
+					
+                    // Keep a reference to Froogaloop for this player
+                    froogaloop = $f(player_id);
+
+					froogaloop.api('getDuration', function (value, player_id) {
+						duration = value;
+					});
+
+					onPlay();
+					onPause();
+					onSeek();
+
+					//froogaloop.addEvent('finish', function(data) {});
+                }
+			}//END ONPAGELOAD
+			
+			function addEvent(element, eventName, callback) {
+				
+				if (element.addEventListener) {
+					element.addEventListener(eventName, callback, false);
+				}
+				else {
+					element.attachEvent(eventName, callback, false);
+				}
+			}	
+        </script>
+    </head>
+    <body>
+		<div id="links" style="position: fixed; bottom: 0; left: 45%; width: 1000%; margin: 0px auto;"></div>
+    	<!--<div id="spin" style="position: fixed; top: 0;">zwater</div>-->
+        <div id="wrapper">
+            <div id="container" style="max-width: 1400px; margin: 0px auto;">
+				<div class="logo" style="float: left;"><a href="http://lukerpig.com/d3/react.html"><img src="logo.png"/></a></div>
+				<div class="topLinks" style="float: right;">Link1 - Link2 - Link3</div>
+				<div style="clear: both"></div>
+				<div id="vid-container" style="width:100%; position: relative; margin: 0px auto;">
+					<iframe id="player_1" src="http://player.vimeo.com/video/30830412?api=1&amp;player_id=player_1" frameborder="0" style="width:100%;"></iframe>
+				</div>
+            </div>
+		<div id="revealHider" style="position: fixed; top: 0; bottom: 0; left:0; right:0; border: 2px solid red; overflow: hidden; z-index:-1;">
+			<div id="revealContainer" style="margin:0 auto; background-color:#F69; width:80%; max-width: 1400px; overflow-y: scroll; overflow-x: hidden;">
+				<div id="reveal1" style="display:none;">
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+					<p>hi</p>
+				</div>
+				<div id="reveal2" style="display:none;">
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+					<p>2</p>
+				</div>
+				<div id="reveal3" style="display:none;">
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+					<p>3</p>
+				</div>
+			</div>
+		</div>
+        <script>
+				
+        </script>
+		<script type='text/javascript'>
+			pageLoad();
+		</script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<script src="http://d3js.org/d3.v2.js"></script>
+
+		<script>
+
+			function onLoad(){
+
+				d3.selectAll("p").style("color", "white").style("line-height","12px");
+
+				d3.select("body").style("background-color", "black");
+
+			}
+
+			var animateTimes=0;
+
+			function animate(){
+
+				animateTimes++;
+
+				d3.selectAll("p").transition()
+
+					.duration(400)
+
+					.style("font-size", 30*animateTimes + "px");
+
+			}	
+
+
+
+		</script>
+
+	</head>
+
+	<body onload="onLoad()">
+
+		<p>dog</p>
+
+		<p>cat</p>
+
+		<p>bird</p>
+
+		<button type="button" onClick="animate()">Test</button> 
+
+	</body>
+
+</html>
