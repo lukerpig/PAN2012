@@ -1,20 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
         <title>Vimeo Froogaloop API Playground</title>
         <style>
-            body {margin: 20px 0px 0px 0px; padding: 0;}
+            body {margin: 20px 0px 0px 0px; padding: 0; background-image:url(wave_background3.png); background-position: top center; background-color: #91CCD0; background-repeat: no-repeat; background-size:100% auto;}
 
             iframe {
                 display:block;
                 border:0;
             }
-
-            .console .clear {
-                margin-top: 10px;
-            }
-			
+						
 			.notYet {
 				color: #999;
 			}
@@ -139,21 +136,21 @@
 				var clickedVidWidth = 300;
 				
 				function showReveal(){
+					console.log(curStory);
 					d3.select("#"+curStory)
-						.style("display","block");
-					d3.select("#revealContainer")
+						.style("display","block")
 						.transition()
 							.duration(onclickDuration)
 							.style("margin-top","90px")
 				}
 				
 				function hideReveal(){
-					d3.select("#revealContainer")
+					d3.select("#"+prevStory)
 						.transition()
 							.duration(onclickDuration-250)
 							.style("margin-top",wh*1+"px")
 							.each("end",function(){
-								d3.selectAll("#revealContainer div")
+								d3.selectAll("#revealHider iframe")
 									.style("display","none");
 								if(storyActive){
 									showReveal();
@@ -178,13 +175,14 @@
 					window.location.hash=d.story;
 					curStory = d.story;
 					storyActive = true;
-					froogaloop.api('pause');
+					if(froogaloop){
+						froogaloop.api('pause');
+					}
 					d3.select("#player_1")
 						.transition()
 							.duration(onclickDuration)
 							.style("width",clickedVidWidth+"px")
 							.style("height", clickedVidWidth*9/16+"px");
-					
 					if(prevStory==null){
 						showReveal();	
 						storyChange()
@@ -231,24 +229,24 @@
 					videoFrame.style.height = vidFrameHieght+"px";
 				}
 	
-				var revealContainer = document.getElementById("revealContainer");
+				var revealFrames = d3.select("#revealHider").selectAll("iframe");
 				revealChange();
 				function revealChange(){
 					if(!storyActive){
-						revealContainer.style.marginTop = wh*1+"px";
+						revealFrames.style("margin-top",wh*1+"px");
 					}
-					revealContainer.style.maxHeight = wh-90+"px";
+					revealFrames.style("max-height",wh-90+"px");
 				}
 				
 				//VIMEO VIMEO VIMEO//
 				//DURATION = video time length; VIMEOPLAYERS = how froogaloop finds the right iFrame; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
 				var duration;
-                var vimeoPlayers = document.querySelectorAll('iframe');
+                var vimeoPlayers = document.getElementById("player_1");
 				var timeInt;
 				var isPlaying = false;
 
 
-                $f(vimeoPlayers[0]).addEvent('ready', ready);
+                $f(vimeoPlayers).addEvent('ready', ready);
                 function ready(player_id) {
 					
                     // Keep a reference to Froogaloop for this player
@@ -279,7 +277,6 @@
 					
 					function timeManip(seconds){
 						console.log(seconds);
-						//alert("TEST2");
 						videoTime = seconds;
 						videoPercent = seconds/duration;
 						updateIcons();
@@ -317,53 +314,9 @@
 				</div>
             </div>
 		<div id="revealHider" style="position: fixed; top: 0; bottom: 0; left:0; right:0; border: 2px solid red; overflow: hidden; z-index:-1;">
-			<div id="revealContainer" style="margin:0 auto; background-color:#F69; width:80%; max-width: 1400px; overflow-y: scroll; overflow-x: hidden;">
-				<iframe src="story1.html" style="width:100%; margin: 0px; padding: 0px;" scrolling="yes"></iframe>
-				<div id="reveal2" style="display:none;">
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-					<p>2</p>
-				</div>
-				<div id="reveal3" style="display:none;">
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-					<p>3</p>
-				</div>
-			</div>
+				<iframe id="reveal1" src="story1.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
+				<iframe id="reveal2" src="story2.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
+				<iframe id="reveal3" src="story1.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
 		</div>
         <script>
 				
