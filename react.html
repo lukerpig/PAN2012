@@ -3,9 +3,9 @@
 <html lang="en">
     <head>
         <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
-        <title>Vimeo Froogaloop API Playground</title>
+        <title>H2OWSOME</title>
         <style>
-            body {margin: 20px 0px 0px 0px; padding: 0; background-image:url(wave_background3.png); background-position: top center; background-color: #91CCD0; background-repeat: no-repeat; background-size:100% auto;}
+            body {margin: 20px 0px 0px 0px; padding: 0; background-image:url(wave_background4.png); background-position: top center; background-color: #93ced2; background-repeat: no-repeat; background-size:100% auto;}
 
             iframe {
                 display:block;
@@ -38,7 +38,7 @@
 			var numbers;
 			var storyActive;
 			var froogaloop;
-			var iconsDiv=document.getElementById("links");
+			var isMoving = false;
 			var data = [
 				{
 					label : "story1",
@@ -60,11 +60,6 @@
 					story: "reveal3"
 				}
 			];
-			
-			function setLayout(){
-				//alert(iconsDiv.offsetHeight);
-				//d3.select("body").style("margin-bottom",iconsDiv+"px")	
-			}
 			
 			function currentIcon(videoTime) {
 				for(var i in data) {
@@ -123,51 +118,63 @@
 			}
 			
 			function pageLoad(){
+				var container = document.getElementById("container");
+				var videoFrame=d3.select("#player_1");
+				var links=d3.select("#links");
+				var revealFrames = d3.select("#revealHider").selectAll("iframe");
+				var curStory, prevStory=null;
+				//Animation Variables
+				var onclickDuration=700;
+				var clickedVidWidth = 300;
 				
-				numbers= d3.select("#links").selectAll("p").data(data);
+				numbers= links.selectAll("p").data(data);
 				numbers.enter().append("p")
 					.text(function(d){return d.label})
 					.style("color",iconColor)
 					.style("fontSize",iconSize);
 					
-				var curStory, prevStory=null;
 				
-				var onclickDuration=1000;
-				var clickedVidWidth = 300;
 				
 				function showReveal(){
-					console.log(curStory);
+					isMoving = true;
 					d3.select("#"+curStory)
 						.style("display","block")
 						.transition()
+							.ease("quad-out")
 							.duration(onclickDuration)
-							.style("margin-top","90px")
+							.style("margin-top","90px");
+					isMoving = false;
 				}
 				
 				function hideReveal(){
+					isMoving = true;
 					d3.select("#"+prevStory)
 						.transition()
 							.duration(onclickDuration-250)
 							.style("margin-top",wh*1+"px")
 							.each("end",function(){
-								d3.selectAll("#revealHider iframe")
+								revealFrames
 									.style("display","none");
 								if(storyActive){
 									showReveal();
+								} else {
+									isMoving = false;	
 								}
 							})
 				}
-				var container = document.getElementById("container")
 				function returnVid(){
+					var containerWidth = container.offsetWidth;
+					
+					isMoving = true;
 					storyActive=false;
 					window.location.hash="";
-					var containerWidth = container.offsetWidth;
-					d3.select("#player_1")
+					videoFrame
 						.transition()
 							.duration(onclickDuration)
 							.style("width",containerWidth+"px")
 							.style("height",containerWidth*9/16+"px");
 					prevStory=null
+					isMoving = false;
 				}
 				
 				
@@ -178,22 +185,24 @@
 					if(froogaloop){
 						froogaloop.api('pause');
 					}
-					d3.select("#player_1")
+					videoFrame
 						.transition()
 							.duration(onclickDuration)
 							.style("width",clickedVidWidth+"px")
 							.style("height", clickedVidWidth*9/16+"px");
+							
 					if(prevStory==null){
 						showReveal();	
 						storyChange()
 					} else if (curStory != prevStory){
-						hideReveal();
+							hideReveal();
 						storyChange()
 					} else {
-						hideReveal();
+							hideReveal();
 						returnVid();
 						froogaloop.api('play');
 					}
+					
 					function storyChange(){
 						prevStory = curStory;
 					}
@@ -218,18 +227,17 @@
 					} 
 				}
 				
-				var videoFrame=document.getElementById("player_1");
 				vidSize();
 				function vidSize(){
-					if(videoFrame.style.width != "100%" && !storyActive){
-						videoFrame.style.width = "100%"
+					var vidFrameWidth = parseInt(videoFrame.style("width"));
+					videoFrame.style("height",vidFrameWidth*9/16+"px");
+
+					if(videoFrame.style("width") != "100%" && !storyActive){
+						videoFrame.style("width","100%");
 					}
-					var vidFrameWidth = videoFrame.offsetWidth;
-					vidFrameHieght = vidFrameWidth*9/16;
-					videoFrame.style.height = vidFrameHieght+"px";
+					
 				}
 	
-				var revealFrames = d3.select("#revealHider").selectAll("iframe");
 				revealChange();
 				function revealChange(){
 					if(!storyActive){
@@ -239,14 +247,14 @@
 				}
 				
 				//VIMEO VIMEO VIMEO//
-				//DURATION = video time length; VIMEOPLAYERS = how froogaloop finds the right iFrame; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
+				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
 				var duration;
-                var vimeoPlayers = document.getElementById("player_1");
 				var timeInt;
 				var isPlaying = false;
+				fVideo = document.getElementById("player_1");
 
 
-                $f(vimeoPlayers).addEvent('ready', ready);
+                $f(fVideo).addEvent('ready', ready);
                 function ready(player_id) {
 					
                     // Keep a reference to Froogaloop for this player
