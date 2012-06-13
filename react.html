@@ -7,27 +7,14 @@
         <style>
             body {margin: 20px 0px 0px 0px; padding: 0; background-image:url(wave_background4.png); background-position: top center; background-color: #93ced2; background-repeat: no-repeat; background-size:100% auto;}
 
-            iframe {
-                display:block;
-                border:0;
-            }
+            iframe {display:block; border:0;}
 						
-			.notYet {
-				color: #999;
-			}
+			#links p {display: inline; margin-right: 10px;}
+
+			.vid-click{position: absolute; z-index: 2; display: none; border: 1px solid blue;}
 			
-			.current {
-				color: #3CF;
-			}
-			
-			.already { 
-				color: #30C;
-			}
-			
-			#links p {
-				display: inline;
-				margin-right: 10px;
-			}
+			.story-frame {max-width: 1400px; width: 80%; height: 100%; margin-left: auto; margin-right: auto; border: 0px; display: none;}
+
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
         <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>   
@@ -35,7 +22,6 @@
 		<script type="text/javascript">
 			var wh=window.innerHeight, ww=window.innerWidth;
 			var videoTime=0, videoPercent=0;
-			var numbers;
 			var storyActive;
 			var froogaloop;
 			var isMoving = false;
@@ -61,61 +47,16 @@
 				}
 			];
 			
-			function currentIcon(videoTime) {
-				for(var i in data) {
-					var d = data[i];
-					if (d.cuePointBegin <= videoTime && videoTime < d.cuePointEnd) {
-						return d;
-					}
+			var vidClickData = [
+				{
+					top: "88.6%",
+					left: "3.7%",
+					width: "13.1%",
+					height: "5%",
+					start: 5,
+					end: 10					
 				}
-				return null
-			}
-	   
-			function iconColor(d){
-				if (videoTime < d.cuePointBegin){
-					return "#999";	
-				} 
-				if (videoTime >= d.cuePointEnd) {
-					return "#30C";
-				}
-				return "#3CF";
-			}
-			
-			function iconSize(d){
-				var normalSize = "16px";
-				var highlightedSize = "40px";
-				if (videoTime < d.cuePointBegin){
-					return normalSize;	
-				} 
-			
-				if (videoTime >= d.cuePointEnd) {
-					return normalSize;
-				}
-			
-				return highlightedSize;
-			}
-
-			var previousIcon = null;
-			function updateIcons(){
-				
-				var current = currentIcon(videoTime);
-
-				if (videoTime < 5){
-					current="begin";
-				} else if (videoTime > 10 && videoTime < 12){
-					current="betwee1and2";
-				} else if (videoTime > 30){
-					current="afterstories";
-				}				
-
-				if (previousIcon != current) {
-					previousIcon = current;			
-	   				numbers.transition()
-				 	   .duration(1000)
-					   .style("color",iconColor)
-					   .style("font-size",iconSize);
-				}
-			}
+			]
 			function pageLoad(){
 				var container = document.getElementById("container");
 				var videoFrame=d3.select("#player_1");
@@ -127,69 +68,148 @@
 				var clickedVidWidth = 300;
 				var storyFrameTop = 90;
 				
-				numbers= links.selectAll("p").data(data);
+				//D3 POPULATE WITH DATA
+				var numbers= links.selectAll("p").data(data);
 				numbers.enter().append("p")
 					.text(function(d){return d.label})
 					.style("color",iconColor)
 					.style("fontSize",iconSize);
 					
+				var vidClick = d3.select("#vid-container").selectAll("div").data(vidClickData);
+				vidClick.enter().append("div")
+					.attr("class","vid-click")
+					.style("width", function(d){return d.width})
+					.style("height", function(d){return d.height})
+					.style("top", function(d){return d.top})
+					.style("left", function(d){return d.left})
+
+				<!--<iframe class="story-frame" id="reveal1" src="story1.html"></iframe>
+				<!--<iframe class="story-frame" id="reveal2" src="story2.html"></iframe>
+				<!--<iframe class="story-frame" id="reveal3" src="story1.html"></iframe>
+
+				var stories = revealFrames.data(data);
+				stories.enter().append("iframe")
+					.attr("class","story-frame")
+					.attr("id", function(d){return d.story})
+					.attr("src", function(d){return d.label+".html"})
+					.style("margin-top", function(){return wh+"px"});
+					
+				
+			///////////////////VIDEO TIME TRACK CODE///////////////////
+				function timeManip(seconds){
+					console.log(seconds);
+					videoTime = seconds;
+					videoPercent = seconds/duration;
+					updateIcons();
+					updateVidClick();
+				}
+				
+			///////////////////VID CLICK CODE///////////////////
+				function currentVidClick(videoTime) {
+					for(var i in vidClickData) {
+						var d = vidClickData[i];
+						if (d.start <= videoTime && videoTime < d.end) {
+							return d;
+						}
+					}
+					return null
+				}
+				
+				var previousVidClick = null;
+				
+				function updateVidClick(){
+					var current = currentVidClick(videoTime);
+					if (previousVidClick != current) {
+						previousVidClick = current;			
+						vidClick.style("display",vidClickDisplay)
+					}
+				}
+				
+				function vidClickDisplay(d){
+					if (videoTime > d.start && videoTime < d.end ){
+						return "block";	
+					} 
+					return "none";
+				}
+				
+				updateVidClick();
+			
+			
+			///////////////////ICON CHANGE CODE///////////////////
+				function currentIcon(videoTime) {
+					for(var i in data) {
+						var d = data[i];
+						if (d.cuePointBegin <= videoTime && videoTime < d.cuePointEnd) {
+							return d;
+						}
+					}
+					return null
+				}
+				
+				var previousIcon = null;
+				
+				function updateIcons(){
+					
+					var current = currentIcon(videoTime);
+	
+					if (videoTime < 5){
+						current="begin";
+					} else if (videoTime > 10 && videoTime < 12){
+						current="betwee1and2";
+					} else if (videoTime > 30){
+						current="afterstories";
+					}		
+							
+					if (previousIcon != current) {
+						previousIcon = current;			
+						numbers.transition()
+						   .duration(1000)
+						   .style("color",iconColor)
+						   .style("font-size",iconSize);
+					}
+				}
+				
+				function iconColor(d){
+					if (videoTime < d.cuePointBegin){
+						return "#999";	
+					} 
+					if (videoTime >= d.cuePointEnd) {
+						return "#30C";
+					}
+					return "#3CF";
+				}
+				
+				function iconSize(d){
+					var normalSize = "16px";
+					var highlightedSize = "40px";
+					if (videoTime < d.cuePointBegin){
+						return normalSize;	
+					} 
+				
+					if (videoTime >= d.cuePointEnd) {
+						return normalSize;
+					}
+				
+					return highlightedSize;
+				}
+				
+				updateIcons();
+				
+			///////////////////HASH CODE///////////////////
 				if(window.location.hash){
 					storyActive = true;
 					var location = String(window.location.hash)
 					var storyFrame = d3.select(location);
 					curStory = location.substr(1);
 					prevStory = location.substr(1);
-					storyFrame.style("display","block").style("margin-top", storyFrameTop+"px");
+					storyFrame.style("display","block").style("margin-top", 90+"px");
 					videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");
 				}
 				
-				function showReveal(){
-					isMoving = true;
-					d3.select("#"+curStory)
-						.style("display","block")
-						.transition()
-							.ease("exp-in-out")
-							.duration(onclickDuration)
-							.style("margin-top",storyFrameTop+"px");
-					isMoving = false;
-				}
-				
-				function hideReveal(){
-					isMoving = true;
-					d3.select("#"+prevStory)
-						.transition()
-							.duration(onclickDuration-250)
-							.style("margin-top",wh*1+"px")
-							.each("end",function(){
-								revealFrames
-									.style("display","none");
-								if(storyActive){
-									showReveal();
-								} else {
-									isMoving = false;	
-								}
-							})
-				}
-				function returnVid(){
-					var containerWidth = container.offsetWidth;
-					
-					isMoving = true;
-					storyActive=false;
-					window.location.hash="";
-					videoFrame
-						.transition()
-							.duration(onclickDuration)
-							.style("width",containerWidth+"px")
-							.style("height",containerWidth*9/16+"px");
-					prevStory=null
-					isMoving = false;
-				}
-				
-				
+			///////////////////STORY CODE///////////////////
 				numbers.on("click", function(d){
 					window.location.hash=d.story;
 					curStory = d.story;
-					storyActive = true;
 					if(froogaloop){
 						froogaloop.api('pause');
 					}
@@ -216,9 +236,50 @@
 					}
 				});
 				
-				updateIcons();
+				function showReveal(){
+					storyActive = true;
+					isMoving = true;
+					d3.select("#"+curStory)
+						.style("display","block")
+						.transition()
+							.ease("exp-in-out")
+							.duration(onclickDuration)
+							.style("margin-top",storyFrameTop+"px");
+					isMoving = false;
+				}
 				
-				//WINDOW RESIZING
+				function hideReveal(){
+					isMoving = true;
+					d3.select("#"+prevStory)
+						.transition()
+							.duration(onclickDuration-250)
+							.style("margin-top",wh*1+"px")
+							.each("end",function(){
+								stories
+									.style("display","none");
+								if(storyActive){
+									showReveal();
+								} else {
+									isMoving = false;	
+								}
+							})
+				}
+				function returnVid(){
+					var containerWidth = container.offsetWidth;
+					
+					isMoving = true;
+					storyActive=false;
+					window.location.hash="";
+					videoFrame
+						.transition()
+							.duration(onclickDuration)
+							.style("width",containerWidth+"px")
+							.style("height",containerWidth*9/16+"px");
+					prevStory=null
+					isMoving = false;
+				}
+				
+			///////////////////WINDOW RESIZING///////////////////
 				window.addEventListener('resize', windowResize, false);
 				
 				function windowResize(){
@@ -254,7 +315,7 @@
 					revealFrames.style("max-height",wh-90+"px");
 				}
 				
-				//VIMEO VIMEO VIMEO//
+			///////////////////VIMEO VIMEO VIMEO///////////////////
 				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
 				var duration;
 				var timeInt;
@@ -291,13 +352,6 @@
 						});
 					}
 					
-					function timeManip(seconds){
-						console.log(seconds);
-						videoTime = seconds;
-						videoPercent = seconds/duration;
-						updateIcons();
-					}
-					
 					froogaloop.api('getDuration', function (value, player_id) {
 						duration = value;
 					});
@@ -317,7 +371,7 @@
 			}	
         </script>
     </head>
-    <body>
+    <body onload="pageLoad()">
 		<div id="links" style="position: fixed; bottom: 0; left: 45%; width: 1000%; margin: 0px auto;"></div>
     	<!--<div id="spin" style="position: fixed; top: 0;">zwater</div>-->
         <div id="wrapper">
@@ -326,20 +380,13 @@
 				<div class="topLinks" style="float: right;">Link1 - Link2 - Link3</div>
 				<div style="clear: both"></div>
 				<div id="vid-container" style="width:100%; position: relative; margin: 0px auto;">
-					<div style="postion: absolute; width: 13.1%; height: 5%; left: 3.7%; top: 88.6%; background-color: #36C">dx</div>
-					<iframe id="player_1" src="http://player.vimeo.com/video/43933265?api=1&amp;player_id=player_1" frameborder="0" style="position: absolute; top: 0; width:100%;"></iframe>
+					<iframe id="player_1" src="http://player.vimeo.com/video/11712103?api=1&amp;player_id=player_1" frameborder="0" style="width:100%;"></iframe>
 				</div>
             </div>
 		<div id="revealHider" style="position: fixed; top: 0; bottom: 0; left:0; right:0; border: 2px solid red; overflow: hidden; z-index:-1;">
-				<iframe id="reveal1" src="story1.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
-				<iframe id="reveal2" src="story2.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
-				<iframe id="reveal3" src="story1.html" style="max-width: 1400px; width:80%; height: 100%; margin: 0 auto; display: none;"></iframe>
+				<!--<iframe class="story-frame" id="reveal1" src="story1.html"></iframe>
+				<iframe class="story-frame" id="reveal2" src="story2.html"></iframe>
+				<iframe class="story-frame" id="reveal3" src="story1.html"></iframe>-->
 		</div>
-        <script>
-				
-        </script>
-		<script type='text/javascript'>
-			pageLoad();
-		</script>
     </body>
 </html>
