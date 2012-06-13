@@ -116,7 +116,6 @@
 					   .style("font-size",iconSize);
 				}
 			}
-			
 			function pageLoad(){
 				var container = document.getElementById("container");
 				var videoFrame=d3.select("#player_1");
@@ -126,6 +125,7 @@
 				//Animation Variables
 				var onclickDuration=700;
 				var clickedVidWidth = 300;
+				var storyFrameTop = 90;
 				
 				numbers= links.selectAll("p").data(data);
 				numbers.enter().append("p")
@@ -133,16 +133,24 @@
 					.style("color",iconColor)
 					.style("fontSize",iconSize);
 					
-				
+				if(window.location.hash){
+					storyActive = true;
+					var location = String(window.location.hash)
+					var storyFrame = d3.select(location);
+					curStory = location.substr(1);
+					prevStory = location.substr(1);
+					storyFrame.style("display","block").style("margin-top", storyFrameTop+"px");
+					videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");
+				}
 				
 				function showReveal(){
 					isMoving = true;
 					d3.select("#"+curStory)
 						.style("display","block")
 						.transition()
-							.ease("quad-out")
+							.ease("exp-in-out")
 							.duration(onclickDuration)
-							.style("margin-top","90px");
+							.style("margin-top",storyFrameTop+"px");
 					isMoving = false;
 				}
 				
@@ -318,7 +326,8 @@
 				<div class="topLinks" style="float: right;">Link1 - Link2 - Link3</div>
 				<div style="clear: both"></div>
 				<div id="vid-container" style="width:100%; position: relative; margin: 0px auto;">
-					<iframe id="player_1" src="http://player.vimeo.com/video/11712103?api=1&amp;player_id=player_1" frameborder="0" style="width:100%;"></iframe>
+					<div style="postion: absolute; width: 13.1%; height: 5%; left: 3.7%; top: 88.6%; background-color: #36C">dx</div>
+					<iframe id="player_1" src="http://player.vimeo.com/video/43933265?api=1&amp;player_id=player_1" frameborder="0" style="position: absolute; top: 0; width:100%;"></iframe>
 				</div>
             </div>
 		<div id="revealHider" style="position: fixed; top: 0; bottom: 0; left:0; right:0; border: 2px solid red; overflow: hidden; z-index:-1;">
