@@ -135,19 +135,21 @@
 							.style("width",size+"px")
 							.style("height", size*9/16+"px");
 				}
-				sizeVid(containerWidth, 0);		
+				sizeVid(containerWidth, 0);
+				
+				function fapi(event){
+					if(froogaloop){
+						froogaloop.api(event);
+					}
+				}
 						
 				function shrinkVid(){
-					if(froogaloop){
-						froogaloop.api('pause');
-					}
+					fapi("pause");
 					sizeVid(clickedVidWidth, onclickDuration)
 				}
 				
 				function returnVid(){
-					if(froogaloop){
-						froogaloop.api('play');
-					}
+					fapi("play");
 					
 					storyActive=false;
 					window.location.hash="";
