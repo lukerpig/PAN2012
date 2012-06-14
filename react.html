@@ -21,7 +21,7 @@
 
 		<script type="text/javascript">
 			var videoTime=0, videoPercent=0;
-			var storyActive;
+			//var storyActive;
 			var froogaloop;
 			var isMoving = false;
 			var data = [
@@ -77,7 +77,7 @@
 				var onclickDuration=700;
 				var clickedVidWidth = 300;
 				var storyFrameTop = 90;
-				var containerWidth = (ww*.8 >= 1400) ? 1400 : ww*.8;
+				var containerWidth = (ww >= 1750) ? 1400 : ww*.8;
 				
 				//D3 POPULATE WITH DATA
 				var numbers= links.selectAll("p").data(data);
@@ -106,7 +106,7 @@
 				function timeManip(seconds){
 					//console.log(seconds);
 					videoTime = seconds;
-					videoPercent = seconds/duration;
+					//videoPercent = seconds/duration;
 					updateIcons();
 					updateVidClick();
 				}
@@ -115,15 +115,12 @@
 				numbers.on("click", function(d){
 					window.location.hash=d.story;
 					curStory = d.story;
-					//console.log("curStory: " + curStory + " prevStory: " + prevStory);
 					if(prevStory==null){
 						shrinkVid();
-						showReveal();	
 					} else if (curStory != prevStory){
 						hideReveal();
 					} else {
 						returnVid();
-						hideReveal();
 					}
 						prevStory = curStory;
 				});
@@ -135,7 +132,6 @@
 							.style("width",size+"px")
 							.style("height", size*9/16+"px");
 				}
-				sizeVid(containerWidth, 0);
 				
 				function fapi(event){
 					if(froogaloop){
@@ -145,19 +141,20 @@
 						
 				function shrinkVid(){
 					fapi("pause");
+					showReveal();
 					sizeVid(clickedVidWidth, onclickDuration)
 				}
 				
 				function returnVid(){
 					fapi("play");
-					
-					storyActive=false;
+					//storyActive=false;
 					window.location.hash="";
+					hideReveal();
 					sizeVid(containerWidth, onclickDuration);
 				}
 				
 				function showReveal(){
-					storyActive = true;
+					//storyActive = true;
 					isMoving = true;
 					d3.select("#"+curStory)
 						.style("display","block")
@@ -177,7 +174,7 @@
 							.each("end",function(){
 								stories
 									.style("display","none");
-								if(storyActive){
+								if(window.location.hash){
 									showReveal();
 								} else {
 									prevStory=null
@@ -190,7 +187,6 @@
 				vidClick.on("click", function(d){
 					window.location.hash=d.story;
 					curStory = d.story;
-					showReveal();
 					shrinkVid();
 					prevStory = curStory;
 				});
@@ -286,7 +282,7 @@
 				
 			///////////////////HASH CODE///////////////////
 				if(window.location.hash){
-					storyActive = true;
+					//storyActive = true;
 					var location = String(window.location.hash)
 					var storyFrame = d3.select(location);
 					curStory = location.substr(1);
@@ -294,6 +290,8 @@
 					storyFrame.style("display","block").style("margin-top", storyFrameTop+"px");
 					sizeVid(clickedVidWidth, 0);
 				//	videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");
+				} else {
+					sizeVid(containerWidth, 0);
 				}
 				
 				
@@ -304,6 +302,11 @@
 					var wh2=window.innerHeight;
 					var ww2=window.innerWidth;
 					
+					if(window.location.hash){
+						alert("HASH");	
+					} else if (!window.location.hash){
+						alert("NOHASH")	
+					}
 					if(wh2!=wh){//NEW HEIGHT
 						wh = wh2;
 						revealChange();
@@ -311,7 +314,9 @@
 					if(ww2!=ww){//NEW WIDTH
 						ww = ww2;
 						containerWidth = (ww >= 1750) ? 1400 : ww*.8;
-						sizeVid(containerWidth, 0);
+						if(!window.location.hash){
+							sizeVid(containerWidth, 0);
+						}
 					} 
 					
 				}
@@ -343,8 +348,7 @@
 					
 						froogaloop.addEvent('play', function(data) {
 							timeInt=setInterval(function(){getTime()},50);
-							if(storyActive){
-								hideReveal();
+							if(window.location.hash){
 								returnVid();
 							}
 						});
@@ -359,9 +363,11 @@
 						});
 					
 					function getTime(){
-						froogaloop.api('getCurrentTime', function (value, player_id) {
-							timeManip (value);
-						});
+						var dog = function (value, player_id) {
+										timeManip (value);
+									}
+									
+						froogaloop.api('getCurrentTime', dog);
 					}
 					
 					froogaloop.api('getDuration', function (value, player_id) {
