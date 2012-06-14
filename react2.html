@@ -11,7 +11,7 @@
 						
 			#links p {display: inline; margin-right: 10px;}
 
-			.vid-click{position: absolute; z-index: 2; display: none; border: 0px solid blue;}
+			.vid-click{position: absolute; z-index: 2; display: none; border: 1px solid blue;}
 			
 			.story-frame {max-width: 1400px; width: 80%; height: 100%; margin-left: auto; margin-right: auto; border: 0px; display: none;}
 
@@ -48,22 +48,12 @@
 			
 			var vidClickData = [
 				{
-					top: "16.4%",
-					left: "84.1%",
-					width: "15.7%",
-					height: "20.0%",
-					story: "reveal1",
-					start: 1,
-					end: 3.41+.5					
-				},
-				{
-					top: "16.4%",
-					left: "84.1%",
-					width: "15.7%",
-					height: "20.0%",
-					story: "reveal2",
-					start: 6.7,
-					end: 9.08+.5				
+					top: "88.6%",
+					left: "3.7%",
+					width: "13.1%",
+					height: "5%",
+					start: 5,
+					end: 10					
 				}
 			]
 			function pageLoad(){
@@ -184,14 +174,6 @@
 				}
 				
 			///////////////////VID CLICK CODE///////////////////
-				vidClick.on("click", function(d){
-					window.location.hash=d.story;
-					curStory = d.story;
-					showReveal();
-					shrinkVid();
-					prevStory = curStory;
-				});
-			
 				function currentVidClick(videoTime) {
 					for(var i in vidClickData) {
 						var d = vidClickData[i];
@@ -220,6 +202,7 @@
 				}
 				
 				updateVidClick();
+			
 			
 			///////////////////ICON CHANGE CODE///////////////////
 				function currentIcon(videoTime) {
@@ -390,16 +373,22 @@
     </head>
     <body onload="pageLoad()">
 		<div id="links" style="position: fixed; bottom: 0; left: 45%; width: 1000%; margin: 0px auto;"></div>
+    	<!--<div id="spin" style="position: fixed; top: 0;">zwater</div>-->
         <div id="wrapper">
             <div id="container" style="max-width: 1400px; width:80%; margin: 0px auto;">
 				<div class="logo" style="float: left;"><a href="http://lukerpig.com/d3/react.html"><img src="logo.png"/></a></div>
 				<div class="topLinks" style="float: right;">Link1 - Link2 - Link3</div>
 				<div style="clear: both"></div>
 				<div id="vid-container" style="width:100%; position: relative; margin: 0px auto; border: 1px solid blue;">
-					<iframe id="player_1" src="http://player.vimeo.com/video/43997322?api=1&amp;player_id=player_1" frameborder="0" style="width:100%;"></iframe>
+					<div id="vidclick-div">
+						<iframe id="player_1" src="http://player.vimeo.com/video/11712103?api=1&amp;player_id=player_1" frameborder="0" style="width:100%;"></iframe>
+					</div>
 				</div>
             </div>
 		<div id="revealHider" style="position: fixed; top: 0; bottom: 0; left:0; right:0; border: 2px solid red; overflow: hidden; z-index:-1;">
+				<!--<iframe class="story-frame" id="reveal1" src="story1.html"></iframe>
+				<iframe class="story-frame" id="reveal2" src="story2.html"></iframe>
+				<iframe class="story-frame" id="reveal3" src="story1.html"></iframe>-->
 		</div>
     </body>
 </html>
