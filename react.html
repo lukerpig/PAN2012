@@ -54,7 +54,7 @@
 					height: "20.0%",
 					story: "reveal1",
 					start: 1,
-					end: 3.41+.5					
+					end: 3.41+1					
 				},
 				{
 					top: "16.4%",
@@ -63,7 +63,7 @@
 					height: "20.0%",
 					story: "reveal2",
 					start: 6.7,
-					end: 9.08+.5				
+					end: 9.08+1				
 				}
 			]
 			function pageLoad(){
@@ -77,6 +77,7 @@
 				var onclickDuration=700;
 				var clickedVidWidth = 300;
 				var storyFrameTop = 90;
+				var containerWidth = (ww*.8 >= 1400) ? 1400 : ww*.8;
 				
 				//D3 POPULATE WITH DATA
 				var numbers= links.selectAll("p").data(data);
@@ -127,30 +128,30 @@
 						prevStory = curStory;
 				});
 				
+				function sizeVid(size, duration){
+					videoFrame
+						.transition()
+							.duration(duration)
+							.style("width",size+"px")
+							.style("height", size*9/16+"px");
+				}
+				sizeVid(containerWidth, 0);		
+						
 				function shrinkVid(){
 					if(froogaloop){
 						froogaloop.api('pause');
 					}
-					videoFrame
-						.transition()
-							.duration(onclickDuration)
-							.style("width",clickedVidWidth+"px")
-							.style("height", clickedVidWidth*9/16+"px");
+					sizeVid(clickedVidWidth, onclickDuration)
 				}
 				
 				function returnVid(){
 					if(froogaloop){
 						froogaloop.api('play');
 					}
-					var containerWidth = (ww*.8 >= 1400) ? 1400 : ww*.8;
 					
 					storyActive=false;
 					window.location.hash="";
-					videoFrame
-						.transition()
-							.duration(onclickDuration)
-							.style("width",containerWidth+"px")
-							.style("height",containerWidth*9/16+"px");
+					sizeVid(containerWidth, onclickDuration);
 				}
 				
 				function showReveal(){
@@ -289,7 +290,8 @@
 					curStory = location.substr(1);
 					prevStory = location.substr(1);
 					storyFrame.style("display","block").style("margin-top", storyFrameTop+"px");
-					videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");
+					sizeVid(clickedVidWidth, 0);
+				//	videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");
 				}
 				
 				
@@ -306,21 +308,12 @@
 					} 
 					if(ww2!=ww){//NEW WIDTH
 						ww = ww2;
-						vidSize();
+						containerWidth = (ww >= 1750) ? 1400 : ww*.8;
+						sizeVid(containerWidth, 0);
 					} 
-				}
-				
-				vidSize();
-				function vidSize(){
-					var vidFrameWidth = parseInt(videoFrame.style("width"));
-					videoFrame.style("height",vidFrameWidth*9/16+"px");
-
-					if(videoFrame.style("width") != "100%" && !storyActive){
-						videoFrame.style("width","100%");
-					}
 					
 				}
-	
+				
 				revealChange();
 				function revealChange(){
 					stories.style("margin-top",function(d){
