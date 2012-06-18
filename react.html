@@ -71,7 +71,6 @@
 				var container = document.getElementById("container");
 				var videoFrame=d3.select("#player_1");
 				var links=d3.select("#links");
-				var revealFrames = d3.select("#revealHider").selectAll("iframe");
 				var curStory, prevStory=null;
 				//Animation Variables
 				var onclickDuration=700;
@@ -94,7 +93,7 @@
 					.style("top", function(d){return d.top})
 					.style("left", function(d){return d.left})
 
-				var stories = revealFrames.data(data);
+				var stories = d3.select("#revealHider").selectAll("iframe").data(data);
 				stories.enter().append("iframe")
 					.attr("class","story-frame")
 					.attr("id", function(d){return d.story})
@@ -116,13 +115,21 @@
 					window.location.hash=d.story;
 					curStory = d.story;
 					if(prevStory==null){
+						console.log("isnull: " + prevStory);
 						shrinkVid();
+						changeStory(curStory);
 					} else if (curStory != prevStory){
+						console.log("notSame: " + prevStory);
 						hideReveal();
+						changeStory(curStory);
 					} else {
+						console.log("isSame: " + prevStory);
 						returnVid();
+						changeStory(null);
 					}
-						prevStory = curStory;
+						function changeStory(x){
+							prevStory = x;
+						}
 				});
 				
 				function sizeVid(size, duration){
@@ -177,7 +184,6 @@
 								if(window.location.hash){
 									showReveal();
 								} else {
-									prevStory=null
 									isMoving = false;	
 								}
 							})
@@ -302,11 +308,6 @@
 					var wh2=window.innerHeight;
 					var ww2=window.innerWidth;
 					
-					if(window.location.hash){
-						alert("HASH");	
-					} else if (!window.location.hash){
-						alert("NOHASH")	
-					}
 					if(wh2!=wh){//NEW HEIGHT
 						wh = wh2;
 						revealChange();
@@ -329,7 +330,7 @@
 						}
 						return storyFrameTop+"px";
 					});
-					revealFrames.style("max-height",wh-90+"px");
+					stories.style("max-height",wh-90+"px");
 				}
 				
 			///////////////////VIMEO VIMEO VIMEO///////////////////
