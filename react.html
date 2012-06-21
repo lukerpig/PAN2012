@@ -98,7 +98,7 @@
 					.attr("class","story-frame")
 					.attr("id", function(d){return d.story})
 					.attr("src", function(d){return d.label+".html"})
-					.style("margin-top", function(){return wh+"px"});
+					.style("margin-top", wh+"px");
 					
 				
 			///////////////////VIDEO TIME TRACK CODE///////////////////
@@ -115,15 +115,12 @@
 					window.location.hash=d.story;
 					curStory = d.story;
 					if(prevStory==null){
-						console.log("isnull: " + prevStory);
 						shrinkVid();
 						changeStory(curStory);
 					} else if (curStory != prevStory){
-						console.log("notSame: " + prevStory);
 						hideReveal();
 						changeStory(curStory);
 					} else {
-						console.log("isSame: " + prevStory);
 						returnVid();
 						changeStory(null);
 					}
@@ -292,7 +289,7 @@
 					var location = String(window.location.hash)
 					var storyFrame = d3.select(location);
 					curStory = location.substr(1);
-					prevStory = location.substr(1);
+					prevStory = curStory;
 					storyFrame.style("display","block").style("margin-top", storyFrameTop+"px");
 					sizeVid(clickedVidWidth, 0);
 				//	videoFrame.style("width",clickedVidWidth+"px").style("height", clickedVidWidth*9/16+"px");

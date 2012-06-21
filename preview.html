@@ -1,14 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link href="http://poweringanation.org/templates/rt_mixxmag_j15_home2011/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Untitled Document</title>
+<title>Water Powers Life: Coming July 2012</title>
 <style>
-body {padding: 0; margin: 0;}
+body {text-align: center; padding: 0; margin: 0; background-color: #000; background-repeat: no-repeat; background-position: 30% top;}
+#container {width: 75%; margin: 0 auto; max-width: 1000px;}
+#social-media {margin: -190px 0px 0px 0px; text-align: center;}
+#social-media img {height: 40px; margin-right: 10px; border: none;}
+.tnails {max-width: 1333; margin-bottom: 10px;}
+.tnails img {width: 30%; margin-right: 4%; border: none;}
 </style>
 <script type="text/javascript">
 	function onLoad(){
-		var wh=window.innerHeight, ww=window.innerWidth;
+		var wh, ww;
 	
 		var videoFrame=document.getElementById("preview");
 		vidSize();
@@ -16,14 +24,31 @@ body {padding: 0; margin: 0;}
 		function vidSize(){
 			wh=window.innerHeight, ww=window.innerWidth;
 			var vidFrameWidth = videoFrame.offsetWidth;
-			vidFrameHieght = wh;
-			videoFrame.style.height = vidFrameHieght+"px";
+			videoFrame.style.height = vidFrameWidth*9/16+"px";
 		}
 	}
 </script>
 </head>
 
 <body onload="onLoad()">
-<iframe id="preview" src="http://player.vimeo.com/video/43549505" width="100%" frameborder="0" style="margin: 0 auto;" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+	<div id="container">
+		<a href="http://www.poweringanation.org" style="height:50px;"><img src="pan-bg.jpg" style="border: 0px; margin-left: -10%; float: left; z-index:-1;" /></a>
+		<div id="social-media" style="float: right; clear: both;">
+			<a href="http://www.facebook.com/poweringanation" target="_blank"><img src="facebook.png" /></a>
+			<a href="https://plus.google.com/u/0/b/114298487940816831586/114298487940816831586/posts" target="_blank"><img src="googleplus.png" /></a>
+			<a href="http://poweringanation.tumblr.com/" target="_blank"><img src="tumblr.png" /></a>
+			<a href="http://www.twitter.com/poweringanation" target="_blank"><img src="twitter.png" style="margin-right: 0px;"/></a>
+		</div>
+		<iframe id="preview" src="http://player.vimeo.com/video/43549505" frameborder="0" style="width: 100%; margin-top: -135px;" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		<p style="color: #ffffff; font-family: Verdana, Geneva, sans-serif;">Upcoming special report on how water powers life. While you're waiting, check out our teasers:</p>
+		<div class="tnails">
+			<a href="http://www.youtube.com/watch?v=xy1SGNk5inw" target="_blank"><img src="austinTnail.jpg" style="float: left"/></a>
+			<a href="http://www.youtube.com/watch?v=YYYDHxixrfA" target="_blank"><img src="sugarcreekTnail.jpg" /></a>
+			<a href="http://www.youtube.com/watch?v=Qv8IvYVTAy4" target="_blank"><img src="portAngelesTnail.jpg" style="margin-right: 0%; float: right;"/></a>
+		</div>
+		<div class="tnails">
+			<a href="http://www.youtube.com/watch?v=2owTBwxI5sU" target="_blank"><img src="newyorkTnail.jpg" style="margin-right: 0%;" /></a>
+		</div>
+	</div>
 </body>
 </html>

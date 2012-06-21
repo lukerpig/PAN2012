@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>SVG Test</title>
+</head>
+
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="500px" width="500px" style="border: 1px solid grey;">
+<!-- center of scaling -->
+<circle cx="250" cy="250" r="2" style="fill: black;"/>
+
+<!-- non-scaled rectangle -->
+<g id="box" style="stroke: black; fill: none;">
+    <rect x="235" y="240" width="30" height="20"/>
+</g>
+
+<use xlink:href="#box" transform="translate(-50,-50) scale(2)"
+    style="stroke-width: 0.5;"/>
+<use xlink:href="#box" transform="translate(-75,-75) scale(2.5)"
+    style="stroke-width: 0.4;"/>
+<use xlink:href="#box" transform="translate(-100,-100) scale(3)"
+    style="stroke-width: 0.33;"/>
+</svg>
+</body>
+</html>
