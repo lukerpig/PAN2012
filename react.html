@@ -76,7 +76,8 @@
 				var onclickDuration=700;
 				var clickedVidWidth = 300;
 				var storyFrameTop = 90;
-				var containerWidth = (ww >= 1750) ? 1400 : ww*.8;
+				var maxWidth = 1200;
+				var containerWidth = setContWidth();
 				
 				//D3 POPULATE WITH DATA
 				var numbers= links.selectAll("p").data(data);
@@ -98,8 +99,14 @@
 					.attr("class","story-frame")
 					.attr("id", function(d){return d.story})
 					.attr("src", function(d){return d.label+".html"})
-					.style("margin-top", wh+"px");
-					
+					.style("margin-top", wh+"px")
+					.style("max-width", maxWidth+"px");
+				
+				container.style.maxWidth = maxWidth+"px";
+				function setContWidth(){
+					var x = (ww >= maxWidth/.8) ? maxWidth : ww*.8;
+					return x;
+				}
 				
 			///////////////////VIDEO TIME TRACK CODE///////////////////
 				function timeManip(seconds){
@@ -311,7 +318,7 @@
 					} 
 					if(ww2!=ww){//NEW WIDTH
 						ww = ww2;
-						containerWidth = (ww >= 1750) ? 1400 : ww*.8;
+						containerWidth = setContWidth();
 						if(!window.location.hash){
 							sizeVid(containerWidth, 0);
 						}
@@ -390,7 +397,7 @@
     <body onload="pageLoad()">
 		<div id="links" style="position: fixed; bottom: 0; left: 45%; width: 1000%; margin: 0px auto;"></div>
         <div id="wrapper">
-            <div id="container" style="max-width: 1400px; width:80%; margin: 0px auto;">
+            <div id="container" style="width:80%; margin: 0px auto;">
 				<div class="logo" style="float: left;"><a href="http://lukerpig.com/d3/react.html"><img src="logo.png"/></a></div>
 				<div class="topLinks" style="float: right;">Link1 - Link2 - Link3</div>
 				<div style="clear: both"></div>
