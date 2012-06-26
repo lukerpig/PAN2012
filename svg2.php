@@ -26,62 +26,80 @@
 		
 		var data = [
 		{
-			a: 10,
+			a: 16,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 20,
+			a: 32,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 60,
+			a: 64,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 500,
+			a: 128,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 600,
+			a: 256,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 1600,
+			a: 512,
+			h: getHeight,
+			w: getWidth
+		},
+		{
+			a: 2024,
 			h: getHeight,
 			w: getWidth
 		}
 	];
+	
 		function onLoad(){
 			var svg = d3.select("body").append("svg")
 							.attr("height", svgOpt.h+"px")
-							.attr("width", svgOpt.w+"px");
-				
-			var numbers= svg.append("g").selectAll("rect").data(data);
+							.attr("width", svgOpt.w+"px")
+		var g= svg.append("g").attr("class","zoomer")
+					//.attr("transform","translate(0,-200) scale(2.5)")
+					
+			var numbers = g.selectAll("rect").data(data);
 			numbers.enter().append("rect")
 				.attr("x", 
-					function(d,i){
-						var w = 0;
-						for (var j = 0; j < i; j++) {
-							var margin = data[j].w()*.2;
-							w += data[j].w()+margin;
-						} 
-						return w;
-					}
+						function(d,i){
+							var w = 0;
+							for (var j = 0; j < i; j++) {
+								var margin = (i < data.length) ? data[j+1].w()*.02 : 0;
+								w += data[j].w()+margin;
+							} 
+							return w;
+						}
 					)
-				.attr("y",function(d,i){return svgOpt.h-50 -d.h()})
+				.attr("y",function(d,i){return svgOpt.h-50-d.h()})
 				.attr("height", function(d,i){return d.h()})
 				.attr("width", function(d,i){return d.w()});
 				
-				
-				console.log("?");
+			sizeSvg();
+			function sizeSvg() {
+				//12300/1.03, 200: 1.01, 66.7
+				//1300/	1.03, 21: 1.01, 7
+				//1: 0, 2: 312.5, 4: 468.75, 8: 546.875
+				var scale = 8;
+				var ratio = 1/scale;
+				console.log(ratio + "ratio");
+				g.attr("transform","scale("+scale+") translate(0,"+- 546.87500+")");
+				console.log(svgOpt.h);
+			}
+			
 			var slider = new Dragdealer('my-slider',
 				{
-					steps: 7,
+					steps: 30,
 					x: .5,
 					animationCallback: function(x, y)
 					{
