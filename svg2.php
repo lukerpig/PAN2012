@@ -90,10 +90,10 @@
 				//12300/1.03, 200: 1.01, 66.7
 				//1300/	1.03, 21: 1.01, 7
 				//1: 0, 2: 312.5, 4: 468.75, 8: 546.875
-				var scale = 8;
+				var scale = 16;
 				var ratio = 1/scale;
 				console.log(ratio + "ratio");
-				g.attr("transform","scale("+scale+") translate(0,"+- 546.87500+")");
+				g.attr("transform","scale("+scale+") translate(0,"+- 585.9375+")");
 				console.log(svgOpt.h);
 			}
 			
