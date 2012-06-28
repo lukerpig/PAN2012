@@ -21,8 +21,8 @@
 		var totalRatio = boxOpt.w + boxOpt.h;
 		var widthRatio = boxOpt.w/totalRatio, heightRatio = boxOpt.h/totalRatio;
 		
-		function getHeight() { return this.a*heightRatio; }
-		function getWidth() { return this.a*widthRatio; }
+		function getHeight() { return this.a*heightRatio/100000000; }
+		function getWidth() { return this.a*widthRatio/100000000; }
 		
 		var data = [
 		{
@@ -89,6 +89,21 @@
 			a: 1000000000000,
 			h: getHeight,
 			w: getWidth
+		},
+		{
+			a: 10000000000000000000,
+			h: getHeight,
+			w: getWidth
+		},
+		{
+			a: 100000000000000,
+			h: getHeight,
+			w: getWidth
+		},
+		{
+			a: 1000000000000000,
+			h: getHeight,
+			w: getWidth
 		}
 	];
 	
@@ -127,8 +142,8 @@
 			//Size SVG
 			sizeSvg();
 			function sizeSvg() {
-				var size = 100000000;
-				var scale = 1/size;
+				var size = 10000000;
+				var scale = 200000000;
 				g.attr("transform","translate(0,"+(-50+svgOpt.h)+") scale("+scale+","+-scale+")");
 			}
 			
