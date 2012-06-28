@@ -92,8 +92,10 @@
 		}
 	];
 	
-		function onLoad(){
+		function onLoad(){ 
 			var svg = d3.select("body").append("svg")
+							.attr("xmlns","http://www.w3.org/2000/svg")
+							.attr("version","1.1")
 							.attr("height", svgOpt.h+"px")
 							.attr("viewBox","0 0 "+svgOpt.w+" "+svgOpt.h+"")
 							.attr("preserveAspectRatio","xMinYMax")
@@ -125,7 +127,7 @@
 			//Size SVG
 			sizeSvg();
 			function sizeSvg() {
-				var size = 99000000;
+				var size = 100000000;
 				var scale = 1/size;
 				g.attr("transform","translate(0,"+(-50+svgOpt.h)+") scale("+scale+","+-scale+")");
 			}
