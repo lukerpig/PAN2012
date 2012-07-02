@@ -23,8 +23,9 @@
 			.forward {left: 90.25%; top: 42.87%; width: 9.6%; height: 24%;}
 			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
 			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
-                        .chart { background: #19172A; font: 10px sans-serif; }
+                        .chart { background: #19172A; font: 12px sans-serif; }
                         .chart { fill: #6DBDC3; }
+                        .chart text { fill: white; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
@@ -109,14 +110,16 @@
                                 var marginPercentage = (1-barRangePercentage)/2;
                                 var chartHeight = 675;
                                 var chartWidth = 1200;
-                                var chartMargin = 10;
+                                var chartSideMargin = 10;
+                                var chartTopMargin = 50;
+                                var chartBottomMargin = 10;
 
 					       
-                                var barHeight = chartHeight - 2*chartMargin;
+                                var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
 
                                 var x = d3.scale.ordinal()
                                     .domain(costs)
-                                    .rangeBands([chartMargin, chartWidth-chartMargin]);
+                                    .rangeBands([chartSideMargin, chartWidth-chartSideMargin]);
 
                                 var y = d3.scale.linear()
                                          .domain([0, d3.max(costs)])
@@ -126,7 +129,7 @@
 				    .data(costs)
 			        .enter().append("rect")
                                     .attr("x", function(d, i) { return x(d) + marginPercentage*x.rangeBand();})
-                                    .attr("y", function(d, i) { return barHeight + chartMargin - y(d);} )
+                                    .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);} )
                                     .attr("width", function(d, i) { return barRangePercentage*x.rangeBand();})
                                     .attr("height", y);
 
@@ -134,8 +137,8 @@
                                     .data(costs)
                                 .enter().append("text")
                                     .attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
-                                    .attr("y", function(d, i) { return chartHeight - y(d);})
-                                    .attr("dy", "1.5em")
+                                    .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
+                                    .attr("dy", "-.5em")
                                     .attr("text-anchor", "middle")
                                     .text(function(d, i) { return "$"+ Math.round(d) });
 
