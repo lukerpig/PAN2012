@@ -14,7 +14,7 @@
 			.has-js label.r_on      { background: url(radio-on.png) no-repeat;background-size: contain;}
 			.has-js .label_radio input  { opacity: 0; }
 			.cost-form label {position: absolute;}
-			.card {position: relative; max-width: 1200px;}
+			.card {position: relative; max-width: 1200px; border: 1px solid red;}
 			.card img{max-width: 100%;}
 			label#one {left: 15.3%; top: 43.04%}
 			label#two {left: 15.3%; top: 54.96%}
@@ -27,10 +27,10 @@
                         .chart { fill: #6DBDC3; }
                         .chart text { fill: white; }
                         div#details { color: white; font: 28px sans-serif; }
+                        .headline { height:168.75px; margin-left: 310px; font: 36px sans-serif; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
-
 			var shower = 0, flush = 0, laundry = 0, hands = 0;
     
                         var SHOWER = 0
@@ -114,6 +114,7 @@
 
 			function calculate(n){
                                 showNext(n);
+                                svgHeight();
 	                        var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
 	                        var costs = regionalCosts(usage);
             
@@ -159,10 +160,44 @@
                                     .text(function(d, i) { return "$"+ Math.round(d) });
 
 			}
+
+
+			var ww = window.innerWidth;
+
+			function windowResize(){
+			     var ww2=window.innerWidth;
+			     if(ww2!=ww){
+                               ww = ww2;
+			       svgHeight();
+                             }
+			}
+			
+			function svgHeight(){
+                              var svgElem = document.getElementById("barchart")
+			      svgW = svgElem.offsetWidth;
+			      svgH = svgElem.offsetWidth*9/16;
+			      d3.select("#barchart").style("height",svgH+"px");
+			
+			}
+
+                        function onLoadPlease() {
+
+                           setupLabels();
+			
+			   //WINDOW RESIZE
+			   window.addEventListener('resize', windowResize, false);
+			
+                        }
+
+               
 		</script>
 	</head>
 	
-	<body>
+	<body onload="onLoadPlease()">
+                <div class="headline" >
+		  This is a really long text line designed to make sure that the div that contains it is in the right place.
+                </div>
+           <div id="container">
 		<div class="card" id="card1">
 			<img src="cost1.png"/>
 			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
@@ -203,18 +238,19 @@
 			</form>
 		</div>
 		<div class="card" id="card5" style="display: none;">
-		  <svg id="barchart" class="chart" width="100%" height="675" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
+		  <svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
                     <g id="bars">
                     </g>
 		  </svg>
                   <div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;">
                   </div>
                 </div>
+              </div>
 		<script>
 			var d = document;
 			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
 			var gebtn = function(parEl,child) { return parEl.getElementsByTagName(child); };
-			onload = function() {
+			function setupLabels() {
 				
 				var body = gebtn(d,'body')[0];
 				body.className = body.className && body.className != '' ? body.className + ' has-js' : 'has-js';
@@ -249,6 +285,8 @@
 					if (safari) inp.click();
 				};
 			};
+
+                        
 		</script>
 	
 	</body>

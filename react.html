@@ -27,12 +27,14 @@
 			var data = [
 				{
 					label : "story1",
+                                        url: "watercost/index.html",
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
 				},
 				{
 					label : "story2",
+                                        url: "story2.html",
 					cuePointBegin: 12.000,
 					cuePointEnd: 20.000,
 					story: "reveal2"
@@ -40,6 +42,7 @@
 				},
 				{
 					label : "story3",
+                                        url: "story3.html",
 					cuePointBegin: 20.000,
 					cuePointEnd: 30.000,
 					story: "reveal3"
@@ -98,7 +101,7 @@
 				stories.enter().append("iframe")
 					.attr("class","story-frame")
 					.attr("id", function(d){return d.story})
-					.attr("src", function(d){return d.label+".html"})
+					.attr("src", function(d){return d.url})
 					.style("margin-top", wh+"px")
 					.style("max-width", maxWidth+"px");
 				
