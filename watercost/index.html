@@ -27,6 +27,18 @@
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
 			var shower = 0, flush = 0, laundry = 0, hands = 0;
+    
+                        var SHOWER = 0
+                        var FLUSH = 1;
+                        var LAUNDRY = 2;
+                        var HANDS = 3;
+
+                        var regions = [
+			 { name:"Here", cost:2 },
+			 { name:"There", cost:4 },
+                         { name:"Everywhere", cost:8 }
+			];
+
 			
 			function showNext(n){
 				d3.select("#card"+n).style("display","none");
@@ -68,10 +80,31 @@
 						hands = frm.data[i].value
 					}
 				}
-				calculate();
+				calculate(n);
 			}
-			function calculate(){
-				alert(shower + " " + flush + " " + laundry + " " + hands)	
+
+	                function regionalCosts(usage) {
+                            var costs=[];
+                            for(var i = 0; i < regions.length; i++) {
+                               costs.push(usage*regions[i].cost);
+			    }
+                            return costs;
+	                }
+			function calculate(n){
+                                showNext(n);
+	                        var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
+	                        alert(usage);
+                                var costs = regionalCosts(usage);
+                                alert(costs);
+
+	                        d3.select("#bars").selectAll("rect")
+				    .data(costs)
+			        .enter().append("rect")
+                                    .attr("x", function(d, i) { return i*30; })
+                                    .attr("y", 0)
+                                    .attr("width", 25)
+                                    .attr("height", function(d, i) { return d; });
+
 			}
 		</script>
 	</head>
@@ -116,6 +149,12 @@
 				<button type="button" class="backward" onclick="goBack(4)"></button>
 			</form>
 		</div>
+		<div class="card" id="card5" style="display: none;">
+		  <svg id="barchart" class="chart" width="1200" height="675">
+		    <g id="bars" transform="translate(0, 675) scale(1, -1)">
+                    </g>
+                  </svg>
+                </div>
 		<script>
 			var d = document;
 			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
