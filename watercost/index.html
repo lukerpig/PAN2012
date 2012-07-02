@@ -6,6 +6,9 @@
 		<title>Cost Of Water</title>
 		<meta name="Description" content="Custom designed HTML checkboxes and radio controls with CSS 3.0 and JavaScript." />
 		<style>
+			@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
+			@font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
+			
 			* { margin: 0; padding: 0; }
 			
 			label       {width: 40%; display: block; cursor: pointer; height: 6%; padding-bottom: 0px;}
@@ -27,7 +30,7 @@
                         .chart { fill: #6DBDC3; }
                         .chart text { fill: white; }
                         div#details { color: white; font: 28px sans-serif; }
-                        .headline { height:168.75px; margin-left: 310px; font: 36px sans-serif; }
+                        .headline { height:168.75px; padding-left: 10px; margin-left: 300px; font: 36px sans-serif; background-color: #FFF; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
@@ -194,58 +197,61 @@
 	</head>
 	
 	<body onload="onLoadPlease()">
-                <div class="headline" >
-		  This is a really long text line designed to make sure that the div that contains it is in the right place.
-                </div>
-           <div id="container">
-		<div class="card" id="card1">
-			<img src="cost1.png"/>
-			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
-				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="5" type="radio" checked />&nbsp;</label>
-				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="10.4" type="radio" checked/>&nbsp;</label>
-				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="17" type="radio" />&nbsp;</label>
-				<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>
-			</form>
+		<div class="headline" >
+			<p style="font-family: Interstate-Thin; font-size: 62px;"><nobr>THE COST OF WATER<nobr></p>
 		</div>
-		<div class="card" id="card2" style="display: none;">
-			<img src="cost2.png"/>
-			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="flush">
-				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
-				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="8" type="radio" checked/>&nbsp;</label>
-				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="12" type="radio" />&nbsp;</label>
-				<button type="button" class="forward" onclick="getFlush(this.form, 2)"></button>
-				<button type="button" class="backward" onclick="goBack(2)"></button>
-			</form>
+			
+		<div id="container" style="background-color: #FFF;">
+			<p style="font-family: Interstate-Light; font-size: 50px;">What would your bill measure across the world?</p>
+			<div id="interactive" style="width: 58%; margin: 0px auto;">
+				<div class="card" id="card1">
+					<img src="cost1.png"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="5" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="10.4" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="17" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>
+					</form>
+				</div>
+				<div class="card" id="card2" style="display: none;">
+					<img src="cost2.png"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="flush">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="8" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="12" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getFlush(this.form, 2)"></button>
+						<button type="button" class="backward" onclick="goBack(2)"></button>
+					</form>
+				</div>
+				<div class="card" id="card3" style="display: none;">
+					<img src="cost3.png"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="laundry">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="3" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="11" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getLaundry(this.form, 3)"></button>
+						<button type="button" class="backward" onclick="goBack(3)"></button>
+					</form>
+				</div>
+				<div class="card" id="card4" style="display: none;">
+					<img src="cost4.png"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="hands">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7.5" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="10" type="radio" />&nbsp;</label>
+						<button type="button" class="calculate" onclick="getHands(this.form, 4)"></button>
+						<button type="button" class="backward" onclick="goBack(4)"></button>
+					</form>
+				</div>
+				<div class="card" id="card5" style="display: none;">
+					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
+							<g id="bars">
+							</g>
+					</svg>
+					<div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;"></div>
+				</div>
+			</div>
 		</div>
-		<div class="card" id="card3" style="display: none;">
-			<img src="cost3.png"/>
-			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="laundry">
-				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="3" type="radio" checked />&nbsp;</label>
-				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7" type="radio" checked/>&nbsp;</label>
-				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="11" type="radio" />&nbsp;</label>
-				<button type="button" class="forward" onclick="getLaundry(this.form, 3)"></button>
-				<button type="button" class="backward" onclick="goBack(3)"></button>
-			</form>
-		</div>
-		<div class="card" id="card4" style="display: none;">
-			<img src="cost4.png"/>
-			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="hands">
-				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
-				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7.5" type="radio" checked/>&nbsp;</label>
-				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="10" type="radio" />&nbsp;</label>
-				<button type="button" class="calculate" onclick="getHands(this.form, 4)"></button>
-				<button type="button" class="backward" onclick="goBack(4)"></button>
-			</form>
-		</div>
-		<div class="card" id="card5" style="display: none;">
-		  <svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
-                    <g id="bars">
-                    </g>
-		  </svg>
-                  <div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;">
-                  </div>
-                </div>
-              </div>
 		<script>
 			var d = document;
 			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
