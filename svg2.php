@@ -15,14 +15,15 @@
 		}
 		var boxOpt = {
 			w: 16,
-			h: 9
+			h: 12
 		}
 		
 		var totalRatio = boxOpt.w + boxOpt.h;
 		var widthRatio = boxOpt.w/totalRatio, heightRatio = boxOpt.h/totalRatio;
+		var g;
 		
-		function getHeight() { return this.a*heightRatio/100000000; }
-		function getWidth() { return this.a*widthRatio/100000000; }
+		function getHeight() { return this.a*heightRatio/100000000000; }
+		function getWidth() { return this.a*widthRatio/100000000000; }
 		
 		var data = [
 		{
@@ -36,22 +37,22 @@
 			w: getWidth
 		},
 		{
-			a: 300,
+			a: 310,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 4000,
+			a: 5000,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 90000,
+			a: 30000,
 			h: getHeight,
 			w: getWidth
 		},
 		{
-			a: 900000,
+			a: 120000,
 			h: getHeight,
 			w: getWidth
 		},
@@ -91,7 +92,7 @@
 			w: getWidth
 		},
 		{
-			a: 10000000000000000000,
+			a: 10000000000000,
 			h: getHeight,
 			w: getWidth
 		},
@@ -101,7 +102,7 @@
 			w: getWidth
 		},
 		{
-			a: 1000000000000000,
+			a: 500000000000000000000,//max number
 			h: getHeight,
 			w: getWidth
 		}
@@ -121,7 +122,7 @@
 			var svgElem = document.getElementById("svg-box");
 			var svgH = svgElem.offsetHeight; var svgW = svgElem.offsetWidth;
 			svgHeight();
-			var g= svg.append("g").attr("class","zoomer")
+			g= svg.append("g").attr("class","zoomer")
 					
 			var numbers = g.selectAll("rect").data(data);
 			numbers.enter().append("rect")
@@ -129,7 +130,7 @@
 						function(d,i){
 							var w = 0;
 							for (var j = 0; j < i; j++) {
-								var margin = (i < data.length) ? data[j+1].w()*.005 : 0;
+								var margin = (i < data.length) ? data[j+1].w()*.01 : 0;
 								w += data[j].w()+margin;
 							} 
 							return w;
@@ -140,12 +141,8 @@
 				.attr("width", function(d,i){return d.w()});
 				
 			//Size SVG
-			sizeSvg();
-			function sizeSvg() {
-				var size = 10000000;
-				var scale = 200000000;
-				g.attr("transform","translate(0,"+(-50+svgOpt.h)+") scale("+scale+","+-scale+")");
-			}
+			sizeSvg(data.length-1);
+			//alert(800/data[1].h());
 			
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
@@ -163,7 +160,7 @@
 			}
 			
 			//SLIDER
-			var slider = new Dragdealer('my-slider',
+		/*	var slider = new Dragdealer('my-slider',
 				{
 					steps: 30,
 					x: .5,
@@ -171,19 +168,21 @@
 					{
 						console.log(x*12);
 					}
-				}); 
+				}); */
 				
+		}
+		function sizeSvg(index) {
+			var size = 10000000;
+			var scale = 600/data[index].h();
+			g.attr("transform","translate(0,"+(-50+svgOpt.h)+") scale("+scale+","+-scale+")");
 		}
 	</script>
 </head>
-<!--<svg>
-<g transform="translate(0,200), scale(13.13,-13.13)">
-<rect x="0" y="0" width="2" height="1" />
-</g>
-</svg>​-->
-
 <body onload="onLoad()">
 
+<button onclick="sizeSvg(0)" type="button">1</button>
+<button onclick="sizeSvg(1)" type="button">2</button>
+<button onclick="sizeSvg(2)" type="button">3</button>
 <div id="my-slider" class="dragdealer">
 	<div class="red-bar handle">drag me</div>
 </div>

@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>Cost Of Water</title>
+		<meta name="Description" content="Custom designed HTML checkboxes and radio controls with CSS 3.0 and JavaScript." />
+		<style>
+			* { margin: 0; padding: 0; }
+			
+			label       {width: 40%; display: block; cursor: pointer; height: 6%; padding-bottom: 0px;}
+			
+			.has-js .label_radio    { background: url(radio-off.png) no-repeat; background-size: contain;}
+			.has-js label.r_on      { background: url(radio-on.png) no-repeat;background-size: contain;}
+			.has-js .label_radio input  { opacity: 0; }
+			.cost-form label {position: absolute;}
+			.card {position: relative; max-width: 1200px;}
+			.card img{max-width: 100%;}
+			label#one {left: 15.3%; top: 43.04%}
+			label#two {left: 15.3%; top: 54.96%}
+			label#three {left: 15.3%; top: 67.0%}
+			.forward, .backward, .calculate {cursor: pointer; background-color: transparent; border: none; position: absolute;}
+			.forward {left: 90.25%; top: 42.87%; width: 9.6%; height: 24%;}
+			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
+			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
+		</style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+		<script type="text/javascript">
+			var shower = 0, flush = 0, laundry = 0, hands = 0;
+			
+			function showNext(n){
+				d3.select("#card"+n).style("display","none");
+				d3.select("#card"+(n+1)).style("display","block");
+			}
+			
+			function goBack(n){
+				d3.select("#card"+n).style("display","none");
+				d3.select("#card"+(n-1)).style("display","block");
+			}
+			
+			function getShower(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						shower = frm.data[i].value;
+					}
+				}
+				showNext(n);
+			}
+			function getFlush(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						flush = frm.data[i].value
+					}
+				}
+				showNext(n);
+			}
+			function getLaundry(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						laundry = frm.data[i].value
+					}
+				}
+				showNext(n);
+			}
+			function getHands(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						hands = frm.data[i].value
+					}
+				}
+				calculate();
+			}
+			function calculate(){
+				alert(shower + " " + flush + " " + laundry + " " + hands)	
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div class="card" id="card1">
+			<img src="cost1.png"/>
+			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
+				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="5" type="radio" checked />&nbsp;</label>
+				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="10.4" type="radio" checked/>&nbsp;</label>
+				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="17" type="radio" />&nbsp;</label>
+				<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>
+			</form>
+		</div>
+		<div class="card" id="card2" style="display: none;">
+			<img src="cost2.png"/>
+			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="flush">
+				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
+				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="8" type="radio" checked/>&nbsp;</label>
+				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="12" type="radio" />&nbsp;</label>
+				<button type="button" class="forward" onclick="getFlush(this.form, 2)"></button>
+				<button type="button" class="backward" onclick="goBack(2)"></button>
+			</form>
+		</div>
+		<div class="card" id="card3" style="display: none;">
+			<img src="cost3.png"/>
+			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="laundry">
+				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="3" type="radio" checked />&nbsp;</label>
+				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7" type="radio" checked/>&nbsp;</label>
+				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="11" type="radio" />&nbsp;</label>
+				<button type="button" class="forward" onclick="getLaundry(this.form, 3)"></button>
+				<button type="button" class="backward" onclick="goBack(3)"></button>
+			</form>
+		</div>
+		<div class="card" id="card4" style="display: none;">
+			<img src="cost4.png"/>
+			<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="hands">
+				<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
+				<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7.5" type="radio" checked/>&nbsp;</label>
+				<label id="three" class="label_radio" for="below"><input name="data" id="below" value="10" type="radio" />&nbsp;</label>
+				<button type="button" class="calculate" onclick="getHands(this.form, 4)"></button>
+				<button type="button" class="backward" onclick="goBack(4)"></button>
+			</form>
+		</div>
+		<script>
+			var d = document;
+			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
+			var gebtn = function(parEl,child) { return parEl.getElementsByTagName(child); };
+			onload = function() {
+				
+				var body = gebtn(d,'body')[0];
+				body.className = body.className && body.className != '' ? body.className + ' has-js' : 'has-js';
+				
+				if (!d.getElementById || !d.createTextNode) return;
+				var ls = gebtn(d,'label');
+				for (var i = 0; i < ls.length; i++) {
+					var l = ls[i];
+					if (l.className.indexOf('label_') == -1) continue;
+					var inp = gebtn(l,'input')[0];
+					
+					if (l.className == 'label_radio') {
+						l.className = (safari && inp.checked == true || inp.checked) ? 'label_radio r_on' : 'label_radio r_off';
+						l.onclick = turn_radio;
+					};
+				};
+			};
+
+			var turn_radio = function() {
+				var inp = gebtn(this,'input')[0];
+				if (this.className == 'label_radio r_off' || inp.checked) {
+					var ls = gebtn(this.parentNode,'label');
+					for (var i = 0; i < ls.length; i++) {
+						var l = ls[i];
+						if (l.className.indexOf('label_radio') == -1)  continue;
+						l.className = 'label_radio r_off';
+					};
+					this.className = 'label_radio r_on';
+					if (safari) inp.click();
+				} else {
+					this.className = 'label_radio r_off';
+					if (safari) inp.click();
+				};
+			};
+		</script>
+	
+	</body>
+</html>

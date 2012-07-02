@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script>
+	var tester;
+	function onLoad(){
+		tester = d3.select("svg").select("g");
+		sizeSvg(1);
+	}
+	function sizeSvg(x){
+		tester.attr("transform","scale("+x+")");
+	}
+</script>
+
+</head>
+
+<body onload="onLoad()">
+<svg>
+	<g id="test">
+		<rect x="10" y="10" height="100" width="100" style="stroke:#006600; fill: #00cc00"/>
+	</g>
+</svg>
+	<button onclick="sizeSvg(1)" type="button">1</button>
+	<button onclick="sizeSvg(2)" type="button">2</button>
+	<button onclick="sizeSvg(3)" type="button">3</button>
+</body>
+</html>
