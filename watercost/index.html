@@ -23,9 +23,12 @@
 			.forward {left: 90.25%; top: 42.87%; width: 9.6%; height: 24%;}
 			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
 			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
+                        .chart { font: 10px sans-serif; }
+                        .chart { stroke: white; fill: steelblue; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
+
 			var shower = 0, flush = 0, laundry = 0, hands = 0;
     
                         var SHOWER = 0
@@ -36,7 +39,9 @@
                         var regions = [
 			 { name:"Here", cost:2 },
 			 { name:"There", cost:4 },
-                         { name:"Everywhere", cost:8 }
+                         { name:"Everywhere", cost:8 },
+                         { name:"Up", cost:6.5},
+                         { name:"Down", cost: 9 },
 			];
 
 			
@@ -93,17 +98,38 @@
 			function calculate(n){
                                 showNext(n);
 	                        var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
-	                        alert(usage);
-                                var costs = regionalCosts(usage);
-                                alert(costs);
+	                        var costs = regionalCosts(usage);
+            
+		                var barRangePercentage = .8;
+                                var marginPercentage = (1-barRangePercentage)/2;
+                                var chartHeight = 500;
+                                var chartWidth = 400;
+
+
+                                var x = d3.scale.ordinal()
+                                    .domain(costs)
+                                    .rangeBands([0, chartWidth]);
+
+                                var y = d3.scale.linear()
+                                         .domain([0, d3.max(costs)])
+                                         .range([0, chartHeight]);
 
 	                        d3.select("#bars").selectAll("rect")
 				    .data(costs)
 			        .enter().append("rect")
-                                    .attr("x", function(d, i) { return i*30; })
-                                    .attr("y", 0)
-                                    .attr("width", 25)
-                                    .attr("height", function(d, i) { return d; });
+                                    .attr("x", function(d, i) { return x(d) + marginPercentage*x.rangeBand();})
+                                    .attr("y", function(d, i) { return chartHeight - y(d);} )
+                                    .attr("width", function(d, i) { return barRangePercentage*x.rangeBand();})
+                                    .attr("height", y);
+
+                                d3.select("#bars").selectAll("text")
+                                    .data(costs)
+                                .enter().append("text")
+                                    .attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
+                                    .attr("y", function(d, i) { return chartHeight - y(d);})
+                                    .attr("dy", "1.5em")
+                                    .attr("text-anchor", "middle")
+                                    .text(function(d, i) { return "$"+ Math.round(d) });
 
 			}
 		</script>
@@ -151,9 +177,9 @@
 		</div>
 		<div class="card" id="card5" style="display: none;">
 		  <svg id="barchart" class="chart" width="1200" height="675">
-		    <g id="bars" transform="translate(0, 675) scale(1, -1)">
+                    <g id="bars" transform="translate(10, 50)">
                     </g>
-                  </svg>
+		  </svg>
                 </div>
 		<script>
 			var d = document;
