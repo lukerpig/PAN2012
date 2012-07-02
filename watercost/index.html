@@ -26,6 +26,7 @@
                         .chart { background: #19172A; font: 12px sans-serif; }
                         .chart { fill: #6DBDC3; }
                         .chart text { fill: white; }
+                        div#details { color: white; font: 28px sans-serif; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
 		<script type="text/javascript">
@@ -38,15 +39,15 @@
                         var HANDS = 3;
 
                         var regions = [
-			 { name:"Amsterdam", cost:8 },
-			 { name:"Paris", cost:7 },
-                         { name:"New York", cost:6 },
-                         { name:"San Francisco", cost:5},
-                         { name:"Chapel Hill", cost: 4 },
-			 { name:"London", cost:3 },
-			 { name:"Tokyo", cost:2 },
-                         { name:"Rio de Janeiro", cost:1 },
-                         { name:"Dublin", cost:0},
+			 { name:"Amsterdam", cost:8, details:"Amsterdam: $8 per gallon" },
+			 { name:"Paris", cost:7, details:"Paris: $7 per gallon" },
+                         { name:"New York", cost:6, details:"New York: $6 per gallon" },
+                         { name:"San Francisco", cost:5, details: "San Francisco: $5 per gallon"},
+                         { name:"Chapel Hill", cost: 4, details: "Chapel Hill: $4 per gallon" },
+			 { name:"London", cost:3, details: "London: $3 per gallon" },
+			 { name:"Tokyo", cost:2, details:"Tokyo: $2 per gallon" },
+                         { name:"Rio de Janeiro", cost:1, details:"Rio: $1 per gallon"  },
+                         { name:"Dublin", cost:0, details: "Dublin: FREEEE!!!!!!"},
 			];
 
 			
@@ -100,6 +101,17 @@
 			    }
                             return costs;
 	                }
+
+                        function showDetails(d, i) {
+                           var details = regions[i].details;
+                           console.log(details);
+                           d3.select("#details").html(details);
+                        }
+
+                        function hideDetails(d, i) {
+                           d3.select("#details").html("");
+                        }
+
 			function calculate(n){
                                 showNext(n);
 	                        var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
@@ -131,7 +143,9 @@
                                     .attr("x", function(d, i) { return x(d) + marginPercentage*x.rangeBand();})
                                     .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);} )
                                     .attr("width", function(d, i) { return barRangePercentage*x.rangeBand();})
-                                    .attr("height", y);
+                                    .attr("height", y)
+                                    .on("mouseover", showDetails)
+			            .on("mouseout", hideDetails);
 
                                 d3.select("#bars").selectAll("text")
                                     .data(costs)
@@ -140,6 +154,8 @@
                                     .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
                                     .attr("dy", "-.5em")
                                     .attr("text-anchor", "middle")
+                                    .on("mouseover", showDetails)
+			            .on("mouseout", hideDetails)
                                     .text(function(d, i) { return "$"+ Math.round(d) });
 
 			}
@@ -191,6 +207,8 @@
                     <g id="bars">
                     </g>
 		  </svg>
+                  <div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;">
+                  </div>
                 </div>
 		<script>
 			var d = document;
