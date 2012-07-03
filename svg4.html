@@ -19,8 +19,8 @@
 			h: svgW*ratH/ratW
 		}
 		var boxOpt = {
-			w: 16,
-			h: 16
+			w: 351,
+			h: 495
 		}
 		
 		var totalRatio = boxOpt.w + boxOpt.h;
@@ -170,13 +170,14 @@
 		}
 	
 		function draw(oldScale, newScale, direction) {
-			var numbers = g.selectAll("rect").data(visible(data, newScale), function(d) { return d.id; });
+			var numbers = g.selectAll("image").data(visible(data, newScale), function(d) { return d.id; });
 			marginBot = 10;
-			numbers.enter().append("rect")
+			numbers.enter().append("image")
 				.attr("x", function(d,i) { return d.x*oldScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*oldScale-marginBot })
 				.attr("height", function(d,i){return d.h()*oldScale })
-				.attr("width", function(d,i){return d.w()*oldScale });
+				.attr("width", function(d,i){return d.w()*oldScale })
+				.attr("xlink:href","gallon.svg")
 			numbers.transition().duration(1000)
 				.attr("x", function(d,i) { return d.x*newScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
