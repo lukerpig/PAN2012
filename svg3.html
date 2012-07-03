@@ -169,14 +169,19 @@
                     return vis;
                 }
 
-                function draw(scale) {
-			var numbers = g.selectAll("rect").data(visible(data, scale), function(d) { return d.id; });
+                function draw(oldScale, newScale) {
+			var numbers = g.selectAll("rect").data(visible(data, newScale), function(d) { return d.id; });
+			numbers.enter().append("rect")
+                                .attr("x", function(d,i) { return d.x*oldScale; })
+				.attr("y", 0*oldScale)
+				.attr("height", function(d,i){return d.h()*oldScale })
+				.attr("width", function(d,i){return d.w()*oldScale });
+                        numbers.transition().duration(1000)
+                                .attr("x", function(d,i) { return d.x*newScale; })
+				.attr("y", 0*newScale)
+				.attr("height", function(d,i){return d.h()*newScale })
+				.attr("width", function(d,i){return d.w()*newScale });
                         numbers.exit().remove();
-			numbers.enter().append("rect");
-                        numbers.attr("x", function(d,i) { return d.x*scale; })
-				.attr("y", 0*scale)
-				.attr("height", function(d,i){return d.h()*scale })
-				.attr("width", function(d,i){return d.w()*scale });
                 }
 	
 		function onLoad(){ 
@@ -200,9 +205,9 @@
 			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
 			svgHeight();
 			g= svg.append("g").attr("class","zoomer")
-                        // TODO: add transform that inverts y's
+                        // TODO:  add transform that inverts y's
 
-                        draw(scale);
+                        draw(scale, scale);
 					
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
@@ -235,12 +240,13 @@
 
 
 		function scaleSvg(direction) {
+                  var oldScale = scale;
                   if (direction > 0) {
                      setScale(scale*factor);
                   } else {
                      setScale(scale/factor);
                   }
-                  draw(scale);
+                  draw(oldScale, scale);
 		}
 	</script>
 </head>
