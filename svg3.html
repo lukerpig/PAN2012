@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>SVG Test</title>
+	<link rel="stylesheet" type="text/css" href="/dragdealer/dragdealer.css" />
+	<script src="/dragdealer/dragdealer.js"></script>
+	<script src="http://d3js.org/d3.v2.js"></script>
+	<script type="text/javascript">
+
+                function log10(x) {
+                  return Math.log(x)/Math.log(10);
+                }
+
+                var scale = 1.0;
+		var logScale = 0.0;
+                var factor = 2.0;
+		
+                var logViewPortWidth = log10(1200);
+                var logViewPortHeight = log10(675);
+	
+		svgW=1200, ratH=9, ratW=16;
+                svgH = svgW*ratH/ratW;
+		var svgOpt = {
+			w: svgW,
+			h: svgW*ratH/ratW
+		}
+		var boxOpt = {
+			w: 16,
+			h: 12
+		}
+		
+		var totalRatio = boxOpt.w + boxOpt.h;
+		var widthRatio = boxOpt.w/totalRatio, heightRatio = boxOpt.h/totalRatio;
+		var logWidthRatio = log10(widthRatio);
+                var logHeightRatio = log10(heightRatio);
+		var g;
+		
+		function getHeight() { return this.a*heightRatio; }
+		function getWidth() { return this.a*widthRatio; }
+		function logHeight() { return this.logA + logHeightRatio; }
+		function logWidth() { return this.logA + logWidthRatio; }
+              
+
+		var data = [
+		{
+		        id: 1,
+			a: 1,
+                        f: 1.0,
+			h: getHeight,
+			w: getWidth,
+                        logA: 0,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                        id: 2,
+			a: 20,
+                        f: 20.0,
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(20),
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 3,
+			a: 310,
+                        f: 15.5,        
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(310),
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 4,
+			a: 5000,
+                        f: 16.128,
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(5) + 3,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 5,
+			a: 30000,
+                        f: 6.0,
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(3) + 4,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 6,
+			a: 120000,
+                        f: 4.0,
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(12) + 4,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 7,
+			a: 1e6,
+                        f: 8.333333,
+			h: getHeight,
+			w: getWidth,
+                        logA: 6,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 8,
+			a: 1e7,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 7,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 9,
+			a: 1e8,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 8,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 10,
+			a: 1e9,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 9,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 11,
+			a: 1e10,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 10,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 12,
+			a: 1e11,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 11,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 13,
+			a: 1e12,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 12,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 14,
+			a: 1e13,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 13,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 15,
+			a: 1e14,
+                        f: 10,
+			h: getHeight,
+			w: getWidth,
+                        logA: 14,
+                        logH: logHeight,
+                        logW: logWidth,
+		},
+		{
+                       id: 16,
+			a: 5e20,//max number
+                        f: 5e6,
+			h: getHeight,
+			w: getWidth,
+                        logA: log10(5)+20,
+                        logH: logHeight,
+                        logW: logWidth,
+		}
+
+	];
+                function setX(data) {
+		    var w = 0;
+		    for (var i = 0; i < data.length; i++) {
+                        var margin = i == 0? 0 : data[i].w()*.01;
+                        data[i].x = w + margin;
+			w = data[i].x+data[i].w();
+		    } 
+		}
+
+                function setFactor(f) {
+                   factor = f;
+                   d3.select("#factor").html(""+factor);
+                }
+                function setScale(s) {
+                   scale = s;
+                   d3.select("#scale").html(""+scale);
+                }
+
+                function changeFactor(direction) {
+		   if (direction > 0) {
+                     setFactor(factor*1.1);
+                   } else {
+                     setFactor(factor/1.1);
+                   }
+                }
+
+
+                function visible(data, scale) {
+                    var vis = [];
+		    for(var i = 0; i < data.length; i++) {
+                       console.log("i: " + i +  " scaledX: " + data[i].x*scale);
+                       if (data[i].x*scale < svgW) {
+	                   vis.push(data[i]);
+                       }
+		    }
+                    return vis;
+                }
+
+                function draw(scale) {
+			var numbers = g.selectAll("rect").data(visible(data, scale), function(d) { return d.id; });
+                        numbers.exit().remove();
+			numbers.enter().append("rect");
+                        numbers.attr("x", function(d,i) { return d.x*scale; })
+				.attr("y", 0*scale)
+				.attr("height", function(d,i){return d.h()*scale })
+				.attr("width", function(d,i){return d.w()*scale });
+                }
+	
+		function onLoad(){ 
+	
+
+                        setFactor(10.0);
+                        setScale(1.0);
+                        setX(data);
+
+			var svg = d3.select("body").append("svg")
+							.attr("xmlns","http://www.w3.org/2000/svg")
+							.attr("version","1.1")
+							.attr("height", svgOpt.h+"px")
+							.attr("viewBox","0 0 "+svgOpt.w+" "+svgOpt.h+"")
+							.attr("preserveAspectRatio","xMinYMax")
+							.attr("id","svg-box")
+							.style("width","100%")
+							.style("max-width","1200px")
+							.style("border","1px solid red");
+			var svgElem = document.getElementById("svg-box");
+			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
+			svgHeight();
+			g= svg.append("g").attr("class","zoomer")
+
+                        draw(scale);
+					
+			//WINDOW RESIZE
+			window.addEventListener('resize', windowResize, false);
+			var ww = window.innerWidth;
+			
+			function windowResize(){
+				var ww2=window.innerWidth;
+				if(ww2!=ww){ww = ww2;	svgHeight();}
+			}
+			
+			function svgHeight(){
+				svgW = svgElem.offsetWidth;
+				svgH = svgElem.offsetWidth*ratH/ratW;
+				svg.style("height",svgH+"px");
+                                
+			}
+			
+			//SLIDER
+		/*	var slider = new Dragdealer('my-slider',
+				{
+					steps: 30,
+					x: .5,
+					animationCallback: function(x, y)
+					{
+						console.log(x*12);
+					}
+				}); */
+				
+		}
+
+
+		function scaleSvg(direction) {
+                  if (direction > 0) {
+                     setScale(scale*factor);
+                  } else {
+                     setScale(scale/factor);
+                  }
+                  draw(scale);
+		}
+	</script>
+</head>
+<body onload="onLoad()">
+
+<table>
+<tr><td></td><td><button onclick="scaleSvg(1)" type="button">Zoom In</button></td><td></td></tr>
+<tr><td><button onclick="changeFactor(-1)" type="button">Factor v</button></td><td><div id="factor"></div><div id="scale"></div></td><td><button onclick="changeFactor(1)" type="button">Factor ^</button></td></tr>
+<tr><td></td><td><button onclick="scaleSvg(-1)" type="button">Zoom Out</button></td><td></td></tr>
+</table>
+
+<div id="my-slider" class="dragdealer">
+	<div class="red-bar handle">drag me</div>
+</div>
+
+</body>
+</html>
