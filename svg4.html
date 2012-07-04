@@ -12,15 +12,15 @@
 		var factor = 2.0;
 		
 	
-		svgW=1200, ratH=9, ratW=16;
-                svgH = svgW*ratH/ratW;
+		svgW=500, ratH=9, ratW=7;
+		svgH = svgW*ratH/ratW;
 		var svgOpt = {
 			w: svgW,
 			h: svgW*ratH/ratW
 		}
 		var boxOpt = {
-			w: 351,
-			h: 495
+			w: 343,
+			h: 490
 		}
 		
 		var totalRatio = boxOpt.w + boxOpt.h;
@@ -47,7 +47,7 @@
 			},
 			{
 				id: 3,
-				a: 310,
+				a: 50,
 				h: getHeight,
 				w: getWidth,
 			},
@@ -144,10 +144,6 @@
 		   factor = f;
 		   d3.select("#factor").html(""+factor);
 		}
-		function setScale(s) {
-		   scale = s;
-		   d3.select("#scale").html(""+scale);
-		}
 	
 		function changeFactor(direction) {
 		   if (direction > 0) {
@@ -169,7 +165,7 @@
 			return vis;
 		}
 	
-		function draw(oldScale, newScale, direction) {
+		function draw(oldScale, newScale) {
 			var numbers = g.selectAll("image").data(visible(data, newScale), function(d) { return d.id; });
 			marginBot = 10;
 			numbers.enter().append("image")
@@ -194,21 +190,14 @@
 	
 		function onLoad(){ 
 	
-
 			setFactor(10.0);
 			setScale(1.0);
 			setX(data);
 
-			var svg = d3.select("body").append("svg")
-						.attr("xmlns","http://www.w3.org/2000/svg")
-						.attr("version","1.1")
+			var svg = d3.select("svg")
 						.attr("height", svgOpt.h+"px")
 						.attr("viewBox","0 0 "+svgOpt.w+" "+svgOpt.h+"")
-						.attr("preserveAspectRatio","xMinYMax")
-						.attr("id","svg-box")
-						.style("width","100%")
-						.style("max-width","1200px")
-						.style("border","1px solid red");
+						.style("max-width",svgOpt.w+"px")
 						
 			var svgElem = document.getElementById("svg-box");
 			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
@@ -252,7 +241,22 @@
 			} else {
 				 setScale(scale/factor);
 			}
-			draw(oldScale, scale, direction);
+			draw(oldScale, scale);
+		}
+		
+		var activeSvg = 0, desiredWidth = 408;
+		
+		function progressSvg(direction) {
+			var oldScale = scale;
+			activeSvg += direction;
+			scale = desiredWidth/data[activeSvg].w();
+			 setScale(scale);
+			draw(oldScale, scale);
+		}
+		
+		function setScale(s) {
+		   scale = s;
+		   d3.select("#scale").html(""+scale);
 		}
 	</script>
 </head>
@@ -263,7 +267,10 @@
 <tr><td><button onclick="changeFactor(-1)" type="button">Factor v</button></td><td><div id="factor"></div><div id="scale"></div></td><td><button onclick="changeFactor(1)" type="button">Factor ^</button></td></tr>
 <tr><td></td><td><button onclick="scaleSvg(-1)" type="button">Zoom Out</button></td><td></td></tr>
 </table>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%; border: 1px solid red;">
 
+</svg><br/>
+<button onclick="progressSvg(-1)" type="button">Back</button><button onclick="progressSvg(1)" type="button">Next</button>
 <div id="my-slider" class="dragdealer">
 	<div class="red-bar handle">drag me</div>
 </div>
