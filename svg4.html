@@ -12,7 +12,7 @@
 		var factor = 2.0;
 		
 	
-		svgW=500, ratH=9, ratW=7;
+		svgW=513, ratH=9, ratW=6;
 		svgH = svgW*ratH/ratW;
 		var svgOpt = {
 			w: svgW,
@@ -174,6 +174,7 @@
 				.attr("height", function(d,i){return d.h()*oldScale })
 				.attr("width", function(d,i){return d.w()*oldScale })
 				.attr("xlink:href","gallon.svg")
+				
 			numbers.transition().duration(1000)
 				.attr("x", function(d,i) { return d.x*newScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
@@ -204,7 +205,6 @@
 			svgHeight();
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
                         // TODO:  add transform that inverts y's
-
 			draw(scale, scale);
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
@@ -244,15 +244,23 @@
 			draw(oldScale, scale);
 		}
 		
-		var activeSvg = 0, desiredWidth = 408;
+		var activeSvg = 0, desWidth = 408, desX = svgOpt.w-boxOpt.w-90;
 		
 		function progressSvg(direction) {
 			var oldScale = scale;
-			activeSvg += direction;
-			scale = desiredWidth/data[activeSvg].w();
-			 setScale(scale);
+			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
+			scale = desWidth/data[activeSvg].w();
+			setScale(scale);
 			draw(oldScale, scale);
-		}
+			var activeX = data[activeSvg].x*scale;
+			g.transition().duration(1000)
+				.attr("transform", "translate("+(desX-activeX)+")")
+		}			/*numbers.transition().duration(1000)
+				.attr("x", function(d,i) { return d.x*newScale; })
+				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
+				.attr("height", function(d,i){return d.h()*newScale })
+				.attr("width", function(d,i){return d.w()*newScale });*/
+
 		
 		function setScale(s) {
 		   scale = s;
