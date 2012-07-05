@@ -3,8 +3,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>SVG Test</title>
-	<link rel="stylesheet" type="text/css" href="/dragdealer/dragdealer.css" />
-	<script src="/dragdealer/dragdealer.js"></script>
+	<link rel="stylesheet" type="text/css" href="dragdealer.css" />
+	<script src="dragdealer.js"></script>
 	<script src="http://d3js.org/d3.v2.js"></script>
 	<script type="text/javascript">
 
@@ -202,6 +202,7 @@
 						
 			var svgElem = document.getElementById("svg-box");
 			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
+			console.log(svgH)
 			svgHeight();
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
 			progressSvg(0);
@@ -258,10 +259,10 @@
 			var activeX = data[activeSvg].x*scale;
 			if(direction == 0){
 				draw(scale, scale);
-				g.attr("transform", "translate("+(desX-activeX)+")")
+			//	g.attr("transform", "translate("+(desX-activeX)+")")
 			} else {
 				draw(oldScale, scale);
-				g.transition().duration(1000).attr("transform", "translate("+(desX-activeX)+")")
+			//	g.transition().duration(1000).attr("transform", "translate("+(desX-activeX)+")")
 			}
 		}
 		
