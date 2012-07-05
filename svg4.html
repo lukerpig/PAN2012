@@ -201,11 +201,13 @@
 						.style("max-width",svgOpt.w+"px")
 						
 			var svgElem = document.getElementById("svg-box");
-			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
+			console.log (svg.style("width") +" " + svgElem.offsetWidth);
+			svgH, svgW;
 			console.log(svgH)
 			svgHeight();
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
 			progressSvg(0);
+			var bound = d3.select("#bound").style("max-width",svgOpt.w+"px");
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
 			var ww = window.innerWidth;
@@ -215,8 +217,11 @@
 				if(ww2!=ww){ww = ww2;	svgHeight();}
 			}
 			function svgHeight(){
-				svgW = svgElem.offsetWidth;
-				svgH = svgElem.offsetWidth*ratH/ratW;
+				//svgW = parseInt(svgElem.style.width);
+				//svgH = parseInt(svgElem.style.width)*ratH/ratW;
+				svgW = document.getElementById("bound").clientWidth;
+				console.log(svgW + " Wid");
+				svgH = svgW*ratH/ratW;
 				svg.style("height",svgH+"px");
                                 
 			}
@@ -279,9 +284,10 @@
 <tr><td><button onclick="changeFactor(-1)" type="button">Factor v</button></td><td><div id="factor"></div><div id="scale"></div></td><td><button onclick="changeFactor(1)" type="button">Factor ^</button></td></tr>
 <tr><td></td><td><button onclick="scaleSvg(-1)" type="button">Zoom Out</button></td><td></td></tr>
 </table>
+<div id="bound">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%; border: 1px solid red;">
 
-</svg><br/>
+</svg></div><br/>
 <button onclick="progressSvg(-1)" type="button">Back</button><button onclick="progressSvg(1)" type="button">Next</button>
 <div id="my-slider" class="dragdealer">
 	<div class="red-bar handle">drag me</div>
