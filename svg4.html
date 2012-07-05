@@ -12,7 +12,7 @@
 		var factor = 2.0;
 		
 	
-		svgW=600, ratH=9, ratW=8;
+		svgW=800, ratH=9, ratW=16;
 		svgH = svgW*ratH/ratW;
 		var svgOpt = {
 			w: svgW,
@@ -34,38 +34,38 @@
 		var data = [
 			{
 				id: 1,
-				a: 1,
+				a: .3,
 				h: getHeight,
 				w: getWidth,
 	
 			},
 			{
 				id: 2,
-				a: 20,
+				a: 2,
 				h: getHeight,
 				w: getWidth,
 			},
 			{
 				id: 3,
-				a: 50,
+				a: 6,
 				h: getHeight,
 				w: getWidth,
 			},
 			{
 				id: 4,
-				a: 5000,
+				a: 20,
 				h: getHeight,
 				w: getWidth,
 			},
 			{
 				id: 5,
-				a: 30000,
+				a: 24,
 				h: getHeight,
 				w: getWidth,
 			},
 			{
 				id: 6,
-				a: 120000,
+				a: 45,
 				h: getHeight,
 				w: getWidth,
 			},
@@ -248,13 +248,13 @@
 			draw(oldScale, scale);
 		}
 		
-		var desWidth = 408, desX = svgOpt.w-boxOpt.w-80;
+		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
 		
 		var activeSvg = 0;
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
-			setScale(desWidth/data[activeSvg].w());
+			setScale(desHeight/data[activeSvg].h());
 			var activeX = data[activeSvg].x*scale;
 			if(direction == 0){
 				draw(scale, scale);
