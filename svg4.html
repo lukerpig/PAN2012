@@ -204,7 +204,6 @@
 			console.log (svg.style("width") +" " + svgElem.offsetWidth);
 			svgH, svgW;
 			console.log(svgH)
-			svgHeight();
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
 			progressSvg(0);
 			var bound = d3.select("#bound").style("max-width",svgOpt.w+"px");
@@ -216,10 +215,12 @@
 				var ww2=window.innerWidth;
 				if(ww2!=ww){ww = ww2;	svgHeight();}
 			}
+			
+			svgHeight();
 			function svgHeight(){
 				//svgW = parseInt(svgElem.style.width);
 				//svgH = parseInt(svgElem.style.width)*ratH/ratW;
-				svgW = document.getElementById("bound").clientWidth;
+				svgW = document.getElementById("bound").offsetWidth;
 				console.log(svgW + " Wid");
 				svgH = svgW*ratH/ratW;
 				svg.style("height",svgH+"px");
