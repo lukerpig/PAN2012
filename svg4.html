@@ -131,6 +131,7 @@
 			}
 		];
 		var marginBot = 10, marginLeft = 10;
+		
 		function setX(data) {
 			var w = 0;
 			for (var i = 0; i < data.length; i++) {
@@ -159,7 +160,6 @@
 				if (data[i].x*scale < svgW && data[i].h()*scale > .5) {
 				   vis.push(data[i]);
 				}
-				console.log(vis);
 			}
 			//if(vis.length != data.length){ vis.push(data[vis.length]) }
 			return vis;
@@ -204,8 +204,7 @@
 			svgH = svgElem.offsetHeight; svgW = svgElem.offsetWidth;
 			svgHeight();
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
-                        // TODO:  add transform that inverts y's
-			draw(scale, scale);
+			progressSvg(0);
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
 			var ww = window.innerWidth;
@@ -222,15 +221,20 @@
 			}
 			
 			//SLIDER
-		/*	var slider = new Dragdealer('my-slider',
+			var oldX = activeSvg;
+			var slider = new Dragdealer('my-slider',
 				{
-					steps: 30,
-					x: .5,
+					steps: data.length,
+					snap: true,
+					slide: false,
 					animationCallback: function(x, y)
 					{
-						console.log(x*12);
+						x = parseFloat(x)*(data.length-1);
+						var dir = x - oldX;
+						progressSvg(dir);
+						oldX = x;
 					}
-				}); */
+				}); 
 				
 		}
 
@@ -244,23 +248,22 @@
 			draw(oldScale, scale);
 		}
 		
-		var activeSvg = 0, desWidth = 408, desX = svgOpt.w-boxOpt.w-90;
+		var desWidth = 408, desX = svgOpt.w-boxOpt.w-80;
 		
+		var activeSvg = 0;
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
-			scale = desWidth/data[activeSvg].w();
-			setScale(scale);
-			draw(oldScale, scale);
+			setScale(desWidth/data[activeSvg].w());
 			var activeX = data[activeSvg].x*scale;
-			g.transition().duration(1000)
-				.attr("transform", "translate("+(desX-activeX)+")")
-		}			/*numbers.transition().duration(1000)
-				.attr("x", function(d,i) { return d.x*newScale; })
-				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
-				.attr("height", function(d,i){return d.h()*newScale })
-				.attr("width", function(d,i){return d.w()*newScale });*/
-
+			if(direction == 0){
+				draw(scale, scale);
+				g.attr("transform", "translate("+(desX-activeX)+")")
+			} else {
+				draw(oldScale, scale);
+				g.transition().duration(1000).attr("transform", "translate("+(desX-activeX)+")")
+			}
+		}
 		
 		function setScale(s) {
 		   scale = s;
