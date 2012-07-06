@@ -172,7 +172,7 @@
 		function visible(data, scale) {
 			var vis = [];
 			for(var i = 0; i < data.length; i++) {
-				if ((data[i].x+data[i].w()*.1)*scale < svgW && data[i].h()*scale > .5 ) {
+				if ((data[i].x+data[i].w()*.1)*scale < svgW) {
 				   vis.push(data[i]);
 				}
 			}
@@ -191,6 +191,10 @@
 						.attr("x",343/2)
 						.attr("y",491/2)
 						.attr("text-anchor","middle")
+						.attr("font-size","30")
+					g.append("image")
+						.attr("xlink:href","gallon2.svg")
+						.attr("width","77").attr("height","108");
 		}
 				
 		var maxHeight = 17000, maxWidth=maxHeight*boxOpt.w/boxOpt.h;
@@ -261,7 +265,7 @@
 					steps: data.length,
 					snap: true,
 					slide: false,
-					animationCallback: function(x, y)
+					callback: function(x, y)
 					{
 						x = parseFloat(x)*(data.length-1);
 						var dir = x - oldX;
