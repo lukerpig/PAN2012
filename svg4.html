@@ -248,7 +248,7 @@
 		
 		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
 		
-		var activeSvg = 0;
+		var activeSvg = data.length-2;
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
