@@ -245,15 +245,6 @@
 				
 		}
 
-		function scaleSvg(direction) {
-			var oldScale = scale;
-			if (direction > 0) {
-				 setScale(scale*factor);
-			} else {
-				 setScale(scale/factor);
-			}
-			draw(oldScale, scale);
-		}
 		
 		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
 		
@@ -280,11 +271,6 @@
 </head>
 <body onload="onLoad()">
 
-<table>
-<tr><td></td><td><button onclick="scaleSvg(1)" type="button">Zoom In</button></td><td></td></tr>
-<tr><td><button onclick="changeFactor(-1)" type="button">Factor v</button></td><td><div id="factor"></div><div id="scale"></div></td><td><button onclick="changeFactor(1)" type="button">Factor ^</button></td></tr>
-<tr><td></td><td><button onclick="scaleSvg(-1)" type="button">Zoom Out</button></td><td></td></tr>
-</table>
 <div id="bound">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%; border: 1px solid red;">
 
