@@ -163,28 +163,29 @@
 			//if(vis.length != data.length){ vis.push(data[vis.length]) }
 			return vis;
 		}
-	
+		
+		var maxHeight = 2000, maxWidth=2000;
 		function draw(oldScale, newScale) {
 			var numbers = g.selectAll("image").data(visible(data, newScale), function(d) { return d.id; });
 			marginBot = 10;
 			numbers.enter().append("image")
 				.attr("x", function(d,i) { return d.x*oldScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*oldScale-marginBot })
-				.attr("height", function(d,i){return d.h()*oldScale })
-				.attr("width", function(d,i){return d.w()*oldScale })
+				.attr("height", function(d,i){return Math.min(maxHeight,d.h()*oldScale) })
+				.attr("width", function(d,i){return Math.min(maxWidth,d.w()*oldScale) })
 				.attr("xlink:href","gallon.svg")
 				
 			numbers.transition().duration(1000)
 				.attr("x", function(d,i) { return d.x*newScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
-				.attr("height", function(d,i){return d.h()*newScale })
-				.attr("width", function(d,i){return d.w()*newScale });
+				.attr("height", function(d,i){return Math.min(maxHeight,d.h()*newScale) })
+				.attr("width", function(d,i){return Math.min(maxWidth,d.w()*newScale) });
 				
 			numbers.exit().transition().duration(1000)
 				.attr("x", function(d,i) { return d.x*newScale; })
 				.attr("y", function(d) { return svgOpt.h - d.h()*newScale-marginBot })
-				.attr("height", function(d,i){return d.h()*newScale })
-				.attr("width", function(d,i){return d.w()*newScale })
+				.attr("height", function(d,i){return Math.min(maxHeight,d.h()*newScale) })
+				.attr("width", function(d,i){return Math.min(maxWidth,d.w()*newScale) })
 			   .remove();
 				}
 	
