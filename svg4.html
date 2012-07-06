@@ -9,8 +9,7 @@
 	<script type="text/javascript">
 
 		var scale = 1.0;
-		var factor = 2.0;
-		
+	
 	
 		svgW=1200, ratH=9, ratW=16;
 		svgH = svgW*ratH/ratW;
@@ -191,7 +190,6 @@
 	
 		function onLoad(){ 
 	
-			setFactor(10.0);
 			setScale(1.0);
 			setX(data);
 
@@ -248,7 +246,7 @@
 		
 		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
 		
-		var activeSvg = data.length-2;
+		var activeSvg = 0;
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
@@ -265,7 +263,6 @@
 		
 		function setScale(s) {
 		   scale = s;
-		   d3.select("#scale").html(""+scale);
 		}
 	</script>
 </head>
