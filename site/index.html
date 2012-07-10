@@ -20,7 +20,7 @@
 			
 			.left{width:96%; float: left;}
 			
-			.right{width:4%; float: right;}
+			.right{width:3%; float: right;}
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
@@ -31,25 +31,11 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
+					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
 				},
-				{
-					label : "story2",
-					url: "story2.html",
-					cuePointBegin: 12.000,
-					cuePointEnd: 20.000,
-					story: "reveal2"
-					
-				},
-				{
-					label : "story3",
-					url: "story3.html",
-					cuePointBegin: 20.000,
-					cuePointEnd: 30.000,
-					story: "reveal3"
-				}
 			];
 			
 			function pageLoad(){
@@ -97,19 +83,19 @@
 				<div id="vid" class="left">
 					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				</div>
-				<div id="markers" class="right" style="">
+				<div id="markers" class="right">
 
 				</div>
 				<div class="clear"></div>
 			</div>
-			<div id="bot-links" style="margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
 				<div id="bot-left" class="left">
-					<div id="bleft" style="float: left;">
+					<div id="bleft" style="float: left; text-align: bottom;">
 						<a>HOW TO VIEW</a>
 					</div>
 					<div id="bright" style="float: right;">
-						<a>WHY 100 GALLONS?</a>
-						<a style="margin: 0px 20px;">ABOUT</a>
+						<a style="bottom: 0px;">WHY 100 GALLONS?</a>
+						<a style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
 					</div>
 				</div>
 				<div id="bot-right" class="right">
