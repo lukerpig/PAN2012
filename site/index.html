@@ -36,7 +36,7 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -44,7 +44,15 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -68,14 +76,6 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
-					cuePointBegin: 5.000,
-					cuePointEnd: 10.000,
-					story: "reveal1"
-				},
-				{
-					label : "story1",
-					url: "watercost/index.html",
 					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
@@ -84,7 +84,7 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -210,16 +210,19 @@
 				var videoOffset = document.getElementById("player_1");
 				var markersDiv=d3.select("#markers");
 				var markers=markersDiv.selectAll("div").data(markerData);
-				var vidHeight;
+				var vidDiv = d3.select("#vid")
+				var vid = vidDiv.selectAll("iframe .story").data(markerData)
+				var vidHeight, vidWidth;
 				
 				sizeVid(videoOffset.offsetWidth);
 				function sizeVid(size){
 					videoFrame
 						.style("height", size*9/16+"px");
-						
+						vidWidth = videoOffset.offsetWidth;
 						vidHeight = videoOffset.offsetHeight;
 						markersDiv.style("height",vidHeight+"px");
 						markerMargin();
+						sizeIframe();
 				}
 				
 				//MAKE MARKERS//////////////				
@@ -233,7 +236,11 @@
 						else
 							return
 					})
-					.style("border-radius","4px");
+					.style("border-radius","4px")
+					.style("cursor","pointer")
+					.on("click",function(d){
+						alert("TEST");	
+					})
 					
 					
 				markerMargin()
@@ -241,6 +248,28 @@
 					markers.style("margin-bottom",function(d,i){
 						if(i!=marginCount)
 							return marginSize/100*vidHeight+"px"
+					})
+				}
+				
+				//MAKE IFRAMES////////////////
+				vid.enter().append("iframe")
+					.attr("src",function(d,i){return "story/story"+i+".html"})
+					.attr("class","story")
+					.style("position","absolute")
+					.style("top","0")
+					
+				sizeIframe()
+				function sizeIframe(){
+					vid
+					.style("left",vidWidth+"px")
+					.style("height",vidHeight+"px")
+					.style("width",function(d){
+						if(d.level==2){
+							return vidWidth*.5+"px";
+						}
+						if(d.level==3){
+							return vidWidth*.75+"px";
+						}
 					})
 				}
 					
@@ -261,6 +290,8 @@
 						}
 					} 
 				}
+				
+				/*
 				///////////////////VIMEO VIMEO VIMEO///////////////////
 				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
 				var duration;
@@ -302,7 +333,8 @@
 						duration = value;
 					});
 					//froogaloop.addEvent('finish', function(data) {});
-                }
+					
+                }*/
 			}//END PAGELOAD()
 			function addEvent(element, eventName, callback) {
 				
@@ -325,7 +357,7 @@
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left" style="background-color: #3FC;">
+				<div id="vid" class="left" style="position: relative; background-color: #3FC; border: 1px solid red; overflow: hidden;">
 					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				</div>
 				<div id="markers" class="right" style="">
