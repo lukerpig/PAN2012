@@ -17,6 +17,10 @@
 			#vidmark {overflow: hidden;}
 			
 			#vidmark div {padding-bottom: 1000px; margin-bottom: -1000px;}
+			
+			.left{width:96%; float: left;}
+			
+			.right{width:4%; float: right;}
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
@@ -85,21 +89,21 @@
     <body onload="pageLoad()">
 		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #7fc3c7; background-image:url(graphics/bgbottom.jpg); background-position: top center; background-size: 100%; background-repeat: no-repeat; z-index: -2;"></div>
 		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
-		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto; border: 1px solid red;">
+		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
 			<div id="pan-logo">
 				<img src="graphics/pan.png">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" style="width:97%; float: left;">
+				<div id="vid" class="left">
 					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				</div>
-				<div id="markers" style="width:3%; float: right; background-color: #69F;">
-					<p style="margin: 0px;">a</p>
+				<div id="markers" class="right" style="">
+
 				</div>
 				<div class="clear"></div>
 			</div>
 			<div id="bot-links" style="margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
-				<div id="bot-left" style="width: 97%; float: left">
+				<div id="bot-left" class="left">
 					<div id="bleft" style="float: left;">
 						<a>HOW TO VIEW</a>
 					</div>
@@ -108,11 +112,18 @@
 						<a style="margin: 0px 20px;">ABOUT</a>
 					</div>
 				</div>
-				<div id="bot-right" style="width: 3%; float: right;">
+				<div id="bot-right" class="right">
 					<a><img src="graphics/mos-link.png" style="width: 100%;"/></a>
 				</div>
 				<div class="clear"></div>
-			</div>		
+			</div>	
+			<div id="line" class="left" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
+			<div class="clear"></div>
+			<div id="footer">
+				<img src="graphics/100galbot.png"/>
+				<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
+				<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
+			</div>
 		</div>
     </body>
 </html>
