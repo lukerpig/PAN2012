@@ -228,14 +228,6 @@
 				//MAKE MARKERS//////////////				
 				markers.enter().append("div")
 					.style("background-color","#549ea4")
-					.style("height",function(d){
-						if(d.level==2)
-							return markerSize+"%"
-						if(d.level==3)
-							return markerSize*2+"%"
-						else
-							return
-					})
 					.style("border-radius","4px")
 					.style("cursor","pointer")
 					.on("click",function(d,i){
@@ -246,9 +238,18 @@
 					
 				markerMargin()
 				function markerMargin(){
-					markers.style("margin-bottom",function(d,i){
+					markers
+					.style("margin-bottom",function(d,i){
 						if(i!=marginCount)
-							return marginSize/100*vidHeight+"px"
+							return Math.round(marginSize/100*vidHeight)+"px"
+					})
+					.style("height",function(d){
+						if(d.level==2)
+							return Math.round(markerSize/100*vidHeight)+"px"
+						if(d.level==3)
+							return Math.round(markerSize*2/100*vidHeight)+"px"
+						else
+							return
 					})
 				}
 				

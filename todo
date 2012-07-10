@@ -1,0 +1,28 @@
+TODO:
+-Make layout/draft site
+-Mosaic page (Have watch again button)
+-Highlight navigation boxes
+
+NICE TO HAVE:
+-exact lineup of markers and vid
+-Sound plays on puase to mask pause
+-lightbox
+-animated scroll out stories
+-Knowing where in the video user is so pause sends out right content
+-scrolling for text stories
+-possible custom scrollbar
+-scroll wheel support
+-splashpage
+-endingpage
+-designing what a story looks like/story format
+-conecpt video changes either on refresh or after clicking a button
+
+
+
+
+
+Open Issues:
+-How to get lightbox to go over main page and not just in iframe
+-How do you play sounds on scrollin/scrollout
+-Scrollwheel functionality
+-customize scrollbar
