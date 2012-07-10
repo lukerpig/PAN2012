@@ -238,8 +238,9 @@
 					})
 					.style("border-radius","4px")
 					.style("cursor","pointer")
-					.on("click",function(d){
-						alert("TEST");	
+					.on("click",function(d,i){
+						d3.select("#story"+i).transtition()
+							.duration(1000)
 					})
 					
 					
@@ -255,6 +256,7 @@
 				vid.enter().append("iframe")
 					.attr("src",function(d,i){return "story/story"+i+".html"})
 					.attr("class","story")
+					.attr("id",function(d,i){ return "story"+i})
 					.style("position","absolute")
 					.style("top","0")
 					
