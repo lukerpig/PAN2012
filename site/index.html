@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
-        <title>H2OWSOME</title>
+        <title>100 Gallons: Reflections From A Nation Powered By Water</title>
         <style>
 			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
 			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
@@ -14,9 +14,6 @@
 			
 			.clear{clear: both;}
 			
-			#vidmark {overflow: hidden;}
-			
-			#vidmark div {padding-bottom: 1000px; margin-bottom: -1000px;}
 			
 			.left{width:96%; float: left;}
 			
@@ -36,22 +33,194 @@
 					cuePointEnd: 10.000,
 					story: "reveal1"
 				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 2,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+				{
+					label : "story1",
+					url: "watercost/index.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					story: "reveal1"
+				},
+
 			];
+			
+			var marginSize = 1;
+			var marginCount = 0, markerWeight=0;
+			for(var i in data){
+				if(data[i].level==2 || data[i].level==3){
+					marginCount++
+					if(data[i].level==2)
+						markerWeight+=1;	
+					if(data[i].level==3)
+						markerWeight+=2;
+				}
+			}
+			marginCount--;
+			var markerSpace = 100-(marginCount*marginSize);
+			var markerSize = markerSpace/markerWeight;
 			
 			function pageLoad(){
 				ww = window.innerWidth, wh = window.innerHeight;
 				var videoFrame=d3.select("#player_1");
-				var videoOffset = document.getElementById("player_1")
-
-				sizeVid(videoOffset.offsetWidth, 0);
-				function sizeVid(size, duration){
+				var videoOffset = document.getElementById("player_1");
+				var markersDiv=d3.select("#markers");
+				var markers=markersDiv.selectAll("div").data(data);
+				var vidHeight;
+				
+				sizeVid(videoOffset.offsetWidth);
+				function sizeVid(size){
 					videoFrame
-						.transition()
-							.duration(duration)
-							.style("width",size+"px")
-							.style("height", size*9/16+"px");
+						.style("height", size*9/16+"px");
+						vidHeight = videoOffset.offsetHeight;
+						markersDiv.style("height",vidHeight+"px")
 				}
 				
+				//MAKE MARKERS//////////////				
+				markers.enter().append("div")
+					.style("background-color","#ffc")
+					.style("height",function(d){
+						if(d.level==2)
+							return markerSize+"%"
+						if(d.level==3)
+							return markerSize*2+"%"
+						else
+							return
+					})
+					.style("margin-bottom",function(d,i){
+						if((d.level==2||d.level==3) && i!=marginCount)
+							return marginSize/100*vidHeight+"px"
+						else
+							return
+					})
+					
+				//WINDOW RESIZE/////////////////
 				window.addEventListener('resize', windowResize, false);
 				
 				function windowResize(){
@@ -64,27 +233,79 @@
 					if(ww2!=ww){//NEW WIDTH
 						ww = ww2;
 						if(!window.location.hash){
-							sizeVid(videoOffset.offsetWidth, 0);
+							sizeVid(videoOffset.offsetWidth);
 						}
 					} 
 				}
-			}
+				///////////////////VIMEO VIMEO VIMEO///////////////////
+				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
+				var duration;
+				var timeInt;
+				var isPlaying = false;
+				fVideo = document.getElementById("player_1");
+
+
+                $f(fVideo).addEvent('ready', ready);
+                function ready(player_id) {
+                    // Keep a reference to Froogaloop for this player
+                    froogaloop = $f(player_id);
+					
+						froogaloop.addEvent('play', function(data) {
+							timeInt=setInterval(function(){getTime()},50);
+							if(window.location.hash){
+								returnVid();
+							}
+						});
+	
+						froogaloop.addEvent('pause', function(data) {
+							isPlaying = false;
+							window.clearInterval(timeInt)
+						});
+					
+						froogaloop.addEvent('seek', function(data) { 
+							timeManip (data.seconds);
+						});
+					
+					function getTime(){
+						var dog = function (value, player_id) {
+										timeManip (value);
+									}
+									
+						froogaloop.api('getCurrentTime', dog);
+					}
+					
+					froogaloop.api('getDuration', function (value, player_id) {
+						duration = value;
+					});
+					//froogaloop.addEvent('finish', function(data) {});
+                }
+			}//END PAGELOAD()
+			function addEvent(element, eventName, callback) {
+				
+				if (element.addEventListener) {
+					element.addEventListener(eventName, callback, false);
+				}
+				else {
+					element.attachEvent(eventName, callback, false);
+				}
+			}	
         </script>
     </head>
 	
     <body onload="pageLoad()">
-		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #7fc3c7; background-image:url(graphics/bgbottom.jpg); background-position: top center; background-size: 100%; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #7fc3c7; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; background-repeat: no-repeat; z-index: -2;"></div>
 		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		
 		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
-			<div id="pan-logo">
-				<img src="graphics/pan.png">
+			<div id="pan-logo" style="width: 50%;">
+				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left">
+				<div id="vid" class="left" style="background-color: #3FC;">
 					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				</div>
-				<div id="markers" class="right">
-
+				<div id="markers" class="right" style="background-color: #C93;">
+				
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -108,6 +329,7 @@
 			<div id="footer">
 				<img src="graphics/100galbot.png"/>
 				<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
+				<img src="graphics/unc.png" style="margin-left: 10px; vertical-align: 10px;"/>
 				<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
 			</div>
 		</div>
