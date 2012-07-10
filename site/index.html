@@ -60,7 +60,7 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 2,
+					level: 1,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -84,7 +84,7 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 1,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -100,7 +100,7 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 1,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -116,14 +116,14 @@
 				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 3,
+					level: 2,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
 				},				{
 					label : "story1",
 					url: "watercost/index.html",
-					level: 2,
+					level: 3,
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
@@ -170,11 +170,13 @@
 				},
 
 			];
+			var markerData=[]
 			
 			var marginSize = 1;
 			var marginCount = 0, markerWeight=0;
 			for(var i in data){
 				if(data[i].level==2 || data[i].level==3){
+					markerData.push(data[i]);
 					marginCount++
 					if(data[i].level==2)
 						markerWeight+=1;	
@@ -191,7 +193,7 @@
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("player_1");
 				var markersDiv=d3.select("#markers");
-				var markers=markersDiv.selectAll("div").data(data);
+				var markers=markersDiv.selectAll("div").data(markerData);
 				var vidHeight;
 				
 				sizeVid(videoOffset.offsetWidth);
