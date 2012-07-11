@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
+@font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
+
+h1 {font-family: Interstate-Thin, verdana, sans-serif; margin-bottom: -10px;}
+p {font-family: Interstate-Light, verdana, sans-serif;}

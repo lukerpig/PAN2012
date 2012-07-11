@@ -2,9 +2,13 @@ TODO:
 -Make layout/draft site
 -Mosaic page (Have watch again button)
 -Highlight navigation boxes
+-Froogaloop play deactivates story
+-Video timing changes marker color
+-Move data out of main page
 
 NICE TO HAVE:
 -exact lineup of markers and vid
+-display:none unactive stories
 -Sound plays on puase to mask pause
 -lightbox
 -animated scroll out stories
