@@ -27,14 +27,14 @@
 			var data = [
 				{
 					label : "story1",
-                                        url: "watercost/index.html",
+					url: "watercost/index.html",
 					cuePointBegin: 5.000,
 					cuePointEnd: 10.000,
 					story: "reveal1"
 				},
 				{
 					label : "story2",
-                                        url: "story2.html",
+					url: "story2.html",
 					cuePointBegin: 12.000,
 					cuePointEnd: 20.000,
 					story: "reveal2"
@@ -42,7 +42,7 @@
 				},
 				{
 					label : "story3",
-                                        url: "story3.html",
+									url: "story3.html",
 					cuePointBegin: 20.000,
 					cuePointEnd: 30.000,
 					story: "reveal3"
@@ -113,7 +113,7 @@
 				
 			///////////////////VIDEO TIME TRACK CODE///////////////////
 				function timeManip(seconds){
-					//console.log(seconds);
+					console.log(seconds);
 					videoTime = seconds;
 					//videoPercent = seconds/duration;
 					updateIcons();
@@ -355,6 +355,7 @@
 					
 						froogaloop.addEvent('play', function(data) {
 							timeInt=setInterval(function(){getTime()},50);
+							console.log("play");
 							if(window.location.hash){
 								returnVid();
 							}
@@ -362,6 +363,7 @@
 	
 						froogaloop.addEvent('pause', function(data) {
 							isPlaying = false;
+							console.log("pause")
 							window.clearInterval(timeInt)
 						});
 					

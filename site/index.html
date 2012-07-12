@@ -21,7 +21,9 @@
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
-        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>   
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
+		
+		<script src="contentData.js"></script>
         
         
 		<script type="text/javascript">
@@ -29,13 +31,16 @@
 		
 
 		    function ContentItem(contentData) {
-			    for(key in contentData) {
+			    for(var key in contentData) {
 				    this[key] = contentData[key];
-				    console.log(""+this+"["+key+"] = " + contentData[key]);
 				}
 				
 				this.getVidFrameWidth = function(vidWidth) {
 					return this.level * .25 * vidWidth;
+				}
+				
+				this.containsTime = function(time) {
+					return this.cuePoint <= time && time < this.nextCuePoint;
 				}
 			}
 
@@ -51,83 +56,76 @@
 
 				this.getMarkerHeight = function(markerSize, vidHeight) {
 					var lvl = this.level;
-					console.log("level: " + lvl);
 					var h =  Math.round((this.level-1)*markerSize*vidHeight/100.0);
-					console.log(h);
 					return h;
 			    }
 
 			    this.getMarkerSlots = function() { return this.level-1; }
 		    }
 
-		    function Content(captionData, storyData) {
+		    function Content(contentData) {
+				this.all = [];
+				this.stories = [];
 			    this.captions = [];
-			    for(var i = 0; i < captionData.length; i++) {
-				    var caption = new Caption(captionData[i]);
-				    console.log("caption["+i+"]: " + caption);
-				    this.captions.push(caption);
-
+				
+			    for(var i = 0; i < contentData.length; i++) {
+					var contentItem;
+					if (contentData.level == 1) {
+						contentItem =  new Caption(contentData[i]);
+						this.captions.push(contentitem);
+					} else {
+						contentItem = new Story(contentData[i]);
+						this.stories.push(contentItem);
+					}
+					
+				    this.all.push(contentItem);
 				}
-
-			    this.stories = [];
-				for(var i = 0; i < storyData.length; i++) {
-					var story = new Story(storyData[i]);
-					console.log("story["+i+"]: " + story);
-					this.stories.push(story);
+				
+				function cuePointComparator(a,b) { return a.cuePoint - b.cuePoint; }
+				
+				this.captions.sort(cuePointComparator);
+				this.stories.sort(cuePointComparator);
+				this.all.sort(cuePointComparator);
+				
+				for(var i = 1; i < this.all.length; i++) {
+					this.all[i-1].nextCuePoint = this.all[i].cuePoint;
 				}
-
+				
+				this.all[this.all.length-1].nextCuePoint = Number.MAX_VALUE;
+				
 				this.getTotalMarkerSlots = function() {
 					var markerSlots = 0;
-					for(i in this.stories) {
+					for(var i in this.stories) {
 						markerSlots += this.stories[i].getMarkerSlots();
 					}
 					return markerSlots;
 				}
-
-			}
+				
+				
+				this.currentContent = function(videoTime){
+		
+					for(var i in this.all) {
+						var d = this.all[i];
+						if (d.containsTime(videoTime)) {
+							return d;
+						}
+					}
+					return null
+				}
+				
+				this.getContentById = function(contentId) {
+										
+					for(var i in this.all) {
+						var d = this.all[i];
+						if (d.id == contentId) {
+							return d;
+						}
+					}
+					return null;
+				}
+			}//END CONTENT END CONTENT ////////////////
 
 		
-			var froogaloop;
-		    
-
-			var storyData = [
-				{
-					id : "story0",
-					url: "story/story0.html",
-					level: 2,
-					cuePointBegin: 0.000,
-					cuePointEnd: 5.000,
-				},
-				{
-					id : "story1",
-					url: "story/story1.html",
-					level: 3,
-					cuePointBegin: 5.000,
-					cuePointEnd: 10.000,
-				},
-			];
-			
-			var captionData = [
-				{
-					id : "caption0",
-					captionTitle: "This is level one",
-					captionContent: "Content goes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. ",
-					level: 1,
-					cuePointBegin: 10.000,
-					cuePointEnd: 15.000,
-				},
-				{
-					id : "caption1",
-					captionTitle: "This is level one also",
-					captionContent: "Content goes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. ",
-					level: 1,
-					cuePointBegin: 15.000,
-					cuePointEnd: 20.000,
-				},
-			]
-
-			var content = new Content(captionData, storyData);
-
 			function MarkerColumn(content, parentElement) {
 				this.content = content;
 				this.parentElement = parentElement;
@@ -165,27 +163,25 @@
 				}
 				
 				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").style("background-color","#155f64");
+					d3.select("#"+storyId+"-marker").style("background-color","#847e89");
 				}
 				
 				this.deactivateStory = function(storyId){
 					d3.select("#"+storyId+"-marker").style("background-color","#549ea4");
 				}
 				
-			}
+			}//END MARKERS END MARKERS ////////////////
+
 
 			function Reveal(content, parentElement) {
 				this.content = content;
 				this.parentElement = parentElement;
 				this.activeStory = null;
+				
+				var that = this;
 
-				this.create = function(onActivate, onDeactivate, onShow, onHide) {
-					this.onActivate = onActivate;
-					this.onDeactivate = onDeactivate;
-					this.onShow = onShow;
-					this.onHide = onHide;
+				this.create = function() {
 					this.vidIframes = this.parentElement.selectAll("iframe .story").data(content.stories);
-
 					this.vidIframes.enter().append("iframe")
 						.attr("src",function(d,i){return d.url})
 						.style("z-index","2")
@@ -193,8 +189,7 @@
 						.attr("class","story")
 						.attr("id",function(d,i){ return d.id })
 						.style("position","absolute")
-						.style("top","0");
-
+						.style("top","0")
 
 					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
 					this.captionDivs.enter().append("div")
@@ -207,18 +202,31 @@
 						.html(function(d,i){return "<h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p>"})
 					
 				}
-
+				
+				function storyLeft(d) {
+					var vidWidth = that.vidWidth;
+					if (that.activeStory == d.id) {
+						return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px"
+					} else {
+						return vidWidth + "px";
+					}
+				}
+				
+			//	function addCaptions
 				this.setSize = function(vidWidth, vidHeight){
 					this.vidWidth = vidWidth;
 					this.vidHeight = vidHeight;
 					this.vidIframes
-					   .style("left",function(d){return vidWidth+"px"})
-					   .style("height",vidHeight+"px")
-					   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+						.call(styleReveal)
 					this.captionDivs
-					   .style("left",function(d){return vidWidth+"px"})
-					   .style("height",vidHeight+"px")
-					   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+						.call(styleReveal)
+						
+       				function styleReveal(){
+						this
+						   .style("left", storyLeft)
+						   .style("height",vidHeight+"px")
+						   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+					}
 				}
 
 				this.showStory = function(story, delay){
@@ -227,16 +235,14 @@
 					d3.select("#"+story).transition()
 						.duration(1000)
 						.delay(delay)
-						.style("left",function(d){
-							return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px";
-						});
+						.style("left", storyLeft);
 				}
 				
 				this.hideStory = function(story){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
 					d3.select("#"+story).transition().duration(750)
-					.style("left", function(d) { return vidWidth + "px"; });
+					.style("left", storyLeft);
 				}
 
 				this.activateStory = function(story){
@@ -259,33 +265,114 @@
 				
 				
 				
+			}//END REVEAL END REVEAL ////////////////
+			
+			
+			function VideoHandler(playerId) {
+				var that = this;				
+				
+				fVideo = document.getElementById(playerId);
+				
+                $f(fVideo).addEvent('ready', ready);
+				
+                function ready(player_id) {
+					
+					console.log("ready called");
+					
+					that.froogaloop = $f(player_id);
+
+
+					function tick(videoTime) {
+						that.videoTime = videoTime;
+					    if (that.onTick) { that.onTick(videoTime); }
+				    }
+
+                    // Keep a reference to Froogaloop for this player
+					function getTime(){
+						that.froogaloop.api('getCurrentTime', function(value, player_id) { tick(value); });
+					}
+
+					
+					that.froogaloop.addEvent('play', function(data) {
+						that.timeInt=setInterval(function(){getTime()},50);
+						console.log("play");
+						if (that.onPlay) { that.onPlay(); }
+					});
+	
+					that.froogaloop.addEvent('pause', function(data) {
+						console.log("pause");
+
+						if (that.timeInt) {
+							window.clearInterval(that.timeInt);
+							that.timeInt = null;
+						}
+						if (that.onPause) { that.onPause(); }
+					});
+					
+					that.froogaloop.addEvent('seek', function(data) { 
+							tick(data.seconds);
+					});
+					
+					that.froogaloop.addEvent('finish', function(data) {
+						console.log("finish");
+						if (that.onFinish) { that.onFinish(); }
+					});
+					
+					that.froogaloop.api('getDuration', function (value, player_id) {
+						that.duration = value;
+					});
+					
+                }
+				
+				this.play = function() {
+					if (this.froogaloop) { this.froogaloop.api("play"); }
+				}
+				
+				this.pause = function() {
+					if (this.froogaloop) { this.froogaloop.api("pause"); }
+				}
+
+				
 			}
 
-
+			var content = new Content(contentData);
 
 			//////////////////PAGELOAD PAGELOAD PAGELOAD/////////////////////
 			function pageLoad(){
 
-				
-				function fapi(event){
-					if(froogaloop){
-						froogaloop.api(event);
-					}
-				}
 
 				ww = window.innerWidth, wh = window.innerHeight;
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("player_1");
+
+				var video = new VideoHandler("player_1");
+				video.onPlay = function() {
+					if (reveal.activeStory) {
+						reveal.deactivateStory();
+					}
+				 }
+				video.onPause = function() { 
+				   var currentStory = content.currentContent(video.videoTime);
+				   if (currentStory) {
+					   reveal.activateStory(currentStory.id);
+				   }
+				}
+				video.onFinish = function() { alert("Display Mosaic Now!") }
+				video.onTick = function(timestamp) { console.log("onTick!: " + timestamp); }
+				
 				
 				var vidDiv = d3.select("#vid")
-				
 				var reveal = new Reveal(content, vidDiv);
 
 				var markersDiv=d3.select("#markers");
-
 				var markerColumn = new MarkerColumn(content, markersDiv);
 				
-				reveal.create(function() { fapi("pause"); }, function() { fapi("play"); }, function(storyId) {markerColumn.activateStory(storyId)}, function(storyId) {markerColumn.deactivateStory(storyId)});
+				reveal.onActivate = function() { video.pause(); }
+			    reveal.onDeactivate = function() { video.play(); }
+				reveal.onShow = function(storyId) { markerColumn.activateStory(storyId); }
+				reveal.onHide = function(storyId) { markerColumn.deactivateStory(storyId); }
+					
+ 			    reveal.create();
 				
 				markerColumn.createMarkers(function(storyId){
 					if (reveal.activeStory == storyId) { 
@@ -298,12 +385,7 @@
 					
 				});
 
-				
-
-				
 				var vidHeight, vidWidth;
-				var videoTime;
-				
 				
 				sizeVid(videoOffset.offsetWidth);
 				function sizeVid(size){
@@ -333,55 +415,9 @@
 					} 
 				}
 				
-				///////////////////VIDEO TIME TRACK CODE///////////////////
-				function timeManip(seconds){
-					console.log(seconds);
-					videoTime = seconds;
-					//videoPercent = seconds/duration;
-				}
-				
-				///////////////////VIMEO VIMEO VIMEO///////////////////
-				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
-				var duration;
-				var timeInt;
-				var isPlaying = false;
-				fVideo = document.getElementById("player_1");
-
-                $f(fVideo).addEvent('ready', ready);
-                function ready(player_id) {
-                    // Keep a reference to Froogaloop for this player
-                    froogaloop = $f(player_id);
-					
-						froogaloop.addEvent('play', function(data) {
-							timeInt=setInterval(function(){getTime()},50);
-							deactivateStory();
-						});
-	
-						froogaloop.addEvent('pause', function(data) {
-							isPlaying = false;
-							window.clearInterval(timeInt);
-						});
-					
-						froogaloop.addEvent('seek', function(data) { 
-							timeManip (data.seconds);
-						});
-					
-					function getTime(){
-						var dog = function (value, player_id) {
-										timeManip (value);
-									}
-							
-						froogaloop.api('getCurrentTime', dog);
-					}
-					
-					froogaloop.api('getDuration', function (value, player_id) {
-						duration = value;
-					});
-					//froogaloop.addEvent('finish', function(data) {});
-					
-                }
 				
 			}//END PAGELOAD()
+			
 			function addEvent(element, eventName, callback) {
 				
 				if (element.addEventListener) {
