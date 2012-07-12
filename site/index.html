@@ -81,10 +81,6 @@
 				    this.all.push(contentItem);
 				}
 				
-				console.log(this.all);
-				console.log(this.captions);
-				console.log(this.stories);
-				
 				function cuePointComparator(a,b) { return a.cuePoint - b.cuePoint; }
 				
 				this.captions.sort(cuePointComparator);
@@ -140,8 +136,7 @@
 				this.markerSpace = 100 - (this.marginCount*this.marginSize);
 				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
 
-				function colorChooser1(d, i) {
-					console.log("colorChooser1");
+				function colorChooser(d, i) {
 					if (that.colorSelector) {
 						return that.colorSelector(d,i);
 						// #549ea4 normal
@@ -151,35 +146,12 @@
 					}
 				}
 
-function colorChooser2(d, i) {
-						console.log("colorChooser2");
-
-					if (that.colorSelector) {
-						return that.colorSelector(d,i);
-						// #549ea4 normal
-						// #847e89 active
-					} else {
-						return "#f33";
-					}
-				}
-
-
-function colorChooser3(d, i) {
-						console.log("colorChooser03");
-
-					if (that.colorSelector) {
-						return that.colorSelector(d,i);
-						// #549ea4 normal
-						// #847e89 active
-					} else {
-						return "#f33";
-					}
-				}			    this.createMarkers = function(clickHandler) {
+			    this.createMarkers = function(clickHandler) {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
 
 					this.markers.enter().append("div")
 						.attr("id",function(d,i){return d.id+"-marker"})
-						.style("background-color", colorChooser1)
+						.style("background-color", colorChooser)
 						.style("border-radius","4px")
 						.style("cursor","pointer")
 						.on("click", function(d,i) { clickHandler(d.id); });
@@ -203,11 +175,15 @@ function colorChooser3(d, i) {
 				}
 				
 				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser2);
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
 				}
 				
 				this.deactivateStory = function(storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser3);
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+				}
+				
+				this.repaint = function() {
+					this.markers.style("background-color",colorChooser);
 				}
 				
 			}//END MARKERS END MARKERS ////////////////
@@ -350,8 +326,7 @@ function colorChooser3(d, i) {
 							window.clearInterval(that.timeInt);
 							that.timeInt = null;
 						}
-						console.log("videoTime: " + that.videoTime + ":" + typeof that.videoTime + " duration: " + that.duration + ":" + typeof that.duration);
-						if ( (that.videoTime < (that.duration-1)) && that.onPause) { console.log("calling onPause"); that.onPause(); }
+						if ( (that.videoTime < (that.duration-1)) && that.onPause) { that.onPause(); }
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
@@ -389,25 +364,30 @@ function colorChooser3(d, i) {
 				ww = window.innerWidth, wh = window.innerHeight;
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("player_1");
+				
+				var currentStory;
 
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
-					console.log("play: " + reveal.activeStory);
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
 					}
 				 }
 				video.onPause = function() {
-									   console.log("in onPause");
-
-				   var currentStory = content.currentContent(video.videoTime);
-				   console.log("pause: activating: " + currentStory);
+				   if (!currentStory) {
+					   currentStory = content.currentContent(video.videoTime);
+				   }
 				   if (currentStory) {
 					   reveal.activateStory(currentStory.id);
 				   }
 				}
 				video.onFinish = function() { alert("Display Mosaic Now!") }
-				video.onTick = function(timestamp) { console.log("onTick!: " + timestamp); }
+				video.onTick = function(timestamp) {
+					if (!currentStory || !currentStory.containsTime(timestamp)) {
+						currentStory = content.currentContent(timestamp);
+						markerColumn.repaint();
+					}
+				 }
 				
 				
 				var vidDiv = d3.select("#vid")
@@ -416,22 +396,23 @@ function colorChooser3(d, i) {
 				var markersDiv=d3.select("#markers");
 				var markerColumn = new MarkerColumn(content, markersDiv);
 				markerColumn.colorSelector = function(d, i) {
-					console.log("getting color for :" + d.id + " active story is: " + reveal.activeStory);
 					if (d.id == reveal.activeStory) {
 						return "#847e89";
+					} else if ( d.nextCuePoint < video.videoTime ) {
+						return "#f00";
+					} else if (d.containsTime(video.videoTime)) {
+						return "#ff0";
 					} else {
 						return "#549ea4";
-					}
+					} 
 				};
 				
 				reveal.onActivate = function() { video.pause(); }
 			    reveal.onDeactivate = function() { video.play(); }
 				reveal.onShow = function(storyId) { 
-					console.log("showing story: " + storyId +" active story is: " + reveal.activeStory);
 					markerColumn.activateStory(storyId)
 				 }
 				reveal.onHide = function(storyId) {
-					console.log("hiding story: " + storyId +" active story is: " + reveal.activeStory);
 					 markerColumn.deactivateStory(storyId);
 				 }
 					
