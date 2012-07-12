@@ -310,7 +310,7 @@
 							window.clearInterval(that.timeInt);
 							that.timeInt = null;
 						}
-						if (that.onPause) { that.onPause(); }
+						if (that.videoTime < that.duration && that.onPause) { that.onPause(); }
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
