@@ -34,6 +34,7 @@
                         .headline { height:168.75px; padding-left: 10px; margin-left: 300px; font: 36px sans-serif; background-color: #FFF; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
 		<script type="text/javascript">
 			var shower = 0, flush = 0, laundry = 0, hands = 0;
     
@@ -168,43 +169,96 @@
 
 			var ww = window.innerWidth;
 
-			function windowResize(){
-			     var ww2=window.innerWidth;
-			     if(ww2!=ww){
-                               ww = ww2;
-			       svgHeight();
-                             }
-			}
-			
-			function svgHeight(){
-                              var svgElem = document.getElementById("barchart")
-			      svgW = svgElem.offsetWidth;
-			      svgH = svgElem.offsetWidth*9/16;
-			      d3.select("#barchart").style("height",svgH+"px");
-			
-			}
 
-                        function onLoadPlease() {
+			function onLoad() {
+				var svgElem, player1;
+				svgHeight();
+				setupLabels();
+				
+				//WINDOW RESIZE
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var ww2=window.innerWidth;
+					if(ww2!=ww){
+						ww = ww2;
+						svgHeight();
+					}
+				}
+				
+				function svgHeight(){
+					var svgElem = document.getElementById("barchart")
+					var player1 = document.getElementById("player_1")
+					var svgW = svgElem.offsetWidth;
+					var svgH = svgElem.offsetWidth*9/16;
+					var playerW = player1.offsetWidth;
+					var playerH = player1.offsetWidth*9/16;
+					d3.select("#barchart").style("height",svgH+"px");
+					d3.select("#player_1").style("height",playerH+"px");
+				}
+				
+			   ////V//I//M//EE/OOOOO//////////
+				fVideo = document.getElementById("player_1");
+				
+				$f(fVideo).addEvent('ready', ready);
+				
+				function ready(player_id) {
+					froogaloop = $f(player_id)
+				
+					froogaloop.addEvent('play', function(data) {
+						var skipDiv = document.getElementById("skip");
+						skipDiv.style.display="none";
+					});
+				
+					froogaloop.addEvent('pause', function(data) {
+						console.log("pause");
+					});
+										
+					froogaloop.addEvent('finish', function(data) {
+						alert("T");
+						afterVideo();
+					});
+					
+					froogaloop.api('getDuration', function (value, player_id) {
+						duration = parseFloat(value);
+					});
+					
+					froogaloop.addEvent('playProgress', function(data) {
+						console.log('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
+					});
+				}
+				
+				function afterVideo(){
+					player1.style.display="none"	
+				}
 
-                           setupLabels();
-			
-			   //WINDOW RESIZE
-			   window.addEventListener('resize', windowResize, false);
-			
-                        }
+				function addEvent(element, eventName, callback) {
+					
+					if (element.addEventListener) {
+						element.addEventListener(eventName, callback, false);
+					}
+					else {
+						element.attachEvent(eventName, callback, false);
+					}
+				}	
+			}
 
                
 		</script>
 	</head>
 	
-	<body onload="onLoadPlease()">
-		<h1>THE COST OF WATER</h1>
+	<body onload="onLoad()">
+		<h1>How much does 100 gallons cost?</h1>
 			
 		<div id="container" style="background-color: #FFF;">
-			<p>What would your bill measure across the world?</p>
-			<div id="interactive" style="margin: 0px auto;">
+			<p>What would your water cost if you lived in another country? xxyxxy?</p>
+			<div id="video" style="position: relative;">
+				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
+			</div>
+			<div id="interactive" style="margin: 0px auto; display: none;">
 				<div class="card" id="card1">
-					<img src="watercost/cost1.png"/>
+					<img src="watercost/cost1.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
 						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="5" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="10.4" type="radio" checked/>&nbsp;</label>
@@ -213,7 +267,7 @@
 					</form>
 				</div>
 				<div class="card" id="card2" style="display: none;">
-					<img src="watercost/cost2.png"/>
+					<img src="watercost/cost2.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="flush">
 						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="8" type="radio" checked/>&nbsp;</label>
@@ -223,7 +277,7 @@
 					</form>
 				</div>
 				<div class="card" id="card3" style="display: none;">
-					<img src="watercost/cost3.png"/>
+					<img src="watercost/cost3.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="laundry">
 						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="3" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7" type="radio" checked/>&nbsp;</label>
@@ -233,7 +287,7 @@
 					</form>
 				</div>
 				<div class="card" id="card4" style="display: none;">
-					<img src="watercost/cost4.png"/>
+					<img src="watercost/cost4.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="hands">
 						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="4" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="7.5" type="radio" checked/>&nbsp;</label>

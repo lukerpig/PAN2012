@@ -69,6 +69,13 @@
 			    this.captions = [];
 				
 			    for(var i = 0; i < contentData.length; i++) {
+					var cuePoint = contentData[i].cuePoint
+					var cuePointFloor = Math.floor(cuePoint)
+					var frame = Math.round(100*(cuePoint-cuePointFloor))
+					var ms = Math.round(frame*1000/24)/1000
+					var cuePointMs = cuePointFloor+ms
+					contentData[i].cuePoint = cuePointMs
+					
 					var contentItem;
 					if (contentData[i].level == 1) {
 						contentItem =  new Caption(contentData[i]);
@@ -304,6 +311,7 @@
 
 					function tick(videoTime) {
 						that.videoTime = parseFloat(videoTime);
+						console.log(that.videoTime)
 					    if (that.onTick) { that.onTick(that.videoTime); }
 				    }
 
@@ -314,7 +322,7 @@
 
 					
 					that.froogaloop.addEvent('play', function(data) {
-						that.timeInt=setInterval(function(){getTime()},50);
+						that.timeInt=setInterval(function(){getTime()},1000/24);
 						console.log("play");
 						if (that.onPlay) { that.onPlay(); }
 					});
@@ -382,8 +390,10 @@
 				   }
 				}
 				video.onFinish = function() { alert("Display Mosaic Now!") }
+				
 				video.onTick = function(timestamp) {
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
+						console.log("change" + timestamp)
 						currentStory = content.currentContent(timestamp);
 						markerColumn.repaint();
 					}
@@ -396,13 +406,13 @@
 				var markersDiv=d3.select("#markers");
 				var markerColumn = new MarkerColumn(content, markersDiv);
 				markerColumn.colorSelector = function(d, i) {
-					if (d.id == reveal.activeStory) {
-						return "#847e89";
-					} else if ( d.nextCuePoint < video.videoTime ) {
-						return "#f00";
-					} else if (d.containsTime(video.videoTime)) {
-						return "#ff0";
-					} else {
+					if (d.id == reveal.activeStory) {//ONCLICK
+						return "#206666";
+					} else if ( d.nextCuePoint < video.videoTime ) {//IS PASSED
+						return "#75BBBC";
+					} else if (d.containsTime(video.videoTime)) {//ACTIVE
+						return "#206666";
+					} else {//DEFAULT
 						return "#549ea4";
 					} 
 				};
@@ -460,15 +470,6 @@
 				
 			}//END PAGELOAD()
 			
-			function addEvent(element, eventName, callback) {
-				
-				if (element.addEventListener) {
-					element.addEventListener(eventName, callback, false);
-				}
-				else {
-					element.attachEvent(eventName, callback, false);
-				}
-			}	
         </script>
     </head>
 	
