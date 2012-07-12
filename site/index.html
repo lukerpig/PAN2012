@@ -70,9 +70,9 @@
 				
 			    for(var i = 0; i < contentData.length; i++) {
 					var contentItem;
-					if (contentData.level == 1) {
+					if (contentData[i].level == 1) {
 						contentItem =  new Caption(contentData[i]);
-						this.captions.push(contentitem);
+						this.captions.push(contentItem);
 					} else {
 						contentItem = new Story(contentData[i]);
 						this.stories.push(contentItem);
@@ -80,6 +80,10 @@
 					
 				    this.all.push(contentItem);
 				}
+				
+				console.log(this.all);
+				console.log(this.captions);
+				console.log(this.stories);
 				
 				function cuePointComparator(a,b) { return a.cuePoint - b.cuePoint; }
 				
