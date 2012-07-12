@@ -131,6 +131,7 @@
 
 		
 			function MarkerColumn(content, parentElement) {
+				var that = this;
 				this.content = content;
 				this.parentElement = parentElement;
 
@@ -139,18 +140,53 @@
 				this.markerSpace = 100 - (this.marginCount*this.marginSize);
 				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
 
-				this.createMarkers = function(clickHandler) {
+				function colorChooser1(d, i) {
+					console.log("colorChooser1");
+					if (that.colorSelector) {
+						return that.colorSelector(d,i);
+						// #549ea4 normal
+						// #847e89 active
+					} else {
+						return "#f33";
+					}
+				}
+
+function colorChooser2(d, i) {
+						console.log("colorChooser2");
+
+					if (that.colorSelector) {
+						return that.colorSelector(d,i);
+						// #549ea4 normal
+						// #847e89 active
+					} else {
+						return "#f33";
+					}
+				}
+
+
+function colorChooser3(d, i) {
+						console.log("colorChooser03");
+
+					if (that.colorSelector) {
+						return that.colorSelector(d,i);
+						// #549ea4 normal
+						// #847e89 active
+					} else {
+						return "#f33";
+					}
+				}			    this.createMarkers = function(clickHandler) {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
 
 					this.markers.enter().append("div")
 						.attr("id",function(d,i){return d.id+"-marker"})
-						.style("background-color","#549ea4")
+						.style("background-color", colorChooser1)
 						.style("border-radius","4px")
 						.style("cursor","pointer")
 						.on("click", function(d,i) { clickHandler(d.id); });
 
 					
 				}
+				
 
 				this.getMarginPixels = function (vidHeight) {
 					return Math.round(this.marginSize/100*vidHeight)
@@ -167,11 +203,11 @@
 				}
 				
 				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").style("background-color","#847e89");
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser2);
 				}
 				
 				this.deactivateStory = function(storyId){
-					d3.select("#"+storyId+"-marker").style("background-color","#549ea4");
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser3);
 				}
 				
 			}//END MARKERS END MARKERS ////////////////
@@ -252,19 +288,23 @@
 				this.activateStory = function(story){
 					this.onActivate();
 					if (this.activeStory == story) return;
+					
+					var oldStory = this.activeStory;
+					this.activeStory = story;
+
 					var delay = 0;
-					if (this.activeStory) {
-						this.hideStory(this.activeStory);
+					if (oldStory) {
+						this.hideStory(oldStory);
 						delay = 1000;
 					}
 					this.showStory(story, delay);
-					this.activeStory = story;
 				}
 				
 				this.deactivateStory = function(){
 					this.onDeactivate();
-					this.hideStory(this.activeStory);
+					var oldStory = this.activeStory;
 					this.activeStory = null;
+					this.hideStory(oldStory);
 				}
 				
 				
@@ -287,8 +327,8 @@
 
 
 					function tick(videoTime) {
-						that.videoTime = videoTime;
-					    if (that.onTick) { that.onTick(videoTime); }
+						that.videoTime = parseFloat(videoTime);
+					    if (that.onTick) { that.onTick(that.videoTime); }
 				    }
 
                     // Keep a reference to Froogaloop for this player
@@ -310,7 +350,8 @@
 							window.clearInterval(that.timeInt);
 							that.timeInt = null;
 						}
-						if (that.videoTime < that.duration && that.onPause) { that.onPause(); }
+						console.log("videoTime: " + that.videoTime + ":" + typeof that.videoTime + " duration: " + that.duration + ":" + typeof that.duration);
+						if ( (that.videoTime < (that.duration-1)) && that.onPause) { console.log("calling onPause"); that.onPause(); }
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
@@ -323,7 +364,7 @@
 					});
 					
 					that.froogaloop.api('getDuration', function (value, player_id) {
-						that.duration = value;
+						that.duration = parseFloat(value);
 					});
 					
                 }
@@ -351,12 +392,16 @@
 
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
+					console.log("play: " + reveal.activeStory);
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
 					}
 				 }
-				video.onPause = function() { 
+				video.onPause = function() {
+									   console.log("in onPause");
+
 				   var currentStory = content.currentContent(video.videoTime);
+				   console.log("pause: activating: " + currentStory);
 				   if (currentStory) {
 					   reveal.activateStory(currentStory.id);
 				   }
@@ -370,21 +415,33 @@
 
 				var markersDiv=d3.select("#markers");
 				var markerColumn = new MarkerColumn(content, markersDiv);
+				markerColumn.colorSelector = function(d, i) {
+					console.log("getting color for :" + d.id + " active story is: " + reveal.activeStory);
+					if (d.id == reveal.activeStory) {
+						return "#847e89";
+					} else {
+						return "#549ea4";
+					}
+				};
 				
 				reveal.onActivate = function() { video.pause(); }
 			    reveal.onDeactivate = function() { video.play(); }
-				reveal.onShow = function(storyId) { markerColumn.activateStory(storyId); }
-				reveal.onHide = function(storyId) { markerColumn.deactivateStory(storyId); }
+				reveal.onShow = function(storyId) { 
+					console.log("showing story: " + storyId +" active story is: " + reveal.activeStory);
+					markerColumn.activateStory(storyId)
+				 }
+				reveal.onHide = function(storyId) {
+					console.log("hiding story: " + storyId +" active story is: " + reveal.activeStory);
+					 markerColumn.deactivateStory(storyId);
+				 }
 					
  			    reveal.create();
 				
 				markerColumn.createMarkers(function(storyId){
 					if (reveal.activeStory == storyId) { 
 					    reveal.deactivateStory();
-					    markerColumn.deactivateStory()
 					} else {
 					   reveal.activateStory(storyId);
-					   markerColumn.activateStory(storyId)
 					}
 					
 				});
