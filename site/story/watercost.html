@@ -118,30 +118,28 @@
                         }
 
 			function calculate(n){
-                                showNext(n);
-                                svgHeight();
-	                        var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
-	                        var costs = regionalCosts(usage);
-            
-					       
-		                var barRangePercentage = .8;
-                                var marginPercentage = (1-barRangePercentage)/2;
-                                var chartHeight = 675;
-                                var chartWidth = 1200;
-                                var chartSideMargin = 10;
-                                var chartTopMargin = 50;
-                                var chartBottomMargin = 10;
+				showNext(n);
+				svgHeight();
+				var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
+				var costs = regionalCosts(usage);
+				var barRangePercentage = .8;
+						var marginPercentage = (1-barRangePercentage)/2;
+						var chartHeight = 675;
+						var chartWidth = 1200;
+						var chartSideMargin = 10;
+						var chartTopMargin = 50;
+						var chartBottomMargin = 10;
 
-					       
-                                var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
-
-                                var x = d3.scale.ordinal()
-                                    .domain(costs)
-                                    .rangeBands([chartSideMargin, chartWidth-chartSideMargin]);
-
-                                var y = d3.scale.linear()
-                                         .domain([0, d3.max(costs)])
-                                         .range([1, barHeight]);
+				
+				var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
+				
+				var x = d3.scale.ordinal()
+					.domain(costs)
+					.rangeBands([chartSideMargin, chartWidth-chartSideMargin]);
+				
+				var y = d3.scale.linear()
+						 .domain([0, d3.max(costs)])
+						 .range([1, barHeight]);
 
 	                        d3.select("#bars").selectAll("rect")
 				    .data(costs)
@@ -162,16 +160,27 @@
                                     .attr("text-anchor", "middle")
                                     .on("mouseover", showDetails)
 			            .on("mouseout", hideDetails)
-                                    .text(function(d, i) { return "$"+ Math.round(d) });
-
+							.text(function(d, i) { return "$"+ Math.round(d) });
 			}
 
 
 			var ww = window.innerWidth;
-
-
+			var svgElem, player1;
+			
+			function svgHeight(){
+				svgElem = document.getElementById("barchart")
+				player1 = document.getElementById("player_1");
+				var svgW = svgElem.offsetWidth;
+				var svgH = svgElem.offsetWidth*9/16;
+				var playerW = player1.offsetWidth;
+				var playerH = player1.offsetWidth*9/16;
+				d3.select("#barchart").style("height",svgH+"px");
+				d3.select("#player_1").style("height",playerH+"px");
+			}
+			
 			function onLoad() {
 				var svgElem, player1;
+				var interactiveDiv=document.getElementById("interactive");
 				svgHeight();
 				setupLabels();
 				
@@ -186,16 +195,10 @@
 					}
 				}
 				
-				function svgHeight(){
-					var svgElem = document.getElementById("barchart")
-					var player1 = document.getElementById("player_1")
-					var svgW = svgElem.offsetWidth;
-					var svgH = svgElem.offsetWidth*9/16;
-					var playerW = player1.offsetWidth;
-					var playerH = player1.offsetWidth*9/16;
-					d3.select("#barchart").style("height",svgH+"px");
-					d3.select("#player_1").style("height",playerH+"px");
-				}
+				
+				d3.select("#skip").on("click",function(){
+					afterVideo();
+				});
 				
 			   ////V//I//M//EE/OOOOO//////////
 				fVideo = document.getElementById("player_1");
@@ -215,8 +218,7 @@
 					});
 										
 					froogaloop.addEvent('finish', function(data) {
-						alert("T");
-						afterVideo();
+						afterVideo()
 					});
 					
 					froogaloop.api('getDuration', function (value, player_id) {
@@ -229,7 +231,15 @@
 				}
 				
 				function afterVideo(){
-					player1.style.display="none"	
+					d3.select("#video").transition()
+						.duration(700)
+						.style("height","0px")
+						.each("end",function(){ 
+							d3.select("#video").style("display","none")
+							d3.select("#interactive").style("display","block")
+						})
+						
+					
 				}
 
 				function addEvent(element, eventName, callback) {
@@ -252,7 +262,7 @@
 			
 		<div id="container" style="background-color: #FFF;">
 			<p>What would your water cost if you lived in another country? xxyxxy?</p>
-			<div id="video" style="position: relative;">
+			<div id="video" style="position: relative; overflow: hidden;">
 				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
 			</div>
@@ -298,8 +308,8 @@
 				</div>
 				<div class="card" id="card5" style="display: none;">
 					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
-							<g id="bars">
-							</g>
+						<g id="bars">
+						</g>
 					</svg>
 					<div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;"></div>
 				</div>
