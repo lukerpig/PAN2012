@@ -18,6 +18,8 @@
 			.left{width:96%; float: left;}
 			
 			.right{width:3%; float: right;}
+			
+			#mosaic tr td {background-color: #206666; width: 20%}
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
@@ -227,7 +229,6 @@
 						.style("position","absolute")
 						.style("top","0")
 						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
-					
 				}
 				
 				function storyLeft(d) {
@@ -371,7 +372,6 @@
 				this.pause = function() {
 					if (this.froogaloop) { this.froogaloop.api("pause"); }
 				}
-
 				
 			}
 
@@ -385,7 +385,11 @@
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
+				var mosaic = d3.select("#mosaic");
+				var markersDiv=d3.select("#markers");
+				var vidDiv = d3.select("#vid")
 				var currentStory;
+				var activeBlock = "video";
 				
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
@@ -394,24 +398,17 @@
 						reveal.deactivateStory();
 					}
 				 }
-				splash.on("click",function(){
-					splash.style("display","none")
-					videoFrame.style("display","block")
-					sizeVid(videoOffset.offsetWidth)
-					video.play()
-				})
+				
 				video.onPause = function() {
 					console.log("onPause currentStory: " + currentStory );
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
-				   if (currentStory && !reveal.activeStory) {
-					 //  Needs to check whether person has clicked on marker or not here before activating story. Problem is when you click, it calls pause
-					 //  so you have something watning to show currentStory AND story associated to marker
+				   if (currentStory && !reveal.activeStory && activeBlock == "video") {
 					   reveal.activateStory(currentStory.id);
 				   }
 				}
-				video.onFinish = function() { alert("Display Mosaic Now!") }
+				video.onFinish = function() { displayMosaic() }
 				
 				video.onTick = function(timestamp) {
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
@@ -422,10 +419,7 @@
 				 }
 				
 				
-				var vidDiv = d3.select("#vid")
-				var reveal = new Reveal(content, vidDiv);
 
-				var markersDiv=d3.select("#markers");
 				var markerColumn = new MarkerColumn(content, markersDiv);
 				markerColumn.colorSelector = function(d, i) {
 					if (d.id == reveal.activeStory) {//ONCLICK
@@ -439,17 +433,6 @@
 					} 
 				};
 				
-				reveal.onActivate = function() { video.pause(); }
-			    reveal.onDeactivate = function() { video.play(); }
-				reveal.onShow = function(storyId) { 
-					markerColumn.activateStory(storyId)
-				 }
-				reveal.onHide = function(storyId) {
-					 markerColumn.deactivateStory(storyId);
-				 }
-					
- 			    reveal.create();
-				
 				markerColumn.onclick = function(storyId){
 					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == storyId) { 
@@ -459,20 +442,56 @@
 					   reveal.activateStory(storyId);
 					}
 				}
-
+				
+				var reveal = new Reveal(content, vidDiv);
+ 			    reveal.create();
+				reveal.onActivate = function() { video.pause(); }
+			    reveal.onDeactivate = function() { if(activeBlock == "video") video.play(); }
+				reveal.onShow = function(storyId) { 
+					markerColumn.activateStory(storyId)
+				 }
+				reveal.onHide = function(storyId) {
+					 markerColumn.deactivateStory(storyId);
+				 }
 				
 				markerColumn.create()
+				
+				splash.on("click",function(){
+					splash.style("display","none")
+					videoFrame.style("display","block")
+					sizeVid(videoOffset.offsetWidth)
+					video.play()
+				})
+				
+				d3.select("#mos-link").on("click",function(){
+					displayMosaic()
+				});
+				
+				video.displayMosaic = displayMosaic;
+				
+				function displayMosaic(){
 					
+					activeBlock = "mosaic";
+					video.pause();
+					reveal.deactivateStory();
+					console.log(currentStory);
+					splash.style("display","none")
+					videoFrame.style("display","none")
+					mosaic.style("display","table")
+					
+				}
 				var vidHeight, vidWidth;
 				
 				sizeVid(videoOffset.offsetWidth);
 				function sizeVid(size){
 					videoFrame
 						.style("height", size*9/16+"px");
-						vidWidth = videoOffset.offsetWidth;
-						vidHeight = videoOffset.offsetHeight;
-						markerColumn.setHeight(videoOffset.offsetHeight);
-						reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
+					mosaic
+						.style("height", size*9/16+"px");
+					vidWidth = videoOffset.offsetWidth;
+					vidHeight = videoOffset.offsetHeight;
+					markerColumn.setHeight(videoOffset.offsetHeight);
+					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
 				}
 				
 				//WINDOW RESIZE/////////////////
@@ -499,8 +518,8 @@
     </head>
 	
     <body onload="pageLoad()">
-		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #7fc3c7; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; background-repeat: no-repeat; z-index: -2;"></div>
-		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid red; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
 		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
 			<div id="pan-logo" style="width: 50%;">
@@ -508,8 +527,41 @@
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
 				<div id="vid" class="left" style="position: relative; overflow: hidden;">
-					<img src="splash.jpg" id="splash" style="max-width: 100%; display: block; cursor: pointer;"/>
-					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="display: none; width: 100%;"></iframe>
+					<img src="splash.jpg" id="splash" style="max-width: 100%; display: none; cursor: pointer;"/>
+					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
+					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
+						<tr>
+							<td rowspan="2">Fracking</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td rowspan="2">Sewer</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td rowspan="2">Water Cost</td>
+							<td></td>
+							<td></td>
+							<td rowspan="2">Water Facts</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
 				</div>
 				<div id="markers" class="right" style="">
 				
@@ -527,7 +579,7 @@
 					</div>
 				</div>
 				<div id="bot-right" class="right">
-					<a><img src="graphics/mos-link.png" style="width: 100%;"/></a>
+					<a><img src="graphics/mos-link.png" id="mos-link" style="width: 100%;"/></a>
 				</div>
 				<div class="clear"></div>
 			</div>	

@@ -1,27 +1,21 @@
 TODO:
--Make layout/draft site
 -Mosaic page (Have watch again button)
 -Hashtags
 -Ramdomize starting video (only on Replay?)
--Color last marker
 -Don't start video again after it's finished
--Level2 Stories 62.5%
 -If you play an unrelated story, it calls out related "pause" data, not related story stuff
 
 NICE TO HAVE:
+-mosaic button toggles mosaic, changes colors when active
 -exact lineup of markers and vid
 -display:none unactive stories
 -Sound plays on puase to mask pause
 -lightbox
--animated scroll out stories
--Knowing where in the video user is so pause sends out right content
--scrolling for text stories
 -possible custom scrollbar
 -scroll wheel support
--splashpage
--endingpage
 -designing what a story looks like/story format
 -conecpt video changes either on refresh or after clicking a button
+- Questions story, click on ? and answers reveals down
 
 
 
@@ -32,3 +26,4 @@ Open Issues:
 -How do you play sounds on scrollin/scrollout
 -Scrollwheel functionality
 -customize scrollbar
+-scrolling for text stories ipad

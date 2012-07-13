@@ -7,3 +7,4 @@ function vidSize(vid){
 }
 
 window.addEventListener('resize', function(){ vidSize(video) }, false);
+
