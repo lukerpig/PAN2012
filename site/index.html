@@ -7,7 +7,8 @@
         <style>
 			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
 			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
-
+			@font-face {font-family: Interstate-Bold; src: url("fonts/Interstate-Bold.otf");}
+			html {overflow-y: scroll}
             body {margin: 20px 0px 0px 0px; padding: 0;}
 
             iframe {display:block; border:0;}
@@ -36,6 +37,8 @@
 				}
 				
 				this.getVidFrameWidth = function(vidWidth) {
+					if(this.level == 2)	return .625*vidWidth;
+
 					return this.level * .25 * vidWidth;
 				}
 				
@@ -159,11 +162,8 @@
 						.style("background-color", colorChooser)
 						.style("border-radius","4px")
 						.style("cursor","pointer")
-						.on("click", function(d,i) { clickHandler(d.id); /*Content.getContentById(d.id))*/});
-
-					
+						.on("click", function(d,i) { clickHandler(d.id);});
 				}
-				
 
 				this.getMarginPixels = function (vidHeight) {
 					return Math.round(this.marginSize/100*vidHeight)
@@ -216,11 +216,12 @@
 					this.captionDivs.enter().append("div")
 						.attr("class","caption")
 						.style("z-index","2")
+						.style("font-family","Interstate-Light, verdana, sans-serif")
 						.style("background-color","#fff")
 						.attr("id",function(d,i){ return d.id })
 						.style("position","absolute")
 						.style("top","0")
-						.html(function(d,i){return "<h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p>"})
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
 					
 				}
 				
@@ -378,20 +379,31 @@
 				ww = window.innerWidth, wh = window.innerHeight;
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("player_1");
-				
+				var splash = d3.select("#splash")
 				var currentStory;
-
+				var started = false; 
+				
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
+					if(!started) {
+						started = true;
+						splash.style("display","none")
+						videoFrame.style("display","block")
+						sizeVid(videoOffset.offsetWidth)
+					}
+					
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
 					}
 				 }
+				splash.on("click",function(){ video.play() })
 				video.onPause = function() {
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
 				   if (currentStory) {
+					   Needs to check whether person has clicked on marker or not here before activating story. Problem is when you click, it calls pause
+					   so you have something watning to show currentStory AND story associated to marker
 					   reveal.activateStory(currentStory.id);
 				   }
 				}
@@ -435,6 +447,7 @@
  			    reveal.create();
 				
 				markerColumn.createMarkers(function(storyId){
+					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == storyId) { 
 					    reveal.deactivateStory();
 					} else {
@@ -488,8 +501,9 @@
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left" style="position: relative; background-color: #3FC; border: 1px solid red; overflow: hidden;">
-					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<div id="vid" class="left" style="position: relative; background-color: #3FC; overflow: hidden;">
+					<img src="splash.jpg" id="splash" style="max-width: 100%; display: block; cursor: pointer;"/>
+					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="display: none; width: 100%;"></iframe>
 				</div>
 				<div id="markers" class="right" style="">
 				

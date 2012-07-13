@@ -160,7 +160,7 @@ var contentData = [
 	},
 	{
 		id : "cookfood",
-		url: "story/waterfootprint.html",
+		url: "story/footprint.html",
 		level: 2,
 		cuePoint: 65.16,
 	},
@@ -360,7 +360,7 @@ var contentData = [
 	},
 	{
 		id : "umbrella",
-		url: "story/rainwatercollect.html",
+		url: "story/rainwater.html",
 		level: 2,
 		cuePoint: 178.12,
 	},
