@@ -1,8 +1,16 @@
 @charset "UTF-8";
 
-html {padding:3%; margin: 0px;}
+html {padding:2%; margin: 0px;}
 @font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
 @font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
+@font-face {font-family: Interstate-Bold; src: url("../fonts/Interstate-Bold.otf");}
 
-h1 {font-family: Interstate-Thin, verdana, sans-serif;}
-p {font-family: Interstate-Light, verdana, sans-serif;}
+img {max-width: 100%;}
+
+h1 {font-family: Interstate-Thin, verdana, sans-serif; font-size: 32px; margin: 0% 0% 4% 0%;}
+h2 {font-family: Interstate-Thin, verdana, sans-serif; font-size: 24px; margin: 0% 0% 3% 0%;}
+p {font-family: Interstate-Light, verdana, sans-serif; font-size: 14px; margin: 0% 0% 3% 0%}
+
+.bold {font-family: Interstate-Bold, verdana, sans-serif; font-weight: bold;}
+
+.question {margin-left: 5%;}

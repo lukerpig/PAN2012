@@ -1,14 +1,12 @@
 TODO:
 -Make layout/draft site
--Pause drags out content
 -Mosaic page (Have watch again button)
 -Hashtags
--Video timing changes marker color
--Move data out of main page
 -Ramdomize starting video (only on Replay?)
 -Color last marker
 -Don't start video again after it's finished
 -Level2 Stories 62.5%
+-If you play an unrelated story, it calls out related "pause" data, not related story stuff
 
 NICE TO HAVE:
 -exact lineup of markers and vid

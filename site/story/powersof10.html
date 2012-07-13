@@ -1,11 +1,314 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Untitled Document</title>
-</head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>SVG Test</title>
+	<link rel="stylesheet" type="text/css" href="watersize/dragdealer.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+	<script src="storyJs.js"></script>
+	
+	<script src="watersize/dragdealer.js"></script>
+	<script src="http://d3js.org/d3.v2.js"></script>
+	<script type="text/javascript">
 
-<body>
-STORY 4
+		var scale = 1.0;
+	
+	
+		svgW=1200, ratH=9, ratW=16;
+		svgH = svgW*ratH/ratW;
+		var svgOpt = {
+			w: svgW,
+			h: svgW*ratH/ratW
+		}
+		var boxOpt = {
+			w: 343,
+			h: 490
+		}
+		
+		var totalRatio = boxOpt.w + boxOpt.h;
+		var widthRatio = boxOpt.w/totalRatio, heightRatio = boxOpt.h/totalRatio;
+		var g;
+		
+		function getHeight() { return this.a*heightRatio; }
+		function getWidth() { return this.a*widthRatio; }
+              
+
+		var data = [
+			{
+				id: 1,
+				a: .3,
+				h: getHeight,
+				w: getWidth,
+				amnt: "38.4 Oz"
+	
+			},
+			{
+				id: 2,
+				a: 2,
+				h: getHeight,
+				w: getWidth,
+				amnt: "2 Gallons"
+			},
+			{
+				id: 3,
+				a: 6,
+				h: getHeight,
+				w: getWidth,
+				amnt: "6 Gallons"
+			},
+			{
+				id: 4,
+				a: 20,
+				h: getHeight,
+				w: getWidth,
+				amnt: "20 Gallons"
+			},
+			{
+				id: 5,
+				a: 24,
+				h: getHeight,
+				w: getWidth,
+				amnt: "24 Gallons"
+			},
+			{
+				id: 6,
+				a: 45,
+				h: getHeight,
+				w: getWidth,
+				amnt: "45 Gallons"
+			},
+			{
+				id: 7,
+				a: 100,
+				h: getHeight,
+				w: getWidth,
+				amnt: "100 Gallons"
+			},
+			{
+				id: 8,
+				a: 500,
+				h: getHeight,
+				w: getWidth,
+				amnt: "500 Gallons"
+			},
+			{
+				id: 9,
+				a: 600,
+				h: getHeight,
+				w: getWidth,
+				amnt: "600 Gallons"
+			},
+			{
+				id: 10,
+				a: 2000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "2000 Gallons"
+			},
+			{
+				id: 11,
+				a: 5000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "5 Thousand Gallons"
+			},
+			{
+				id: 12,
+				a: 15000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "15 Thousand Gallons"
+			},
+			{
+				id: 13,
+				a: 100000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "100 Thousands Gallons"
+			},
+			{
+				id: 14,
+				a: 3000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "3 Million Gallons"
+			},
+			{
+				id: 15,
+				a: 3900000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "3.9 Million Gallons"
+			},
+			{
+				id: 16,
+				a: 5e20,//max number
+				h: getHeight,
+				w: getWidth,
+				amnt: "500 Quintillion Gallons"
+			}
+		];
+		var marginBot = 10, marginLeft = 10;
+		
+		function setX(data) {
+			var w = 0;
+			for (var i = 0; i < data.length; i++) {
+				var margin = i == 0? 0 : data[i].w()*.01;
+				data[i].x = w + margin;
+				w = data[i].x+data[i].w();
+			} 
+		}
+	
+		function setFactor(f) {
+		   factor = f;
+		   d3.select("#factor").html(""+factor);
+		}
+	
+		function changeFactor(direction) {
+		   if (direction > 0) {
+				setFactor(factor*1.1);
+		   } else {
+				setFactor(factor/1.1);
+		   }
+		}
+	
+		function visible(data, scale) {
+			var vis = [];
+			for(var i = 0; i < data.length; i++) {
+				if ((data[i].x+data[i].w()*.1)*scale < svgW) {
+				   vis.push(data[i]);
+				}
+			}
+			//if(vis.length != data.length){ vis.push(data[vis.length]) }
+			return vis;
+		}
+		
+		function create(numbers, scaler){
+			var g =	numbers.enter().append("g").attr("class","imgjug");
+					g.call(function(){drawParams(this, scaler)});
+					g.append("image")
+						.attr("xlink:href","watersize/gallon.svg")
+						.attr("width","343").attr("height","491");
+					g.append("text")
+						.text(function(d){return d.amnt})
+						.attr("x",343/2)
+						.attr("y",491/2)
+						.attr("text-anchor","middle")
+						.attr("font-size","30")
+		}
+				
+		var maxHeight = 17000, maxWidth=maxHeight*boxOpt.w/boxOpt.h;
+		function draw(oldScale, newScale) {
+			var numbers = g.selectAll(".imgjug").data(visible(data, newScale), function(d) { return d.id; });
+			marginBot = 10;
+			create(numbers, oldScale);
+				
+			numbers.transition().duration(1000)
+				.call(function(){drawParams(this, newScale)})
+				
+			numbers.exit().transition().duration(1000)
+				.call(function(){drawParams(this, newScale)})
+			   .remove();
+		}
+		
+		function drawParams(obj, scaler){
+			/*obj
+				.attr("x", function(d,i) { return d.x*scaler; })
+				.attr("y", function(d) { return svgOpt.h - d.h()*scaler-marginBot })
+				.attr("height", function(d,i){return Math.min(maxHeight,d.h()*scaler) })
+				.attr("width", function(d,i){return Math.min(maxWidth,d.w()*scaler) })*/
+			obj
+				.attr("transform",function(d){return "translate("+d.x*scaler+","+(svgOpt.h - d.h()*scaler-marginBot)+") scale("+d.h()*scaler/491+")"})
+		}
+	
+		function onLoad(){ 
+	
+			setScale(1.0);
+			setX(data);
+
+			var svg = d3.select("svg")
+						.attr("height", svgOpt.h+"px")
+						.attr("viewBox","0 0 "+svgOpt.w+" "+svgOpt.h+"")
+						.style("max-width",svgOpt.w+"px")
+						
+			var svgElem = document.getElementById("svg-box");
+			console.log (svg.style("width") +" " + svgElem.offsetWidth);
+			svgH, svgW;
+			console.log(svgH)
+			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
+			progressSvg(0);
+			var bound = d3.select("#bound").style("max-width",svgOpt.w+"px");
+			//WINDOW RESIZE
+			window.addEventListener('resize', windowResize, false);
+			var ww = window.innerWidth;
+			
+			function windowResize(){
+				var ww2=window.innerWidth;
+				if(ww2!=ww){ww = ww2;	svgHeight();}
+			}
+			
+			svgHeight();
+			function svgHeight(){
+				//svgW = parseInt(svgElem.style.width);
+				//svgH = parseInt(svgElem.style.width)*ratH/ratW;
+				svgW = document.getElementById("bound").offsetWidth;
+				console.log(svgW + " Wid");
+				svgH = svgW*ratH/ratW;
+				svg.style("height",svgH+"px");
+                                
+			}
+			
+			//SLIDER
+			var oldX = activeSvg;
+			var slider = new Dragdealer('my-slider',
+				{
+					steps: data.length,
+					snap: true,
+					slide: false,
+					animationCallback: function(x, y)
+					{
+						x = parseFloat(x)*(data.length-1);
+						var dir = x - oldX;
+						progressSvg(dir);
+						oldX = x;
+					}
+				}); 
+				
+		}
+
+		
+		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
+		
+		var activeSvg = 0;
+		function progressSvg(direction) {
+			var oldScale = scale;
+			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
+			setScale(desHeight/data[activeSvg].h());
+			var activeX = data[activeSvg].x*scale;
+			if(direction == 0){
+				draw(scale, scale);
+			//	g.attr("transform", "translate("+(desX-activeX)+")")
+			} else {
+				draw(oldScale, scale);
+			//	g.transition().duration(1000).attr("transform", "translate("+(desX-activeX)+")")
+			}
+		}
+		
+		function setScale(s) {
+		   scale = s;
+		}
+	</script>
+</head>
+<body onload="onLoad()">
+<h1>The Size of Water</h1>
+<div id="bound">
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%; border: 1px solid red;">
+	
+	</svg>
+</div>
+<div id="my-slider" class="dragdealer">
+	<div class="red-bar handle">drag me</div>
+</div>
+
 </body>
 </html>

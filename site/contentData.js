@@ -314,7 +314,7 @@ var contentData = [
 	},
 	{
 		id : "fatherdaughter",
-		url: "story/weightofcloud.html",
+		url: "story/cloudweight.html",
 		level: 2,
 		cuePoint: 145.08,
 	},
@@ -327,7 +327,7 @@ var contentData = [
 	},
 	{
 		id : "waterslide",
-		url: "story/waterparkattend.html",
+		url: "story/waterpark.html",
 		level: 2,
 		cuePoint: 151.22,
 	},

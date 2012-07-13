@@ -2,15 +2,13 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-		<title>Cost Of Water</title>
-		<meta name="Description" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>The Cost of Water</title>
 		<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+		<script src="storyJs.js"></script>
 		<style>
 			@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
 			@font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
-			
-			* { margin: 0; padding: 0; }
 			
 			label       {width: 40%; display: block; cursor: pointer; height: 6%; padding-bottom: 0px;}
 			
@@ -23,15 +21,17 @@
 			label#one {left: 15.3%; top: 43.04%}
 			label#two {left: 15.3%; top: 54.96%}
 			label#three {left: 15.3%; top: 67.0%}
+			
 			.forward, .backward, .calculate {cursor: pointer; background-color: transparent; border: none; position: absolute;}
 			.forward {left: 90.25%; top: 42.87%; width: 9.6%; height: 24%;}
 			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
 			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
-                        .chart { background: #19172A; font: 12px sans-serif; }
-                        .chart { fill: #6DBDC3; }
-                        .chart text { fill: white; }
-                        div#details { color: white; font: 28px sans-serif; }
-                        .headline { height:168.75px; padding-left: 10px; margin-left: 300px; font: 36px sans-serif; background-color: #FFF; }
+			
+			.chart { background: #19172A; font: 12px sans-serif; }
+			.chart { fill: #6DBDC3; }
+			.chart text { fill: white; }
+			div#details { color: white; font: 28px sans-serif; }
+			.headline { height:168.75px; padding-left: 10px; margin-left: 300px; font: 36px sans-serif; background-color: #FFF; }
 		</style>
 		<script src="http://d3js.org/d3.v2.js"></script>
         <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
@@ -169,16 +169,13 @@
 			
 			function svgHeight(){
 				svgElem = document.getElementById("barchart")
-				player1 = document.getElementById("player_1");
 				var svgW = svgElem.offsetWidth;
 				var svgH = svgElem.offsetWidth*9/16;
-				var playerW = player1.offsetWidth;
-				var playerH = player1.offsetWidth*9/16;
 				d3.select("#barchart").style("height",svgH+"px");
-				d3.select("#player_1").style("height",playerH+"px");
 			}
 			
 			function onLoad() {
+				vidSize(document.getElementById("player_1"))	
 				var svgElem, player1;
 				var interactiveDiv=document.getElementById("interactive");
 				svgHeight();
