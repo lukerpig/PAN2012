@@ -175,11 +175,11 @@
 		function visible(data, scale) {
 			var vis = [];
 			for(var i = 0; i < data.length; i++) {
-				if ((data[i].x+data[i].w()*.1)*scale < svgW) {
+				if ((data[i].x+data[i].w())*scale < svgW) {
 				   vis.push(data[i]);
 				}
 			}
-			//if(vis.length != data.length){ vis.push(data[vis.length]) }
+			if(vis.length != data.length){ vis.push(data[vis.length]) }
 			return vis;
 		}
 		

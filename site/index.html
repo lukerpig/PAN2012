@@ -8,7 +8,6 @@
 			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
 			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
 			@font-face {font-family: Interstate-Bold; src: url("fonts/Interstate-Bold.otf");}
-			html {overflow-y: scroll}
             body {margin: 20px 0px 0px 0px; padding: 0;}
 
             iframe {display:block; border:0;}
@@ -37,7 +36,8 @@
 				}
 				
 				this.getVidFrameWidth = function(vidWidth) {
-					if(this.level == 2)	return .625*vidWidth;
+					if(this.level == 2)	return .70*vidWidth;
+					if(this.level == 3)	return .85*vidWidth;
 
 					return this.level * .25 * vidWidth;
 				}
@@ -154,15 +154,20 @@
 					}
 				}
 
-			    this.createMarkers = function(clickHandler) {
+			    this.create = function() {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
 
+				
 					this.markers.enter().append("div")
 						.attr("id",function(d,i){return d.id+"-marker"})
 						.style("background-color", colorChooser)
 						.style("border-radius","4px")
 						.style("cursor","pointer")
-						.on("click", function(d,i) { clickHandler(d.id);});
+						.on("click", function(d,i) {
+							if(that.onclick){
+								that.onclick(d.id);	
+							}
+						 });
 				}
 
 				this.getMarginPixels = function (vidHeight) {
@@ -378,32 +383,31 @@
 
 				ww = window.innerWidth, wh = window.innerHeight;
 				var videoFrame=d3.select("#player_1");
-				var videoOffset = document.getElementById("player_1");
+				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
 				var currentStory;
-				var started = false; 
 				
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
-					if(!started) {
-						started = true;
-						splash.style("display","none")
-						videoFrame.style("display","block")
-						sizeVid(videoOffset.offsetWidth)
-					}
 					
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
 					}
 				 }
-				splash.on("click",function(){ video.play() })
+				splash.on("click",function(){
+					splash.style("display","none")
+					videoFrame.style("display","block")
+					sizeVid(videoOffset.offsetWidth)
+					video.play()
+				})
 				video.onPause = function() {
+					console.log("onPause currentStory: " + currentStory );
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
-				   if (currentStory) {
-					   Needs to check whether person has clicked on marker or not here before activating story. Problem is when you click, it calls pause
-					   so you have something watning to show currentStory AND story associated to marker
+				   if (currentStory && !reveal.activeStory) {
+					 //  Needs to check whether person has clicked on marker or not here before activating story. Problem is when you click, it calls pause
+					 //  so you have something watning to show currentStory AND story associated to marker
 					   reveal.activateStory(currentStory.id);
 				   }
 				}
@@ -446,16 +450,19 @@
 					
  			    reveal.create();
 				
-				markerColumn.createMarkers(function(storyId){
+				markerColumn.onclick = function(storyId){
 					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == storyId) { 
 					    reveal.deactivateStory();
 					} else {
+					   console.log("currentStory clickedOn: " + storyId);
 					   reveal.activateStory(storyId);
 					}
-					
-				});
+				}
 
+				
+				markerColumn.create()
+					
 				var vidHeight, vidWidth;
 				
 				sizeVid(videoOffset.offsetWidth);
@@ -474,15 +481,14 @@
 				function windowResize(){
 					var wh2=window.innerHeight;
 					var ww2=window.innerWidth;
+					sizeVid(videoOffset.offsetWidth);
+					
 					
 					if(wh2!=wh){//NEW HEIGHT
 						wh = wh2;
 					} 
 					if(ww2!=ww){//NEW WIDTH
 						ww = ww2;
-						if(!window.location.hash){
-							sizeVid(videoOffset.offsetWidth);
-						}
 					} 
 				}
 				
@@ -501,7 +507,7 @@
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left" style="position: relative; background-color: #3FC; overflow: hidden;">
+				<div id="vid" class="left" style="position: relative; overflow: hidden;">
 					<img src="splash.jpg" id="splash" style="max-width: 100%; display: block; cursor: pointer;"/>
 					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="display: none; width: 100%;"></iframe>
 				</div>
