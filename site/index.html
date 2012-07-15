@@ -19,7 +19,7 @@
 			
 			.right{width:3%; float: right;}
 			
-			#mosaic tr td {background-color: #206666; width: 20%}
+			#mosaic tr td {background-color: #206666; width: 20%; height: 20%}
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
@@ -386,21 +386,22 @@
 				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
 				var mosaic = d3.select("#mosaic");
+				var moslink = d3.select("#moslink");
 				var markersDiv=d3.select("#markers");
 				var vidDiv = d3.select("#vid")
 				var currentStory;
 				var activeBlock = "video";
+				var isPlaying = false;
 				
 				var video = new VideoHandler("player_1");
 				video.onPlay = function() {
-					
+					isPlaying = true;
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
 					}
 				 }
 				
 				video.onPause = function() {
-					console.log("onPause currentStory: " + currentStory );
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
@@ -408,7 +409,10 @@
 					   reveal.activateStory(currentStory.id);
 				   }
 				}
-				video.onFinish = function() { displayMosaic() }
+				video.onFinish = function() {
+					isPlaying = false;
+					displayMosaic()
+				}
 				
 				video.onTick = function(timestamp) {
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
@@ -434,11 +438,11 @@
 				};
 				
 				markerColumn.onclick = function(storyId){
+					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == storyId) { 
 					    reveal.deactivateStory();
 					} else {
-					   console.log("currentStory clickedOn: " + storyId);
 					   reveal.activateStory(storyId);
 					}
 				}
@@ -446,7 +450,7 @@
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
 				reveal.onActivate = function() { video.pause(); }
-			    reveal.onDeactivate = function() { if(activeBlock == "video") video.play(); }
+			    reveal.onDeactivate = function() { if(activeBlock == "video" && isPlaying) video.play(); }
 				reveal.onShow = function(storyId) { 
 					markerColumn.activateStory(storyId)
 				 }
@@ -463,21 +467,43 @@
 					video.play()
 				})
 				
-				d3.select("#mos-link").on("click",function(){
+				moslink.on("click",function(){
 					displayMosaic()
 				});
 				
-				video.displayMosaic = displayMosaic;
 				
 				function displayMosaic(){
-					
-					activeBlock = "mosaic";
-					video.pause();
+					var divHeight = vidDiv.style("height")
+								console.log("1")
+					if(activeBlock=="video"){
+						moslink.attr("src","graphics/mos-linka.png")
+					} else if (activeBlock == "mosaic") {
+						moslink.attr("src","graphics/mos-link.png")
+					}
+
+					vidDiv.transition().duration(600)
+						.style("height","0px")
+						.each("end",function(){
+							if(activeBlock=="video"){
+								activeBlock = "mosaic";
+								if(isPlaying)video.pause()
+								videoFrame.style("display","none")
+								mosaic.style("display","table")
+								moslink.attr("src","graphics/mos-linka.png")
+							} else if (activeBlock=="mosaic"){
+								activeBlock = "video";
+								if(isPlaying) video.play()
+								videoFrame.style("display","block")
+								mosaic.style("display","none")
+							}
+							vidDiv.transition().duration(700)
+								.style("height",divHeight)
+								.each("end",function(){
+									vidDiv.style("height","");
+								})
+						})
 					reveal.deactivateStory();
-					console.log(currentStory);
-					splash.style("display","none")
-					videoFrame.style("display","none")
-					mosaic.style("display","table")
+					console.log("mosaic CurrentStory: " + currentStory);
 					
 				}
 				var vidHeight, vidWidth;
@@ -518,7 +544,7 @@
     </head>
 	
     <body onload="pageLoad()">
-		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid red; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
 		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
 		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
@@ -579,10 +605,15 @@
 					</div>
 				</div>
 				<div id="bot-right" class="right">
-					<a><img src="graphics/mos-link.png" id="mos-link" style="width: 100%;"/></a>
+					<a><img src="graphics/mos-link.png" id="moslink" style="width: 100%;"/></a>
 				</div>
 				<div class="clear"></div>
 			</div>	
+			<div id="helptext" style="height: 0px; overflow: hidden;">
+				<div id="howview">a</div>
+				<div id="why100">b</div>
+				<div id="about">c</div>
+			</div>
 			<div id="line" class="left" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
 			<div class="clear"></div>
 			<div id="footer">

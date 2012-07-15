@@ -2,19 +2,19 @@ TODO:
 -Mosaic page (Have watch again button)
 -Hashtags
 -Ramdomize starting video (only on Replay?)
--Don't start video again after it's finished
--If you play an unrelated story, it calls out related "pause" data, not related story stuff
+-When mouseover about/why100gallons/howtoview
+-Credit Box/Source Box
+-Dimmer
+-make not stupid on firefox
+-add toolbars
 
 NICE TO HAVE:
--mosaic button toggles mosaic, changes colors when active
--exact lineup of markers and vid
+-scroll iframe overflow
 -display:none unactive stories
 -Sound plays on puase to mask pause
--lightbox
+-lightbox/make shit bigger
 -possible custom scrollbar
--scroll wheel support
 -designing what a story looks like/story format
--conecpt video changes either on refresh or after clicking a button
 - Questions story, click on ? and answers reveals down
 
 
@@ -24,6 +24,6 @@ NICE TO HAVE:
 Open Issues:
 -How to get lightbox to go over main page and not just in iframe
 -How do you play sounds on scrollin/scrollout
--Scrollwheel functionality
+-Scrollwheel functionality for custom scrollbar
 -customize scrollbar
 -scrolling for text stories ipad

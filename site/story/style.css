@@ -8,8 +8,10 @@ body {color: #333;}
 
 img {max-width: 100%;}
 
-h1 {font-family: Interstate-Light, verdana, sans-serif; font-size: 32px; margin: 0% 0% 4% 0%;}
-h2 {font-family: Interstate-Light, verdana, sans-serif; font-size: 24px; margin: 0% 0% 3% 0%;}
+iframe {margin-bottom: 3%;}
+
+h1 {font-family: Interstate-Light, verdana, sans-serif; font-size: 32px; margin: 0% 0% 3% 0%;}
+h2 {font-family: Interstate-Light, verdana, sans-serif; font-size: 24px; margin: 0% 0% 2% 0%;}
 p {font-family: Interstate-Thin, verdana, sans-serif; font-size: 14px; margin: 0% 0% 3% 0%}
 
 .bold {font-family: Interstate-Bold, verdana, sans-serif; font-weight: bold;}

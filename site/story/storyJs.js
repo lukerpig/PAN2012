@@ -6,5 +6,5 @@ function vidSize(vid){
 	vid.style.height=vidH+"px";
 }
 
-window.addEventListener('resize', function(){ vidSize(video) }, false);
+window.addEventListener('resize', function(){ if(video) vidSize(video) }, false);
 
