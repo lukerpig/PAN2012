@@ -20,7 +20,7 @@
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
 <rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
-<text transform="matrix(1 0 0 1 96.8467 403.6309)" font-family="'Interstate-Regular'" font-size="30">volume of Lake Superior</text>
+<text transform="matrix(1 0 0 1 142.1309 403.6309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">number of gallons </tspan><tspan x="10.65" y="36" font-family="'Interstate-Regular'" font-size="30">in Lake Superior</tspan></text>
 <text transform="matrix(1 0 0 1 292.4429 288.8154)" font-family="'Interstate-Bold'" font-size="120">3 </text>
 <text transform="matrix(1 0 0 1 207.168 350.21)" font-family="'Interstate-Bold'" font-size="50">quadrillion</text>
 <path fill="#19162B" d="M329.625,515.781l-6.254,4.376l1.25-4.376l-9.067,2.188l-12.507-2.188l-8.442-4.066l-19.073-5.939

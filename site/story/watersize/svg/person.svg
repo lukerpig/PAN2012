@@ -20,7 +20,7 @@
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
 <rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
-<text transform="matrix(1 0 0 1 35.791 402.1729)" font-family="'Interstate-Regular'" font-size="28">amount in an average 150 lb person</text>
+<text transform="matrix(1 0 0 1 59.3945 402.1729)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="28">number of gallons in an average </tspan><tspan x="120.552" y="33.6" font-family="'Interstate-Regular'" font-size="28">150 lb person</tspan></text>
 <text transform="matrix(1 0 0 1 244.3203 333.1475)" font-family="'Interstate-Bold'" font-size="200">11</text>
 <text transform="matrix(1 0 0 1 398.3179 333.1475)" font-family="'Interstate-Bold'" font-size="150"> </text>
 <g>

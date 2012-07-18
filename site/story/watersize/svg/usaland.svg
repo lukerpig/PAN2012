@@ -19,18 +19,8 @@
 	</g>
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
-<rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
-<text transform="matrix(1 0 0 1 41.8428 403.6309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">number of gallons one American  </tspan><tspan x="53.804" y="36" font-family="'Interstate-Regular'" font-size="30">household uses in a year   </tspan></text>
-<text transform="matrix(1 0 0 1 229.2031 288.8154)" font-family="'Interstate-Bold'" font-size="120">127</text>
-<text transform="matrix(1 0 0 1 433.0815 288.8154)" font-family="'Interstate-Bold'" font-size="70"> </text>
-<g>
-	<path fill="#19162B" stroke="#19162B" stroke-miterlimit="10" d="M330.998,677.691H202.888v-90.498h128.109V677.691z
-		 M171.154,587.193h189.229l-96.378-81.099L171.154,587.193z M279.433,677.545v-52.448h-27.326v52.448H279.433z M240.938,613.196
-		h-28.207v28.208h28.207V613.196z M318.951,613.196h-28.207v28.208h28.207V613.196z"/>
-	<line fill="none" stroke="#19162B" stroke-miterlimit="10" x1="226.835" y1="641.404" x2="226.835" y2="613.196"/>
-	<line fill="none" stroke="#19162B" stroke-miterlimit="10" x1="212.731" y1="627.301" x2="240.938" y2="627.301"/>
-	<line fill="none" stroke="#19162B" stroke-miterlimit="10" x1="304.847" y1="641.404" x2="304.847" y2="613.196"/>
-	<line fill="none" stroke="#19162B" stroke-miterlimit="10" x1="290.744" y1="627.301" x2="318.951" y2="627.301"/>
-</g>
-<text transform="matrix(1 0 0 1 221.0439 350.21)" font-family="'Interstate-Bold'" font-size="50">thousand</text>
+<rect x="32.689" y="390.261" fill="none" width="468" height="59.5"/>
+<text transform="matrix(1 0 0 1 49.8149 409.9434)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="27">number of gallons needed to cover </tspan><tspan x="-15.255" y="32.4" font-family="'Interstate-Regular'" font-size="27">the entire U.S. with one foot of water</tspan></text>
+<text transform="matrix(1 0 0 1 195.2695 288.8154)" font-family="'Interstate-Bold'" font-size="120">790</text>
+<text transform="matrix(1 0 0 1 235.7646 350.21)" font-family="'Interstate-Bold'" font-size="50">trillion</text>
 </svg>

@@ -19,7 +19,6 @@
 	</g>
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
-<text transform="matrix(1 0 0 1 166.3301 298.5732)" font-family="'Interstate-Bold'" font-size="90">20,000 </text>
 <rect x="32.689" y="390.261" fill="none" width="468" height="66.5"/>
 <text transform="matrix(1 0 0 1 61.1626 412.1309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">number of gallons an average </tspan><tspan x="0.239" y="36" font-family="'Interstate-Regular'" font-size="30">person drinks in their lifetime</tspan></text>
 <g>
@@ -35,4 +34,6 @@
 	c-51.309,15.147-84.094-1.205-84.094-1.205l-11.387-101.383 M337.729,562.336c0,0-29.992,32.422-26.181,57.906
 	c0,0,2.947,18.377,21.853,18.377c0,0,20.111,1.822,21.667-23.271c0,0,0.352-10.532-9.361-25.793
 	C345.707,589.555,338.08,578.287,337.729,562.336z"/>
+<text transform="matrix(1 0 0 1 231.9292 288.8154)" font-family="'Interstate-Bold'" font-size="120">20</text>
+<text transform="matrix(1 0 0 1 204.0894 350.21)" font-family="'Interstate-Bold'" font-size="50">thousand</text>
 </svg>

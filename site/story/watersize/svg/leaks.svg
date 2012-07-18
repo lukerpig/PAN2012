@@ -19,8 +19,8 @@
 	</g>
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
-<rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
-<text transform="matrix(1 0 0 1 71.752 403.6309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">number of gallons wasted in</tspan><tspan x="48.765" y="36" font-family="'Interstate-Regular'" font-size="30">water leaks each day</tspan></text>
+<rect x="32.689" y="381.761" fill="none" width="468" height="88"/>
+<text transform="matrix(1 0 0 1 88.3267 403.6309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">number of gallons wasted </tspan><tspan x="-9.18" y="36" font-family="'Interstate-Regular'" font-size="30"> from leaky pipes everyday</tspan></text>
 <g>
 	<path fill="#19162B" d="M325.096,640.33l-24.828-1.815l-13.927-7.267c-32.701,1.814-44.208-6.056-44.208-6.056v3.632
 		c6.661,0.605,10.9,7.873,10.9,7.873l-1.816,13.927c-43.6,12.719-55.105-5.449-55.105-5.449l0.605-15.744l13.321-6.662

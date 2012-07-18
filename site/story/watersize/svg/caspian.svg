@@ -19,8 +19,8 @@
 	</g>
 	<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 </g>
-<rect x="32.689" y="390.261" fill="none" width="468" height="49"/>
-<text transform="matrix(1 0 0 1 45.4277 412.1309)" font-family="'Interstate-Regular'" font-size="30">total volume of the Caspian Sea</text>
+<rect x="32.689" y="390.261" fill="none" width="468" height="63.5"/>
+<text transform="matrix(1 0 0 1 173.8252 412.1309)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="30">gallons in the</tspan><tspan x="7.98" y="36" font-family="'Interstate-Regular'" font-size="30">Caspian Sea</tspan></text>
 <text transform="matrix(1 0 0 1 190.4443 288.8154)" font-family="'Interstate-Bold'" font-size="120">20.8 </text>
 <text transform="matrix(1 0 0 1 207.168 350.21)" font-family="'Interstate-Bold'" font-size="50">quadrillion</text>
 <path fill="#19162B" d="M303.804,506.724l-2.102-3.36l2.102-3.783v-6.304v-3.362v-5.464v-5.042l-6.725-2.943l-7.986,2.943

@@ -18,7 +18,7 @@
 </g>
 <path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
 <rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
-<text transform="matrix(1 0 0 1 35.9644 401.4434)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="27">number of gallons needed to process </tspan><tspan x="44.481" y="32.4" font-family="'Interstate-Regular'" font-size="27">one barrel (31 gallons) of beer </tspan></text>
+<text transform="matrix(1 0 0 1 36.0454 401.4434)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="27">gallons needed to process one barrel </tspan><tspan x="112.021" y="32.4" font-family="'Interstate-Regular'" font-size="27">(31 gallons) of beer </tspan></text>
 <text transform="matrix(1 0 0 1 184.5898 313.1523)" font-family="'Interstate-Bold'" font-size="110">1,500 </text>
 <g>
 	<path fill="#19162B" d="M356.065,532.689c0,0-100.303-36.928-200.108,1.995c0,0-25.45,65.871,1.996,133.241

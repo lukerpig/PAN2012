@@ -27,7 +27,7 @@
 			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
 			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
 			
-			.chart { background: #19172A; font: 12px sans-serif; }
+			#card5 { background-image:url(watercost/bg.jpg); border:1px solid red; background-size: 100% 100%; background-repeat: no-repeat; font: 12px sans-serif; }
 			.chart { fill: #6DBDC3; }
 			.chart text { fill: white; }
 			div#details { color: white; font: 28px sans-serif; }
@@ -44,15 +44,17 @@
                         var HANDS = 3;
 
                         var regions = [
-			 { name:"Amsterdam", cost:8, details:"Amsterdam: $8 per gallon" },
-			 { name:"Paris", cost:7, details:"Paris: $7 per gallon" },
-                         { name:"New York", cost:6, details:"New York: $6 per gallon" },
-                         { name:"San Francisco", cost:5, details: "San Francisco: $5 per gallon"},
-                         { name:"Chapel Hill", cost: 4, details: "Chapel Hill: $4 per gallon" },
-			 { name:"London", cost:3, details: "London: $3 per gallon" },
-			 { name:"Tokyo", cost:2, details:"Tokyo: $2 per gallon" },
-                         { name:"Rio de Janeiro", cost:1, details:"Rio: $1 per gallon"  },
-                         { name:"Dublin", cost:0, details: "Dublin: FREEEE!!!!!!"},
+						 { name:"You", cost:8, details:"Amsterdam: $8 per gallon" },
+						 { name:"Average U.S. Citizen", cost:7, details:"Paris: $7 per gallon" },
+                         { name:"Glasgow, U.K.", cost:7.57, details:"New York: $6 per gallon" },
+                         { name:"Berlin, Germany", cost:6.62, details: "San Francisco: $5 per gallon"},
+                         { name:"Oslo, Norway", cost: 3.49, details: "Chapel Hill: $4 per gallon" },
+						 { name:"Sydney, Australia", cost:3.45, details: "London: $3 per gallon" },
+						 { name:"Tokyo, Japan", cost:1.65, details:"Tokyo: $2 per gallon" },
+                         { name:"Moscow, Russia", cost:0.65, details:"Rio: $1 per gallon"  },
+                         { name:"Lima, Peru", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
+                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
+                         { name:"Mumbai, India", cost:0.09, details: "Dublin: FREEEE!!!!!!"},
 			];
 
 			
@@ -123,44 +125,45 @@
 				var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
 				var costs = regionalCosts(usage);
 				var barRangePercentage = .8;
-						var marginPercentage = (1-barRangePercentage)/2;
-						var chartHeight = 675;
-						var chartWidth = 1200;
-						var chartSideMargin = 10;
-						var chartTopMargin = 50;
-						var chartBottomMargin = 10;
+				var marginPercentage = (1-barRangePercentage)/2;
+				var chartHeight = 675;
+				var chartWidth = 1200;
+				var chartSideMargin = 10;
+				var chartTopMargin = 150;
+				var chartBottomMargin = 10;
+				var textbottom = 128;
 
 				
 				var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
+				var barWidth = chartWidth - chartSideMargin - textBottom;
 				
-				var x = d3.scale.ordinal()
-					.domain(costs)
-					.rangeBands([chartSideMargin, chartWidth-chartSideMargin]);
 				
-				var y = d3.scale.linear()
-						 .domain([0, d3.max(costs)])
-						 .range([1, barHeight]);
+				var x = d3.scale.linear()
+					.domain(0, d3.max(costs))
+					.range([352, 1100]);
+				
+				var y = d3.scale.ordinal()
+					 .domain([costs])
+					 .rangeBands([(chartHeight-textBottom) , (chartHeight-chartBottomMargin)]);
 
-	                        d3.select("#bars").selectAll("rect")
-				    .data(costs)
+				d3.select("#bars").selectAll("rect").data(costs)
 			        .enter().append("rect")
-                                    .attr("x", function(d, i) { return x(d) + marginPercentage*x.rangeBand();})
-                                    .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);} )
-                                    .attr("width", function(d, i) { return barRangePercentage*x.rangeBand();})
-                                    .attr("height", y)
-                                    .on("mouseover", showDetails)
-			            .on("mouseout", hideDetails);
+						.attr("x", 32)
+						.attr("y", y)
+						.attr("width", function(d, i) { return barRangePercentage*x;})
+						.attr("height", y.rangeBand())
+						.on("mouseover", showDetails)
+						.on("mouseout", hideDetails);
 
-                                d3.select("#bars").selectAll("text")
-                                    .data(costs)
-                                .enter().append("text")
-                                    .attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
-                                    .attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
-                                    .attr("dy", "-.5em")
-                                    .attr("text-anchor", "middle")
-                                    .on("mouseover", showDetails)
-			            .on("mouseout", hideDetails)
-							.text(function(d, i) { return "$"+ Math.round(d) });
+				d3.select("#bars").selectAll("text").data(costs)
+					.enter().append("text")
+						.attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
+						.attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
+						.attr("dy", "-.5em")
+						.attr("text-anchor", "middle")
+						.on("mouseover", showDetails)
+						.on("mouseout", hideDetails)
+						.text(function(d, i) { return "$"+ Math.round(d) });
 			}
 
 
@@ -263,7 +266,7 @@
 				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
 			</div>
-			<div id="interactive" style="margin: 0px auto; display: none;">
+			<div id="interactive" style="margin: 0px auto;">
 				<div class="card" id="card1">
 					<img src="watercost/cost1.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
@@ -303,8 +306,10 @@
 						<button type="button" class="backward" onclick="goBack(4)"></button>
 					</form>
 				</div>
-				<div class="card" id="card5" style="display: none;">
+				<div class="card" id="card5" style="display: block;">
 					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
+						<text style="font-family: Interstate-Light; fill:#40A09D; font-size: 35px;" x="61" y="55"><tspan>Based on your answers, you use about 100 gallons of water per day.</tspan>
+<tspan x="61" y="95">Here’s what that would cost:</tspan></text>
 						<g id="bars">
 						</g>
 					</svg>
@@ -312,6 +317,10 @@
 				</div>
 			</div>
 		</div>
+		
+		
+		
+		
 		<script>
 			var d = document;
 			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
