@@ -17,12 +17,12 @@
 		svgW=1200, ratH=9, ratW=16;
 		svgH = svgW*ratH/ratW;
 		var svgOpt = {
-			w: svgW,
-			h: svgW*ratH/ratW
+			maxW: 1200,
+			maxH: 1200*ratH/ratW
 		}
 		var boxOpt = {
-			w: 343,
-			h: 490
+			w: 536,
+			h: 781
 		}
 		
 		var totalRatio = boxOpt.w + boxOpt.h;
@@ -35,119 +35,207 @@
 
 		var data = [
 			{
-				id: 1,
-				a: .3,
+				a: 1,
 				h: getHeight,
 				w: getWidth,
-				amnt: "38.4 Oz"
+				amnt: "1 Gallon",
+				svg: "1gal",
 	
 			},
 			{
-				id: 2,
 				a: 2,
 				h: getHeight,
 				w: getWidth,
-				amnt: "2 Gallons"
+				amnt: "1.6 Gallons",
+				svg: "toilet",
 			},
 			{
-				id: 3,
-				a: 6,
+				a: 11,
 				h: getHeight,
 				w: getWidth,
-				amnt: "6 Gallons"
+				amnt: "11 Gallons",
+				svg: "person",
 			},
 			{
-				id: 4,
-				a: 20,
+				a: 40,
 				h: getHeight,
 				w: getWidth,
-				amnt: "20 Gallons"
+				amnt: "40 Gallons",
+				svg: "bathtub",
 			},
 			{
-				id: 5,
-				a: 24,
-				h: getHeight,
-				w: getWidth,
-				amnt: "24 Gallons"
-			},
-			{
-				id: 6,
-				a: 45,
-				h: getHeight,
-				w: getWidth,
-				amnt: "45 Gallons"
-			},
-			{
-				id: 7,
 				a: 100,
 				h: getHeight,
 				w: getWidth,
-				amnt: "100 Gallons"
+				amnt: "100 Gallons",
+				svg: "100",
 			},
 			{
-				id: 8,
-				a: 500,
+				a: 1000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "500 Gallons"
+				amnt: "1,000 Gallons",
+				svg: "firetruck",
 			},
 			{
-				id: 9,
-				a: 600,
+				a: 1500,
 				h: getHeight,
 				w: getWidth,
-				amnt: "600 Gallons"
+				amnt: "1,500 Gallons",
+				svg: "beer",
 			},
 			{
-				id: 10,
-				a: 2000,
+				a: 2019,
 				h: getHeight,
 				w: getWidth,
-				amnt: "2000 Gallons"
+				amnt: "2,019 Gallons",
+				svg: "cement",
 			},
 			{
-				id: 11,
-				a: 5000,
+				a: 10000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "5 Thousand Gallons"
+				amnt: "10 Thousand Gallons",
+				svg: "leaks",
 			},
 			{
-				id: 12,
-				a: 15000,
+				a: 20000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "15 Thousand Gallons"
+				amnt: "20 Thousand Gallons",
+				svg: "drink",
 			},
 			{
-				id: 13,
-				a: 100000,
+				a: 24000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "100 Thousands Gallons"
+				amnt: "24 Thousand Gallons",
+				svg: "schoolbus",
 			},
 			{
-				id: 14,
-				a: 3000000,
+				a: 127000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "3 Million Gallons"
+				amnt: "127,000",
+				svg: "household",
 			},
 			{
-				id: 15,
-				a: 3900000,
+				a: 221000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "3.9 Million Gallons"
+				amnt: "221,000",
+				svg: "iss",
 			},
 			{
-				id: 16,
-				a: 5e20,//max number
+				a: 660000,
 				h: getHeight,
 				w: getWidth,
-				amnt: "500 Quintillion Gallons"
-			}
+				amnt: "660,000",
+				svg: "pool",
+			},
+			{
+				a: 800000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "800,000",
+				svg: "cotton",
+			},
+			{
+				a: 1500000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "1.5 Million",
+				svg: "blimp",
+			},
+			{
+				a: 9600000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "9.6 Million",
+				svg: "football",
+			},
+			{
+				a: 276000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "276 Million",
+				svg: "empirestate",
+			},
+			{
+				a: 660000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "660 Million",
+				svg: "pyramid",
+			},
+			{
+				a: 8700000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "8.7 Billion",
+				svg: "bottle",
+			},
+			{
+				a: 400000000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "400 Billion",
+				svg: "americanday",
+			},
+			{
+				a: 1.49e14,
+				h: getHeight,
+				w: getWidth,
+				amnt: "149 Trillion",
+				svg: "americanyear",
+			},
+			{
+				a: 3e15,
+				h: getHeight,
+				w: getWidth,
+				amnt: "3 quadrillion",
+				svg: "superior",
+			},
+			{
+				a: 2.08e16,
+				h: getHeight,
+				w: getWidth,
+				amnt: "20.8 Quadrillion",
+				svg: "caspian",
+			},
+			{
+				a: 3410000000000000000,
+				h: getHeight,
+				w: getWidth,
+				amnt: "341 Quadrillion",
+				svg: "atmosphere",
+			},
+			{
+				a: 6.35e18,
+				h: getHeight,
+				w: getWidth,
+				amnt: "660 Quadrillion",
+				svg: "glacier",
+			},
+			{
+				a: 1.2e19,
+				h: getHeight,
+				w: getWidth,
+				amnt: "12 Quintillion",
+				svg: "freshwater",
+			},
+			{
+				a: 3.26e20,
+				h: getHeight,
+				w: getWidth,
+				amnt: "326 Quintillion",
+				svg: "globewater",
+			},
 		];
+		for (var i in data){
+			data[i].id=i;
+		}
+		
 		var marginBot = 10, marginLeft = 10;
 		
 		function setX(data) {
@@ -189,12 +277,9 @@
 					g.append("image")
 						.attr("xlink:href","watersize/gallon.svg")
 						.attr("width","343").attr("height","491");
-					g.append("text")
-						.text(function(d){return d.amnt})
-						.attr("x",343/2)
-						.attr("y",491/2)
-						.attr("text-anchor","middle")
-						.attr("font-size","30")
+					g.append("image")
+						.attr("xlink:href",function(d){ return "watersize/svg/"+d.svg+".svg"})
+						.attr("width","343").attr("height","491");
 		}
 				
 		var maxHeight = 17000, maxWidth=maxHeight*boxOpt.w/boxOpt.h;
@@ -212,32 +297,26 @@
 		}
 		
 		function drawParams(obj, scaler){
-			/*obj
-				.attr("x", function(d,i) { return d.x*scaler; })
-				.attr("y", function(d) { return svgOpt.h - d.h()*scaler-marginBot })
-				.attr("height", function(d,i){return Math.min(maxHeight,d.h()*scaler) })
-				.attr("width", function(d,i){return Math.min(maxWidth,d.w()*scaler) })*/
 			obj
-				.attr("transform",function(d){return "translate("+d.x*scaler+","+(svgOpt.h - d.h()*scaler-marginBot)+") scale("+d.h()*scaler/491+")"})
+				.attr("transform",function(d){
+					return "translate("+d.x*scaler+","+(svgOpt.maxH - d.h()*scaler-marginBot)+") scale("+d.h()*scaler/491+")"
+				})
 		}
 	
 		function onLoad(){ 
-	
 			setScale(1.0);
 			setX(data);
 
 			var svg = d3.select("svg")
-						.attr("height", svgOpt.h+"px")
-						.attr("viewBox","0 0 "+svgOpt.w+" "+svgOpt.h+"")
-						.style("max-width",svgOpt.w+"px")
+						.attr("height", svgOpt.maxH+"px")
+						.attr("viewBox","0 0 "+svgOpt.maxW+" "+svgOpt.maxH+"")
+						.style("max-width",svgOpt.maxW+"px")
 						
 			var svgElem = document.getElementById("svg-box");
 			console.log (svg.style("width") +" " + svgElem.offsetWidth);
-			svgH, svgW;
-			console.log(svgH)
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
 			progressSvg(0);
-			var bound = d3.select("#bound").style("max-width",svgOpt.w+"px");
+			var svgContain = d3.select("#svgContain").style("max-width",svgOpt.maxW+"px");
 			//WINDOW RESIZE
 			window.addEventListener('resize', windowResize, false);
 			var ww = window.innerWidth;
@@ -249,11 +328,9 @@
 			
 			svgHeight();
 			function svgHeight(){
-				//svgW = parseInt(svgElem.style.width);
-				//svgH = parseInt(svgElem.style.width)*ratH/ratW;
-				svgW = document.getElementById("bound").offsetWidth;
-				console.log(svgW + " Wid");
+				svgW = document.getElementById("svgContain").offsetWidth;
 				svgH = svgW*ratH/ratW;
+				console.log(svgW + " Wid");
 				svg.style("height",svgH+"px");
                                 
 			}
@@ -268,7 +345,7 @@
 					animationCallback: function(x, y)
 					{
 						x = parseFloat(x)*(data.length-1);
-						var dir = x - oldX;
+						var dir = Math.round(x - oldX);
 						progressSvg(dir);
 						oldX = x;
 					}
@@ -277,12 +354,13 @@
 		}
 
 		
-		var desHeight = svgOpt.h-20, desX = svgOpt.w-boxOpt.w;
+		var desHeight = svgOpt.maxH-20, desX = svgOpt.maxW-boxOpt.w;
 		
 		var activeSvg = 0;
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
+			console.log("oldScale: "+oldScale+" activeSVG: " + activeSvg + " direction " + direction);
 			setScale(desHeight/data[activeSvg].h());
 			var activeX = data[activeSvg].x*scale;
 			if(direction == 0){
@@ -301,9 +379,8 @@
 </head>
 <body onload="onLoad()">
 <h1>The Size of Water</h1>
-<div id="bound">
-	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%; border: 1px solid red;">
-	
+<div id="svgContain" style="background-image: url(watersize/bg.jpg); background-size: 100% 100%; background-repeat: no-repeat;">
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%;">
 	</svg>
 </div>
 <div id="my-slider" class="dragdealer">
