@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-html {padding:4%; margin: 0px;}
+html {padding:0px; margin: 0px;}
 body {color: #333;}
 @font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
 @font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}

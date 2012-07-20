@@ -44,17 +44,17 @@
                         var HANDS = 3;
 
                         var regions = [
-						 { name:"You", cost:8, details:"Amsterdam: $8 per gallon" },
-						 { name:"Average U.S. Citizen", cost:7, details:"Paris: $7 per gallon" },
-                         { name:"Glasgow, U.K.", cost:7.57, details:"New York: $6 per gallon" },
-                         { name:"Berlin, Germany", cost:6.62, details: "San Francisco: $5 per gallon"},
-                         { name:"Oslo, Norway", cost: 3.49, details: "Chapel Hill: $4 per gallon" },
-						 { name:"Sydney, Australia", cost:3.45, details: "London: $3 per gallon" },
-						 { name:"Tokyo, Japan", cost:1.65, details:"Tokyo: $2 per gallon" },
-                         { name:"Moscow, Russia", cost:0.65, details:"Rio: $1 per gallon"  },
-                         { name:"Lima, Peru", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
-                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
-                         { name:"Mumbai, India", cost:0.09, details: "Dublin: FREEEE!!!!!!"},
+						 { name:"You", cost:2.13, details: function(){ return ["Your estimated water use per day is " + this.cost,"and your water bill would cost Y","based on the national average water cost"] }},
+						 { name:"Average U.S. Citizen", cost:2.13, details: function(){ return ["The average U.S. citizen: 2.13 per gallon"]},total:100 },
+                         { name:"Glasgow, U.K.", cost:7.57, details: function(){ return ["Glasgow, U.K.: Water bill costs X","addblurb"]}},
+                         { name:"Berlin, Germany", cost:6.62, details: function(){ return ["Berlin, Germany: Water bill costs X","addblurb"]}},
+                         { name:"Oslo, Norway", cost: 3.49, details: function(){ return ["Oslo, Norway.: Water bill costs X","addblurb"]}},
+						 { name:"Sydney, Australia", cost:3.45, details: function(){ return ["Sydney, Australia.: Water bill costs X","addblurb"]}},
+						 { name:"Tokyo, Japan", cost:1.65, details: function(){ return ["Tokyo, Japan: Water bill costs X","addblurb"]}},
+                         { name:"Moscow, Russia", cost:0.65, details: function(){ return ["Moscow, Russia: Water bill costs X","addblurb"]}},
+                         { name:"Lima, Peru", cost:0.22, details: function(){ return ["Lima, Peru: Water bill costs X","addblurb"]}},
+                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: function(){ return ["Addis Ababa, Ethiopia: Water bill costs X","addblurb"]}},
+                         { name:"Mumbai, India", cost:0.09, details: function(){ return ["Mumbai, India: Water bill costs X","addblurb"]}},
 			];
 
 			
@@ -104,7 +104,9 @@
 	                function regionalCosts(usage) {
                             var costs=[];
                             for(var i = 0; i < regions.length; i++) {
-                               costs.push(usage*regions[i].cost);
+								var pushedInfo=!(regions[i].total)?usage*regions[i].cost:regions[i].total*regions[i].cost;
+								regions[i].total=pushedInfo
+								costs[i] = pushedInfo
 			    }
                             return costs;
 	                }
@@ -122,48 +124,63 @@
 			function calculate(n){
 				showNext(n);
 				svgHeight();
-				var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
+				var usage = (+shower + +flush + +laundry + +hands)*1.234;
 				var costs = regionalCosts(usage);
-				var barRangePercentage = .8;
-				var marginPercentage = (1-barRangePercentage)/2;
 				var chartHeight = 675;
 				var chartWidth = 1200;
-				var chartSideMargin = 10;
-				var chartTopMargin = 150;
-				var chartBottomMargin = 10;
-				var textbottom = 128;
-
-				
-				var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
-				var barWidth = chartWidth - chartSideMargin - textBottom;
-				
+				var marginRight = 76;
+				var barX = 352;
 				
 				var x = d3.scale.linear()
-					.domain(0, d3.max(costs))
-					.range([352, 1100]);
+					.domain([0, d3.max(costs)])
+					.range(["0px",(chartWidth-barX-marginRight)+"px"])
 				
-				var y = d3.scale.ordinal()
-					 .domain([costs])
-					 .rangeBands([(chartHeight-textBottom) , (chartHeight-chartBottomMargin)]);
-
-				d3.select("#bars").selectAll("rect").data(costs)
-			        .enter().append("rect")
-						.attr("x", 32)
-						.attr("y", y)
-						.attr("width", function(d, i) { return barRangePercentage*x;})
-						.attr("height", y.rangeBand())
-						.on("mouseover", showDetails)
-						.on("mouseout", hideDetails);
-
-				d3.select("#bars").selectAll("text").data(costs)
-					.enter().append("text")
-						.attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
-						.attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
-						.attr("dy", "-.5em")
-						.attr("text-anchor", "middle")
-						.on("mouseover", showDetails)
-						.on("mouseout", hideDetails)
-						.text(function(d, i) { return "$"+ Math.round(d) });
+				
+				var bars = d3.select("#bars").selectAll("rect").data(costs,function(d){return d.name});
+				bars.enter().append("rect")
+					.attr("class","bar")
+					.attr("x",barX)
+					.attr("y", function(d,i){ return (i*50+134) })
+					.attr("width",x)
+					.attr("height","25")
+					.attr("fill","#40A09D")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+						
+				var bartext = d3.select("#bars").selectAll("text").data(regions,function(d){return d.name})
+				bartext.enter().append("text")
+					.text(function(d){return d.name})					
+					.attr("class", "bartext")
+					.attr("x", 340)
+					.attr("y", function(d,i){ return (i*50+158) })
+					.attr("text-anchor", "end")
+					.style("fill","#40A09D")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","25")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+					
+				var infobox = d3.select("#bars").append("text").attr("id","infobox")
+				
+				
+				infobox
+					.attr("class","infobox")
+					.attr("x","593")
+					.attr("y","509")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","30")
+					.style("fill","#40A09D")
+					.style("opacity",".75")
+									
+				function onRollover(d,i){
+					var infoTspan = d3.select("#infobox").selectAll("tspan").data(d.details())
+					
+					infoTspan.enter().append("tspan")
+					infoTspan.attr("x", 593).attr("dy", function(d, i) { return i == 0?  0 : 30 })
+						.text(String)
+					infoTspan.exit().remove()
+					
+				}
 			}
 
 
@@ -195,7 +212,6 @@
 					}
 				}
 				
-				
 				d3.select("#skip").on("click",function(){
 					afterVideo();
 				});
@@ -225,8 +241,6 @@
 							d3.select("#video").style("display","none")
 							d3.select("#interactive").style("display","block")
 						})
-						
-					
 				}
 
 				function addEvent(element, eventName, callback) {
@@ -257,7 +271,7 @@
 				<div class="card" id="card1">
 					<img src="watercost/cost1.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
-						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="24.4" type="radio" checked />&nbsp;</label>
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="24.416" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="16.8" type="radio" checked/>&nbsp;</label>
 						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="9.09" type="radio" />&nbsp;</label>
 						<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>

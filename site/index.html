@@ -20,6 +20,8 @@
 			.right{width:3%; float: right;}
 			
 			#mosaic tr td {background-color: #206666; width: 20%; height: 20%}
+			#botContent {color: #fff; font-family: Interstate-Light, Verdana, sans-serif; position: relative; width: 96%;}
+			#botContent div {height: 0%; display: none;}
 
         </style>
 		<script src="http://d3js.org/d3.v2.js"></script>
@@ -547,9 +549,24 @@
 			waterCostTd.on("click",function(){reveal.activateStory("pipeburst");})
 			waterFactsTd.on("click",function(){reveal.activateStory("girlbath");})
 			
-			d3.select("#why100").on("click",function(){ alert("The average American consumes 100 gallons of water daily between showering, laundry, drinking, and flushing toilets.") }).style("cursor","pointer")
-			d3.select("#howview").on("click",function(){ alert("As the video plays, boxes to the right will light to indicate a related story. Checking these stories out is encouraged and will not disrupt your time in the video.") }).style("cursor","pointer")
-			d3.select("#about").on("click",function(){ alert("100 Gallons is a project produced by the UNC School of Journalism and Mass Communication. Every summer, fellows are selected among a pool of students who have shown passion in multimedia storytelling techniques.") }).style("cursor","pointer")
+			d3.select("#why100").on("mouseover",function(){botRollover("#why100text")})
+			d3.select("#howview").on("mouseover",function(){botRollover("#howviewtext")})
+			d3.select("#about").on("mouseover",function(){botRollover("#abouttext")})
+			
+			var botContent = d3.select("#botContent")
+			var activeBottom;
+			function botRollover(selector){
+				var s = d3.select(selector)
+				if(activeBottom && activeBottom != selector){
+					console.log("different")
+					d3.select(activeBottom).style("display","none")
+					s.style("display","block")
+				} else {
+					console.log("same")
+					s.style("display","block")
+				}
+				activeBottom=selector;
+			}
 			}//END PAGELOAD()
 			
         </script>
@@ -565,8 +582,7 @@
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
 				<div id="vid" class="left" style="position: relative; overflow: hidden;">
-					<img src="splash.jpg" id="splash" style="max-width: 100%; cursor: pointer;"/>
-					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: none; width: 100%;"></iframe>
+					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
 							<td id="alienWaterTd" rowspan="2">Alien Water</td>
@@ -621,10 +637,16 @@
 				</div>
 				<div class="clear"></div>
 			</div>	
-			<div id="helptext" style="height: 0px; overflow: hidden;">
-				<div id="howview">a</div>
-				<div id="why100">b</div>
-				<div id="about">c</div>
+			<div id="botContent">
+				<div id="howviewtext">
+					The average American consumes 100 gallons of water daily between showering, laundry, drinking, and flushing toilets.
+				</div>
+				<div id="why100text">
+					As the video plays, boxes to the right will light to indicate a related story. Checking these stories out is encouraged and will not disrupt your time in the video.
+				</div>
+				<div id="abouttext">
+					100 Gallons is a project produced by the UNC School of Journalism and Mass Communication. Every summer, fellows are selected among a pool of students who have shown passion in multimedia storytelling techniques.
+				</div>
 			</div>
 			<div id="line" class="left" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
 			<div class="clear"></div>
