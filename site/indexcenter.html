@@ -439,14 +439,21 @@
 					var isOn = that.button.attr("src")==that.on 
 					
 					if(isOn){
-						that.button.attr("src",that.off)
+						that.turnOff()
 					} else {
-						that.button.attr("src",that.on)
+						that.turnOn()
 					}
 					if(that.onClick){
 						that.onClick(!isOn)	
 					}
 				})
+				
+				this.turnOn = function(){
+					that.button.attr("src",that.on)
+				}
+				this.turnOff = function(){
+					that.button.attr("src",that.off)
+				}
 			}
 
 			var content = new Content(contentData);
@@ -468,8 +475,13 @@
 				var isPlaying = false;
 				
 				var progress = new Progress(content,d3.select("#progressBar"))
+				
+				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
+				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
+
 				var video = new VideoHandler("conceptVideo");
 				video.onPlay = function() {
+					playButton.turnOn();
 					isPlaying = true;
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
@@ -477,6 +489,7 @@
 				 }
 				
 				video.onPause = function() {
+					playButton.turnOff();
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
@@ -485,6 +498,7 @@
 				   }
 				}
 				video.onFinish = function() {
+					playButton.turnOff();
 					isPlaying = false;
 					displayMosaic()
 				}
@@ -522,9 +536,17 @@
 					   reveal.activateStory(storyId);
 					}
 				}
-				
-				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
-				var mosLink = new ToggleButton("mosOn.png","mosOff.png",d3.select("#mosLink"))
+								
+				playButton.onClick=function(isOn){
+					if(isOn){
+						if(activeBlock=="mosaic"){
+							displayMosaic();
+						}
+						video.play();
+					} else {
+						video.pause();	
+					}
+				}
 				
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
@@ -587,26 +609,26 @@
 					displayMosaic();
 				}
 				
+				mosaicButton.onClick = function(isMosaicShowing){
+					displayMosaic()
+				}
 				
 				function displayMosaic(){
 					var divHeight = vidDiv.style("height")
-					if(activeBlock=="video"){
-						moslink.attr("src","graphics/mos-linka.png")
-					} else if (activeBlock == "mosaic") {
-						moslink.attr("src","graphics/mos-link.png")
-					}
 
 					vidDiv.transition().duration(600)
 						.style("height","0px")
 						.each("end",function(){
 							if(activeBlock=="video"){
 								activeBlock = "mosaic";
+								mosaicButton.turnOn()
 								if(isPlaying)video.pause()
 								videoFrame.style("display","none")
 								mosaicTable.style("display","table")
 								moslink.attr("src","graphics/mos-linka.png")
 							} else if (activeBlock=="mosaic"){
 								activeBlock = "video";
+								mosaicButton.turnOff();
 								if(isPlaying) video.play()
 								videoFrame.style("display","block")
 								mosaicTable.style("display","none")
@@ -726,7 +748,7 @@
 			<table style="width:100%; margin-top: 8px;">
 				<tr>
 					<td style="width: 2%; max-width:11px;"><img src="playbtn.png" id="playBtn"/></td>
-					<td><div id="progressBar" style="border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
+					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
 					<td id="mosaic" style="width: 2%; max-width:11px;"><img src="moslink.png" id="mosLink"/></td>
 				</tr>
 			</table>
@@ -739,9 +761,6 @@
 						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
 						<a id="about" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
 					</div>
-				</div>
-				<div id="bot-right" class="right">
-					<a><img src="graphics/mos-link.png" id="moslink" style="width: 100%;"/></a>
 				</div>
 				<div class="clear"></div>
 			</div>	
