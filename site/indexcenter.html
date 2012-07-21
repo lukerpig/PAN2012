@@ -316,7 +316,8 @@
 			
 			
 			function VideoHandler(playerId) {
-				var that = this;				
+				var that = this;
+				this.duration = 1e6;			
 				
 				fVideo = document.getElementById(playerId);
 				
@@ -329,15 +330,17 @@
 					that.froogaloop = $f(player_id);
 
 
-					function tick(videoTime) {
+					function tick(videoTime, videoPercent) {
+						console.log(videoTime + " " + videoPercent+"%")
 						that.videoTime = parseFloat(videoTime);
+						that.videoPercent = parseFloat(videoPercent);
 						console.log(that.videoTime)
-					    if (that.onTick) { that.onTick(that.videoTime); }
+					    if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
 				    }
 
                     // Keep a reference to Froogaloop for this player
 					function getTime(){
-						that.froogaloop.api('getCurrentTime', function(value, player_id) { tick(value); });
+						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
 					}
 
 					
@@ -358,7 +361,7 @@
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
-							tick(data.seconds);
+							tick(data.seconds, data.percent);
 					});
 					
 					that.froogaloop.addEvent('finish', function(data) {
@@ -409,6 +412,42 @@
 				}
 				
 			}
+			
+			function Progress(content, parentElement){
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+				
+				this.percent = 0;
+				this.redraw = function(){
+					d3.select("#progressIndicator").style("width",that.percent+"%")
+				}
+				
+				this.setPercent = function(percent){
+					that.percent = percent;
+					that.redraw();
+				}
+			}
+			
+			function ToggleButton(on,off,parentElement){
+				var that = this;
+				this.on = on;
+				this.off = off;
+				this.button = parentElement;
+				this.button.style("cursor","pointer")
+				this.button.on("click",function(){
+					var isOn = that.button.attr("src")==that.on 
+					
+					if(isOn){
+						that.button.attr("src",that.off)
+					} else {
+						that.button.attr("src",that.on)
+					}
+					if(that.onClick){
+						that.onClick(!isOn)	
+					}
+				})
+			}
 
 			var content = new Content(contentData);
 
@@ -417,7 +456,7 @@
 
 
 				ww = window.innerWidth, wh = window.innerHeight;
-				var videoFrame=d3.select("#player_1");
+				var videoFrame=d3.select("#conceptVideo");
 				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
 				var mosaicTable = d3.select("#mosaic");
@@ -428,7 +467,8 @@
 				var activeBlock = "video";
 				var isPlaying = false;
 				
-				var video = new VideoHandler("player_1");
+				var progress = new Progress(content,d3.select("#progressBar"))
+				var video = new VideoHandler("conceptVideo");
 				video.onPlay = function() {
 					isPlaying = true;
 					if (reveal.activeStory) {
@@ -449,7 +489,8 @@
 					displayMosaic()
 				}
 				
-				video.onTick = function(timestamp) {
+				video.onTick = function(timestamp, videoPercent) {
+					progress.setPercent(videoPercent*100);
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
 						console.log("change" + timestamp)
 						currentStory = content.currentContent(timestamp);
@@ -481,6 +522,9 @@
 					   reveal.activateStory(storyId);
 					}
 				}
+				
+				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
+				var mosLink = new ToggleButton("mosOn.png","mosOff.png",d3.select("#mosLink"))
 				
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
@@ -543,9 +587,9 @@
 					displayMosaic();
 				}
 				
+				
 				function displayMosaic(){
 					var divHeight = vidDiv.style("height")
-									console.log("1")
 					if(activeBlock=="video"){
 						moslink.attr("src","graphics/mos-linka.png")
 					} else if (activeBlock == "mosaic") {
@@ -640,9 +684,9 @@
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left" style="position: relative; overflow: hidden;">
+				<div id="vid" style="position: relative; overflow: hidden;">
 					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
+					<iframe id="conceptVideo" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=conceptVideo" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
 							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="everydrop" rowspan="2" >Every Drop</td>
@@ -677,12 +721,17 @@
 						</tr>
 					</table>
 				</div>
-				<div id="markers" class="right" style="">
-				</div>
 				<div class="clear"></div>
 			</div>
+			<table style="width:100%; margin-top: 8px;">
+				<tr>
+					<td style="width: 2%; max-width:11px;"><img src="playbtn.png" id="playBtn"/></td>
+					<td><div id="progressBar" style="border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
+					<td id="mosaic" style="width: 2%; max-width:11px;"><img src="moslink.png" id="mosLink"/></td>
+				</tr>
+			</table>
 			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
-				<div id="bot-left" class="left">
+				<div id="bot-left">
 					<div id="bleft" style="float: left; text-align: bottom;">
 						<a id="howview">HOW TO VIEW</a>
 					</div>
