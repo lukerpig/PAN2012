@@ -31,7 +31,7 @@ var contentData = [
 	},
 	{
 		id : "girlbath",
-		storyId: "everydrop",
+		name: "everydrop",
 		url: "story/everydrop.html",
 		level: 3,
 		cuePoint: 13.19,
@@ -73,7 +73,7 @@ var contentData = [
 	},
 	{
 		id : "canoe",
-		storyId: "elwha",
+		name: "elwha",
 		url: "story/elwha.html",
 		level: 2,
 		cuePoint: 27.19,
@@ -129,7 +129,7 @@ var contentData = [
 	},
 	{
 		id : "guysocean",
-		storyId: "powersof10",
+		name: "powersof10",
 		url: "story/powersof10.html",
 		level: 2,
 		cuePoint: 52.05,
@@ -143,7 +143,7 @@ var contentData = [
 	},
 	{
 		id : "campfire",
-		storyId: "alienwater",
+		name: "alienwater",
 		url: "story/alienwater.html",
 		level: 2,
 		cuePoint: 60.06,
@@ -164,7 +164,7 @@ var contentData = [
 	},
 	{
 		id : "cookfood",
-		storyId: "footprint",
+		name: "footprint",
 		url: "story/footprint.html",
 		level: 2,
 		cuePoint: 65.16,
@@ -185,7 +185,7 @@ var contentData = [
 	},
 	{
 		id : "nightcar",
-		storyId: "rainsmell",
+		name: "rainsmell",
 		url: "story/rainsmell.html",
 		level: 2,
 		cuePoint: 78.23,
@@ -227,14 +227,14 @@ var contentData = [
 	},
 	{
 		id : "pipeburst",
-		storyId: "watercost",
+		name: "watercost",
 		url: "story/watercost.html",
 		level: 3,
 		cuePoint: 98.19,
 	},
 	{
 		id : "bottlespray",
-		storyId: "tanktown",
+		name: "tanktown",
 		url: "story/tanktown.html",
 		level: 2,
 		cuePoint: 101.04,
@@ -262,14 +262,14 @@ var contentData = [
 	},
 	{
 		id : "plop",
-		storyId: "pollution",
+		name: "pollution",
 		url: "story/pollution.html",
 		level: 2,
 		cuePoint: 113.01,
 	},
 	{
 		id : "sewer",
-		storyId: "nycsewers",
+		name: "nycsewers",
 		url: "story/nycsewers.html",
 		level: 3,
 		cuePoint: 115.04,
@@ -283,7 +283,7 @@ var contentData = [
 	},
 	{
 		id : "sprinklers",
-		storyId: "whereswater",
+		name: "whereswater",
 		url: "story/whereswater.html",
 		level: 2,
 		cuePoint: 120.16,
@@ -325,7 +325,7 @@ var contentData = [
 	},
 	{
 		id : "fatherdaughter",
-		storyId: "cloudweight",
+		name: "cloudweight",
 		url: "story/cloudweight.html",
 		level: 2,
 		cuePoint: 145.08,
@@ -339,7 +339,7 @@ var contentData = [
 	},
 	{
 		id : "waterslide",
-		storyId: "waterpark",
+		name: "waterpark",
 		url: "story/waterpark.html",
 		level: 2,
 		cuePoint: 151.22,
@@ -367,14 +367,14 @@ var contentData = [
 	},
 	{
 		id : "pourwater",
-		storyId: "purestwater",
+		name: "purestwater",
 		url: "story/purestwater.html",
 		level: 2,
 		cuePoint: 175.12,
 	},
 	{
 		id : "umbrella",
-		storyId: "rainwater",
+		name: "rainwater",
 		url: "story/rainwater.html",
 		level: 2,
 		cuePoint: 178.12,

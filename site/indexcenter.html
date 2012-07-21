@@ -40,11 +40,10 @@
 				}
 				
 				this.getVidFrameWidth = function(vidWidth) {
-					
-					if(this.level == 1)	return this.level * .25 * vidWidth;
-					return .90*vidWidth;
+					if(this.level == 2)	return .70*vidWidth;
+					if(this.level == 3)	return .85*vidWidth;
 
-					
+					return this.level * .25 * vidWidth;
 				}
 				
 				this.containsTime = function(time) {
@@ -208,27 +207,25 @@
 				this.content = content;
 				this.parentElement = parentElement;
 				this.activeStory = null;
-				this.margin = 15;
+				this.margin = 4
 				
 				var that = this;
 
 				this.create = function() {
-					this.vidDivs = this.parentElement.selectAll("div .story").data(content.stories);
-					this.vidDivs.enter().append("div")
-							.attr("id",function(d,i){ return d.id })
-							.style("position","absolute")
-							.style("top",that.margin+"px")
-							.style("background-color","#fff")
-							.attr("class","story")
-							.style("z-index","10")
-							.style("overflow","hidden")
-						.append("iframe")
-							.style("margin","4% 0% 4% 4%")
-							.style("height","92%")
-							.style("width","96%")
-							.attr("src",function(d,i){return d.url})
-							.attr("id",function(d,i){ return d.id })
-							.style("position","absolute")
+					this.vidIframes = this.parentElement.selectAll("iframe .story").data(content.stories);
+					this.vidIframes.enter().append("div")	
+						.style("position","absolute")
+						.style("top",that.margin+"%")
+						.style("bottom",that.margin+"%")
+						.style("background-color","#fff")
+						.style("z-index","10")
+						.attr("id",function(d,i){ return d.id })
+					.append("iframe")
+						.style("margin","4% 0% 4% 4%")
+						.style("width","96%")
+						.style("height","88%")
+						.attr("src",function(d,i){return d.url})
+						.attr("class","story")
 
 					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
 					this.captionDivs.enter().append("div")
@@ -245,7 +242,7 @@
 				function storyLeft(d) {
 					var vidWidth = that.vidWidth;
 					if (that.activeStory == d.id) {
-						return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px"
+						return (vidWidth-(vidWidth*.96)) + "px"
 					} else {
 						return vidWidth + "px";
 					}
@@ -254,7 +251,7 @@
 				this.setSize = function(vidWidth, vidHeight){
 					this.vidWidth = vidWidth;
 					this.vidHeight = vidHeight;
-					this.vidDivs
+					this.vidIframes
 						.call(styleReveal)
 					this.captionDivs
 						.call(styleReveal)
@@ -262,8 +259,7 @@
        				function styleReveal(){
 						this
 						   .style("left", storyLeft)
-						   .style("height",(vidHeight-that.margin*2)+"px")
-						   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+						   .style("width",function(d){ return vidWidth*.92 + "px"; });
 					}
 				}
 
@@ -385,6 +381,34 @@
 				}
 				
 			}
+			
+			function Mosaic(content, parentElement){
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+				
+				function clickHandler(storyId) {
+					return function() {
+						if (that.onClick) that.onClick(storyId)
+					}
+				}
+					
+				
+				this.create = function(){
+					for(var i in that.content.stories) {
+						var story = that.content.stories[i];
+						var handler = clickHandler(story.id);
+						var storyElement = that.parentElement.select("#"+story.name);
+						storyElement.on("click", handler)
+					}
+					
+					
+					var playAgainElement = that.parentElement.select("#playAgain");
+					playAgainElement.on("click", function() { if (that.onPlayAgain) that.onPlayAgain(); })
+
+				}
+				
+			}
 
 			var content = new Content(contentData);
 
@@ -396,7 +420,7 @@
 				var videoFrame=d3.select("#player_1");
 				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
-				var mosaic = d3.select("#mosaic");
+				var mosaicTable = d3.select("#mosaic");
 				var moslink = d3.select("#moslink");
 				var markersDiv=d3.select("#markers");
 				var vidDiv = d3.select("#vid")
@@ -460,14 +484,41 @@
 				
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
-				reveal.onActivate = function() { video.pause(); }
-			    reveal.onDeactivate = function() { if(activeBlock == "video" && isPlaying) video.play(); }
+				reveal.onActivate = function() {
+					showDimmer()
+					video.pause();
+				}
+			    reveal.onDeactivate = function() {
+					if(activeBlock == "video" && isPlaying){
+						 video.play();
+					}
+					hideDimmer()
+				}
 				reveal.onShow = function(storyId) { 
 					markerColumn.activateStory(storyId)
 				 }
 				reveal.onHide = function(storyId) {
 					 markerColumn.deactivateStory(storyId);
 				 }
+				
+				var dimmerDiv = d3.select("#dimmerDiv")
+				dimmerDiv.on("click",function(){
+					reveal.deactivateStory();
+				}).style("cursor","pointer")
+				function hideDimmer(){
+					dimmerDiv.transition()
+						.duration(1000)
+						.style("opacity","0")
+						.each("end",function(){
+							dimmerDiv.style("display","none")	
+						})
+				}
+				function showDimmer(){
+					dimmerDiv.style("display","block")
+						.transition()
+							.duration(1000)
+							.style("opacity",".4")
+				}
 				
 				markerColumn.create()
 				
@@ -483,9 +534,18 @@
 				}).style("cursor","pointer");
 				
 				
+				var mosaic = new Mosaic(content, mosaicTable);
+				mosaic.create();
+				mosaic.onClick = function(storyId) {
+					  reveal.activateStory(storyId);
+				}
+				mosaic.onPlayAgain = function(){
+					displayMosaic();
+				}
+				
 				function displayMosaic(){
 					var divHeight = vidDiv.style("height")
-								console.log("1")
+									console.log("1")
 					if(activeBlock=="video"){
 						moslink.attr("src","graphics/mos-linka.png")
 					} else if (activeBlock == "mosaic") {
@@ -499,13 +559,13 @@
 								activeBlock = "mosaic";
 								if(isPlaying)video.pause()
 								videoFrame.style("display","none")
-								mosaic.style("display","table")
+								mosaicTable.style("display","table")
 								moslink.attr("src","graphics/mos-linka.png")
 							} else if (activeBlock=="mosaic"){
 								activeBlock = "video";
 								if(isPlaying) video.play()
 								videoFrame.style("display","block")
-								mosaic.style("display","none")
+								mosaicTable.style("display","none")
 							}
 							vidDiv.transition().duration(700)
 								.style("height",divHeight)
@@ -523,7 +583,7 @@
 				function sizeVid(size){
 					videoFrame
 						.style("height", size*9/16+"px");
-					mosaic
+					mosaicTable
 						.style("height", size*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
@@ -547,17 +607,7 @@
 						ww = ww2;
 					} 
 				}
-				
-			var alienWaterTd = d3.select("#alienWaterTd")
-			var sewerTd = d3.select("#sewerTd")
-			var waterCostTd = d3.select("#waterCostTd")
-			var waterFactsTd = d3.select("#waterFactsTd")
-			
-			alienWaterTd.on("click",function(){reveal.activateStory("campfire");})
-			sewerTd.on("click",function(){reveal.activateStory("sewer");})
-			waterCostTd.on("click",function(){reveal.activateStory("pipeburst");})
-			waterFactsTd.on("click",function(){reveal.activateStory("girlbath");})
-			
+							
 			d3.select("#why100").on("mouseover",function(){botRollover("#why100text")})
 			d3.select("#howview").on("mouseover",function(){botRollover("#howviewtext")})
 			d3.select("#about").on("mouseover",function(){botRollover("#abouttext")})
@@ -583,7 +633,7 @@
 	
     <body onload="pageLoad()">
 		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
-		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		<div id="bg2" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
 		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
 			<div id="pan-logo" style="width: 50%;">
@@ -591,45 +641,43 @@
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
 				<div id="vid" class="left" style="position: relative; overflow: hidden;">
-					<div style="z-index: 5; background-color: #000; opacity: .4; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-					
+					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
 					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
-							<td id="alienWaterTd" rowspan="2">Alien Water</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="everydrop" rowspan="2" >Every Drop</td>
+							<td id="elwha" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Elwha</td>
+							<td id="powersof10" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Powers of 10</td>
+							<td id ="alienwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Alien Water</td>
+							<td id="playAgain" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Play Again</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td id="sewerTd" rowspan="2">Sewer</td>
-							<td></td>
-							<td></td>
+							<td id="footprint" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Footprint</td>
+							<td id="nycsewers" style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" rowspan="2">Sewer</td>
+							<td id="pollution" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Pollution</td>
+							<td id="whereswater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Where's Water</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td id="cloudweight" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Cloud Weight</td>
+							<td id="waterpark" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Waterpark</td>
+							<td id="purestwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Purest Water</td>
+							<td id="rainwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainwater</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td id="waterCostTd" rowspan="2">Water Cost</td>
-							<td></td>
-							<td></td>
-							<td id="waterFactsTd" rowspan="2">Water Facts</td>
+							<td id="rainsmell" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainsmell</td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="watercost" rowspan="2">Water Cost</td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="tanktown" rowspan="2">Tank Town</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
 						</tr>
 					</table>
 				</div>
 				<div id="markers" class="right" style="">
-				
 				</div>
 				<div class="clear"></div>
 			</div>
