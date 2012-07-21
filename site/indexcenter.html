@@ -257,6 +257,7 @@
 							.style("bottom",that.margin+"%")
 							.style("z-index","10")
 							.style("background-color","#fff")
+							.style("left",that.margin+"%")
 					}
 				}
 								
@@ -266,6 +267,15 @@
 						return (vidWidth-(vidWidth*.96)) + "px"
 					} else {
 						return vidWidth + "px";
+					}
+				}
+				
+				function storyTop(d) {
+					var vidHeight = that.vidHeight;
+					if (that.activeStory == d.id) {
+						return (vidHeight-(vidHeight*.96)) + "px"
+					} else {
+						return vidHeight + "px";
 					}
 				}
 				
@@ -279,7 +289,8 @@
 						
        				function styleReveal(){
 						this
-						   .style("left", storyLeft)
+						   .style("top", storyTop)
+						   .style("height",function(d){ return vidHeight*.92 + "px"; })
 						   .style("width",function(d){ return vidWidth*.92 + "px"; });
 					}
 				}
@@ -291,7 +302,7 @@
 					selectedStory.transition()
 						.duration(1000)
 						.delay(delay)
-						.style("left", storyLeft);
+						.style("top", storyTop);
 					console.log(story + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
 				}
 				
@@ -299,7 +310,7 @@
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
 					d3.select("#"+story+"-reveal").transition().duration(750)
-					.style("left", storyLeft);
+					.style("top", storyTop);
 				}
 
 				this.activateStory = function(story){
