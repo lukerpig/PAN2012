@@ -46,8 +46,30 @@
 					return this.level * .25 * vidWidth;
 				}
 				
-				this.containsTime = function(time) {
-					return this.cuePoint <= time && time < this.nextCuePoint;
+				this.containsTime = function(timeInNillis) {
+					return this.cuePointMillis() <= timeInNillis && timeInNillis < this.nextCuePointMillis();
+				}
+				
+				function millis(cuePoint) {
+						var cuePointFloor = Math.floor(cuePoint)
+						var frame = Math.round(100*(cuePoint-cuePointFloor))
+						var ms = Math.round(frame*1000/24)/1000
+						return cuePointFloor + ms;
+				}
+				
+				this.cuePointMillis = function() {
+					if (!this.cuePointMs) {
+						this.cuePointMs = millis(this.cuePoint);
+					}
+					return this.cuePointMs;
+					
+				}
+				
+				this.nextCuePointMillis = function() {
+					if (!this.nextCuePointMs) {
+						this.nextCuePointMs = millis(this.nextCuePoint);
+					}
+					return this.nextCuePointMs;
 				}
 			}
 
@@ -76,13 +98,6 @@
 			    this.captions = [];
 				
 			    for(var i = 0; i < contentData.length; i++) {
-					var cuePoint = contentData[i].cuePoint
-					var cuePointFloor = Math.floor(cuePoint)
-					var frame = Math.round(100*(cuePoint-cuePointFloor))
-					var ms = Math.round(frame*1000/24)/1000
-					var cuePointMs = cuePointFloor+ms
-					contentData[i].cuePoint = cuePointMs
-					
 					var contentItem;
 					if (contentData[i].level == 1) {
 						contentItem =  new Caption(contentData[i]);
@@ -140,32 +155,37 @@
 			}//END CONTENT END CONTENT ////////////////
 
 		
-			function MarkerColumn(content, parentElement) {
+			function StoryMarker(content, parentElement) {
 				var that = this;
 				this.content = content;
 				this.parentElement = parentElement;
+				this.duration = 182;
 
 				this.marginSize = 1;
 				this.marginCount = this.content.stories.length -1;
 				this.markerSpace = 100 - (this.marginCount*this.marginSize);
 				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
 
-				function colorChooser(d, i) {
-					if (that.colorSelector) {
-						return that.colorSelector(d,i);
+				function markerChooser(d, i) {
+					if (that.markerSelector) {
+						return that.markerSelector(d,i);
 					} else {
-						return "#f33";
+						return "1bubble.png";
 					}
 				}
-
+				
+				
 			    this.create = function() {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
 
 				
-					this.markers.enter().append("div")
+					this.markers.enter().append("img")
+						.attr("src",markerChooser)
 						.attr("id",function(d,i){return d.id+"-marker"})
-						.style("background-color", colorChooser)
-						.style("border-radius","4px")
+						.style("position","absolute")
+						.style("left",function(d){
+							return (d.cuePointMillis()/that.duration)*100+"%";
+						})
 						.style("cursor","pointer")
 						.on("click", function(d,i) {
 							if(that.onclick){
@@ -180,24 +200,23 @@
 				
 
 				this.setHeight = function (vidHeight){
-					this.parentElement.style("height",vidHeight+"px");
-					var markerColumn = this;
+					/*this.parentElement.style("height",vidHeight+"px");
 					var markerSize = this.markerSize;
 					this.markers
-						.style("margin-bottom", function(d,i){ return markerColumn.getMarginPixels(vidHeight) + "px"; })
-						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });
+						.style("margin-bottom", function(d,i){ return that.getMarginPixels(vidHeight) + "px"; })
+						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });*/
 				}
 				
 				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+					d3.select("#"+storyId+"-marker").attr("src",markerChooser);
 				}
 				
 				this.deactivateStory = function(storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+					d3.select("#"+storyId+"-marker").attr("src",markerChooser);
 				}
 				
 				this.repaint = function() {
-					this.markers.style("background-color",colorChooser);
+					this.markers.attr("src",markerChooser);
 				}
 				
 			}//END MARKERS END MARKERS ////////////////
@@ -207,7 +226,7 @@
 				this.content = content;
 				this.parentElement = parentElement;
 				this.activeStory = null;
-				this.margin = 4
+				this.margin = 4;
 				
 				var that = this;
 
@@ -468,7 +487,7 @@
 				var splash = d3.select("#splash")
 				var mosaicTable = d3.select("#mosaic");
 				var moslink = d3.select("#moslink");
-				var markersDiv=d3.select("#markers");
+				var markersDiv=d3.select("#storyMarker");
 				var vidDiv = d3.select("#vid")
 				var currentStory;
 				var activeBlock = "video";
@@ -508,26 +527,32 @@
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
 						console.log("change" + timestamp)
 						currentStory = content.currentContent(timestamp);
-						markerColumn.repaint();
+						storyMarker.repaint();
 					}
 				 }
 				
 				
 
-				var markerColumn = new MarkerColumn(content, markersDiv);
-				markerColumn.colorSelector = function(d, i) {
-					if (d.id == reveal.activeStory) {//ONCLICK
-						return "#206666";
-					} else if ( d.nextCuePoint < video.videoTime ) {//IS PASSED
-						return "#75BBBC";
-					} else if (d.containsTime(video.videoTime)) {//ACTIVE
-						return "#206666";
-					} else {//DEFAULT
-						return "#549ea4";
-					} 
+				var storyMarker = new StoryMarker(content, markersDiv);
+				storyMarker.markerSelector = function(d, i) {
+					console.log(d.cuePointMillis()+", current video time: " + video.videoTime);
+					if (d.level == 2) {
+						if (d.cuePointMillis() < video.videoTime) {
+							return "1bubblefill.png";
+						} else {
+							return "1bubble.png"
+						}
+					} else {
+						if (d.cuePointMillis() < video.videoTime) {
+							return "2bubblefill.png";
+						} else {
+							return "2bubble.png"
+						}
+
+					}
 				};
 				
-				markerColumn.onclick = function(storyId){
+				storyMarker.onclick = function(storyId){
 					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == storyId) { 
@@ -561,10 +586,10 @@
 					hideDimmer()
 				}
 				reveal.onShow = function(storyId) { 
-					markerColumn.activateStory(storyId)
+					storyMarker.activateStory(storyId)
 				 }
 				reveal.onHide = function(storyId) {
-					 markerColumn.deactivateStory(storyId);
+					 storyMarker.deactivateStory(storyId);
 				 }
 				
 				var dimmerDiv = d3.select("#dimmerDiv")
@@ -586,7 +611,7 @@
 							.style("opacity",".4")
 				}
 				
-				markerColumn.create()
+				storyMarker.create()
 				
 				splash.on("click",function(){
 					splash.style("display","none")
@@ -653,7 +678,7 @@
 						.style("height", size*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
-					markerColumn.setHeight(videoOffset.offsetHeight);
+					storyMarker.setHeight(videoOffset.offsetHeight);
 					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
 				}
 				
@@ -747,9 +772,14 @@
 			</div>
 			<table style="width:100%; margin-top: 8px;">
 				<tr>
-					<td style="width: 2%; max-width:11px;"><img src="playbtn.png" id="playBtn"/></td>
+					<td style="width: 2%;"><img src="playbtn.png" id="playBtn"/></td>
 					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
-					<td id="mosaic" style="width: 2%; max-width:11px;"><img src="moslink.png" id="mosLink"/></td>
+					<td id="mosaic" style="width: 2%;"><img src="moslink.png" id="mosLink"/></td>
+				</tr>
+				<tr>
+					<td style="width: 2%;"></td>
+					<td><div id="storyMarker" style="position: relative; margin-top: -9px;"><img src="2bubble" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td style="width: 2%;"></td>
 				</tr>
 			</table>
 			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
