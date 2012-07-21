@@ -231,33 +231,35 @@
 				var that = this;
 
 				this.create = function() {
-					this.vidIframes = this.parentElement.selectAll("iframe .story").data(content.stories);
-					this.vidIframes.enter().append("div")	
-						.style("position","absolute")
-						.style("top",that.margin+"%")
-						.style("bottom",that.margin+"%")
-						.style("background-color","#fff")
-						.style("z-index","10")
-						.attr("id",function(d,i){ return d.id })
+					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories);
+					this.storyDivs.enter().append("div")
+						.attr("class","story")
+						.call(styleReveals)
 					.append("iframe")
 						.style("margin","4% 0% 4% 4%")
 						.style("width","96%")
 						.style("height","88%")
 						.attr("src",function(d,i){return d.url})
-						.attr("class","story")
 
 					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
 					this.captionDivs.enter().append("div")
 						.attr("class","caption")
-						.style("z-index","2")
 						.style("font-family","Interstate-Light, verdana, sans-serif")
-						.style("background-color","#fff")
-						.attr("id",function(d,i){ return d.id })
 						.style("position","absolute")
-						.style("top","0")
 						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
+						.call(styleReveals)
+						
+					function styleReveals(){
+						this
+							.attr("id",function(d,i){ return d.id+"-reveal" })
+							.style("position","absolute")
+							.style("top",that.margin+"%")
+							.style("bottom",that.margin+"%")
+							.style("z-index","10")
+							.style("background-color","#fff")
+					}
 				}
-				
+								
 				function storyLeft(d) {
 					var vidWidth = that.vidWidth;
 					if (that.activeStory == d.id) {
@@ -270,7 +272,7 @@
 				this.setSize = function(vidWidth, vidHeight){
 					this.vidWidth = vidWidth;
 					this.vidHeight = vidHeight;
-					this.vidIframes
+					this.storyDivs
 						.call(styleReveal)
 					this.captionDivs
 						.call(styleReveal)
@@ -285,16 +287,18 @@
 				this.showStory = function(story, delay){
 					this.onShow(story);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story).transition()
+					var selectedStory = d3.select("#"+story+"-reveal")
+					selectedStory.transition()
 						.duration(1000)
 						.delay(delay)
 						.style("left", storyLeft);
+					console.log(story + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
 				}
 				
 				this.hideStory = function(story){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story).transition().duration(750)
+					d3.select("#"+story+"-reveal").transition().duration(750)
 					.style("left", storyLeft);
 				}
 
