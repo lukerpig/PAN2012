@@ -560,6 +560,7 @@
 				 }
 				
 				progress.onSeek = function(percent) {
+					currentStory = null;
 					video.seekToPercent(percent);
 				}
 				
