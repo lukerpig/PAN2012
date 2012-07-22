@@ -159,7 +159,7 @@
 				var that = this;
 				this.content = content;
 				this.parentElement = parentElement;
-				this.duration = 182;
+				this.duration = 183;
 
 				this.marginSize = 1;
 				this.marginCount = this.content.stories.length -1;
@@ -236,6 +236,7 @@
 						.attr("class","story")
 						.call(styleReveals)
 					.append("iframe")
+						.attr("id",function(d,i){ return d.id+"-iframe" })
 						.style("margin","4% 0% 4% 4%")
 						.style("width","96%")
 						.style("height","88%")
@@ -301,7 +302,11 @@
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
 					d3.select("#"+story+"-reveal").transition().duration(750)
-					.style("top", storyTop);
+					.style("top", storyTop)
+					.each("end", function(d){
+						var frame = document.getElementById(story+"-iframe");
+						frame.src=frame.src
+					})
 				}
 
 				this.activateStory = function(story){
@@ -351,7 +356,6 @@
                 function ready(player_id) {
 					
 					console.log("ready called");
-					
 					that.froogaloop = $f(player_id);
 
 
@@ -396,6 +400,7 @@
 					
 					that.froogaloop.api('getDuration', function (value, player_id) {
 						that.duration = parseFloat(value);
+						if(that.onDuration) {that.onDuration(that.duration); }
 					});
 					
                 }
@@ -464,6 +469,7 @@
 				}
 				
 				function mouseHandler(d, i) {
+					console.log(that.parentElement.getBoundingClientRect())
 					var width = that.parentElement.getBoundingClientRect().width;
 					var seekX = d3.mouse(that.parentElement)[0];
 					var seekPercent = seekX/width;
@@ -520,9 +526,7 @@
 				var currentStory;
 				var activeBlock = "video";
 				var isPlaying = false;
-				
 				var progress = new Progress(content,"progressBar")
-				
 				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
 				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
 
@@ -558,7 +562,7 @@
 						storyMarker.repaint();
 					}
 				 }
-				
+				 
 				progress.onSeek = function(percent) {
 					currentStory = null;
 					video.seekToPercent(percent);
@@ -566,8 +570,12 @@
 				
 
 				var storyMarker = new StoryMarker(content, markersDiv);
+				
+				 video.onDuration = function(duration){
+					 storyMarker.duration = duration
+				 }
+				 
 				storyMarker.markerSelector = function(d, i) {
-					console.log(d.cuePointMillis()+", current video time: " + video.videoTime);
 					if (d.level == 2) {
 						if (d.cuePointMillis() < video.videoTime) {
 							return "1bubblefill.png";
@@ -583,6 +591,7 @@
 
 					}
 				};
+				
 				
 				storyMarker.onclick = function(storyId){
 					video.pause()
@@ -710,10 +719,21 @@
 						.style("height", size*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
-					storyMarker.setHeight(videoOffset.offsetHeight);
 					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
 				}
 				
+			 function getWindowHeight() {
+				 
+			  var myHeight = 0;
+			  if( typeof( window.innerWidth ) == 'number' ) {
+				myHeight = window.innerHeight;
+			  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+				myHeight = document.documentElement.clientHeight;
+			  } 
+			  
+			  return myHeight;
+			}
+			
 				//WINDOW RESIZE/////////////////
 				window.addEventListener('resize', windowResize, false);
 				
@@ -758,7 +778,7 @@
 		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
 		<div id="bg2" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
-		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
+		<div id="container" style="width: 65%; margin: 0px auto;">
 			<div id="pan-logo" style="width: 50%;">
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
@@ -800,7 +820,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="clear"></div>
+				<div id="vidbot" class="clear"></div>
 			</div>
 			<table style="width:100%; margin-top: 8px;">
 				<tr>
