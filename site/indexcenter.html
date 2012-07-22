@@ -408,6 +408,11 @@
 					if (this.froogaloop) { this.froogaloop.api("pause"); }
 				}
 				
+				this.seekToPercent = function(perCent) {
+					console.log("seeking to " + perCent + " of " + this.duration);
+					if (this.froogaloop) {  this.froogaloop.api('seekTo', perCent*this.duration); }
+				}
+				
 			}
 			
 			function Mosaic(content, parentElement){
@@ -438,10 +443,15 @@
 				
 			}
 			
-			function Progress(content, parentElement){
+			function Progress(content, divId){
 				var that = this;
 				this.content = content;
-				this.parentElement = parentElement;
+				this.divId=divId;
+				this.parentSelection = d3.select("#"+divId);
+				this.parentElement = document.getElementById(divId)
+				this.progressIndicator = document.getElementById("progressIndicator")
+				
+				
 				
 				this.percent = 0;
 				this.redraw = function(){
@@ -452,6 +462,18 @@
 					that.percent = percent;
 					that.redraw();
 				}
+				
+				function mouseHandler(d, i) {
+					var width = that.parentElement.getBoundingClientRect().width;
+					var seekX = d3.mouse(that.parentElement)[0];
+					var seekPercent = seekX/width;
+					
+					
+					if (that.onSeek) { that.onSeek(seekPercent); }
+				}
+				
+				this.parentSelection.on("click", mouseHandler)
+				//this.parentSelection.on("mousemove", function(d,i) { console.log(d3.event) })
 			}
 			
 			function ToggleButton(on,off,parentElement){
@@ -499,7 +521,7 @@
 				var activeBlock = "video";
 				var isPlaying = false;
 				
-				var progress = new Progress(content,d3.select("#progressBar"))
+				var progress = new Progress(content,"progressBar")
 				
 				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
 				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
@@ -537,6 +559,9 @@
 					}
 				 }
 				
+				progress.onSeek = function(percent) {
+					video.seekToPercent(percent);
+				}
 				
 
 				var storyMarker = new StoryMarker(content, markersDiv);
