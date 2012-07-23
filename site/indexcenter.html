@@ -231,25 +231,46 @@
 				var that = this;
 
 				this.create = function() {
-					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories);
-					this.storyDivs.enter().append("div")
+					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories).enter().append("div")
+					this.storyDivs
 						.attr("class","story")
 						.call(styleReveals)
 					.append("iframe")
 						.attr("id",function(d,i){ return d.id+"-iframe" })
-						.style("margin","4% 0% 4% 4%")
+						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
 						.style("width","96%")
 						.style("height","88%")
 						.attr("src",function(d,i){return d.url})
+					this.storyDivs.append("div")
+						.call(styleX)
+						
 
 					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
 					this.captionDivs.enter().append("div")
 						.attr("class","caption")
+						.call(styleReveals)
+					.append("div")
 						.style("font-family","Interstate-Light, verdana, sans-serif")
 						.style("position","absolute")
-						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
-						.call(styleReveals)
+						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
+						.style("width","96%")
+						.style("height","88%")
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
+					this.captionDivs.append("div")
+						.call(styleX)
 						
+					function styleX(){
+						this
+							.attr("class","closebtn")
+							.style("position","absolute")
+							.style("top","5px")
+							.style("right","5px")
+							.style("cursor","pointer")
+							.on("click",function(d){
+								that.deactivateStory()
+							})
+							.html("X")
+					}
 					function styleReveals(){
 						this
 							.attr("id",function(d,i){ return d.id+"-reveal" })
@@ -260,6 +281,7 @@
 							.style("background-color","#fff")
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
+							.style("display","none")
 					}
 				}
 								
@@ -291,21 +313,24 @@
 					this.onShow(story);
 					var vidWidth = this.vidWidth;
 					var selectedStory = d3.select("#"+story+"-reveal")
-					selectedStory.transition()
-						.duration(1000)
-						.delay(delay)
-						.style("top", storyTop);
+					selectedStory.style("display","block")
+						.transition()
+							.duration(1000)
+							.delay(delay)
+							.style("top", storyTop);
 					console.log(story + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
 				}
 				
-				this.hideStory = function(story){
+				this.hideStory = function(story,isDeactivating){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
 					d3.select("#"+story+"-reveal").transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
+						d3.select("#"+story+"-reveal").style("display","none")
 						var frame = document.getElementById(story+"-iframe");
-						frame.src=frame.src
+						if(frame) frame.src=frame.src;
+						if(isDeactivating){that.onDeactivate();};
 					})
 				}
 
@@ -325,10 +350,10 @@
 				}
 				
 				this.deactivateStory = function(){
-					this.onDeactivate();
+					if(this.hideDimmer) this.hideDimmer();
 					var oldStory = this.activeStory;
 					this.activeStory = null;
-					this.hideStory(oldStory);
+					this.hideStory(oldStory,true);
 				}
 				
 				var oldStory;
@@ -372,7 +397,6 @@
 						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
 					}
 
-					
 					that.froogaloop.addEvent('play', function(data) {
 						that.timeInt=setInterval(function(){getTime()},1000/24);
 						console.log("play");
@@ -390,7 +414,7 @@
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
-							tick(data.seconds, data.percent);
+						tick(data.seconds, data.percent);
 					});
 					
 					that.froogaloop.addEvent('finish', function(data) {
@@ -526,6 +550,7 @@
 				var currentStory;
 				var activeBlock = "video";
 				var isPlaying = false;
+				
 				var progress = new Progress(content,"progressBar")
 				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
 				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
@@ -576,19 +601,12 @@
 				 }
 				 
 				storyMarker.markerSelector = function(d, i) {
-					if (d.level == 2) {
-						if (d.cuePointMillis() < video.videoTime) {
-							return "1bubblefill.png";
-						} else {
-							return "1bubble.png"
-						}
+					if (d.id == reveal.activeStory) {//ONCLICK
+						return "bubbleclick.png";
+					} else if (d.cuePointMillis() < video.videoTime) {//PASSED
+						return "bubblefill.png";
 					} else {
-						if (d.cuePointMillis() < video.videoTime) {
-							return "2bubblefill.png";
-						} else {
-							return "2bubble.png"
-						}
-
+						return "bubble.png"
 					}
 				};
 				
@@ -617,15 +635,19 @@
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
 				reveal.onActivate = function() {
-					showDimmer()
 					video.pause();
+					showDimmer()
 				}
 			    reveal.onDeactivate = function() {
 					if(activeBlock == "video" && isPlaying){
 						 video.play();
 					}
-					hideDimmer()
 				}
+				
+				reveal.hideDimmer = function(){
+					hideDimmer();
+				}
+				
 				reveal.onShow = function(storyId) { 
 					storyMarker.activateStory(storyId)
 				 }
@@ -822,7 +844,7 @@
 				</div>
 				<div id="vidbot" class="clear"></div>
 			</div>
-			<table style="width:100%; margin-top: 8px;">
+			<table style="width:100%; margin-top: 8px; margin-bottom: 5px;">
 				<tr>
 					<td style="width: 2%;"><img src="playbtn.png" id="playBtn"/></td>
 					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
@@ -830,11 +852,11 @@
 				</tr>
 				<tr>
 					<td style="width: 2%;"></td>
-					<td><div id="storyMarker" style="position: relative; margin-top: -9px;"><img src="2bubble" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
 					<td style="width: 2%;"></td>
 				</tr>
 			</table>
-			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+			<div id="bot-links" style="position: relative; margin: 0px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
 				<div id="bot-left">
 					<div id="bleft" style="float: left; text-align: bottom;">
 						<a id="howview">HOW TO VIEW</a>
