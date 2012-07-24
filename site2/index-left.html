@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
+        <title>100 Gallons: Reflections From A Nation Powered By Water</title>
+        <style>
+			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
+			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
+			@font-face {font-family: Interstate-Bold; src: url("fonts/Interstate-Bold.otf");}
+            body {margin: 20px 0px 0px 0px; padding: 0;}
+
+            iframe {display:block; border:0;}
+			
+			.clear{clear: both;}
+			
+			
+			.left{width:96%; float: left;}
+			
+			.right{width:3%; float: right;}
+			
+			#mosaic tr td {background-color: #206666; width: 20%; height: 20%}
+			#botContent {color: #fff; font-family: Interstate-Light, Verdana, sans-serif; position: relative; width: 96%;}
+			#botContent div {height: 0%; display: none;}
+
+        </style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
+		
+		<script src="contentData.js"></script>
+        
+        
+		<script type="text/javascript">
+
+		
+
+		    function ContentItem(contentData) {
+			    for(var key in contentData) {
+				    this[key] = contentData[key];
+				}
+				
+				this.getVidFrameWidth = function(vidWidth) {
+					
+					if(this.level == 1)	return this.level * .25 * vidWidth;
+					return .90*vidWidth;
+
+					
+				}
+				
+				this.containsTime = function(time) {
+					return this.cuePoint <= time && time < this.nextCuePoint;
+				}
+			}
+
+		    function Caption(captionData) {
+				this.inheritFrom = ContentItem;
+				this.inheritFrom(captionData);
+			}
+
+
+			function Story(storyData) {
+				this.inheritFrom = ContentItem;
+				this.inheritFrom(storyData);
+
+				this.getMarkerHeight = function(markerSize, vidHeight) {
+					var lvl = this.level;
+					var h =  Math.round((this.level-1)*markerSize*vidHeight/100.0);
+					return h;
+			    }
+
+			    this.getMarkerSlots = function() { return this.level-1; }
+		    }
+
+		    function Content(contentData) {
+				this.all = [];
+				this.stories = [];
+			    this.captions = [];
+				
+			    for(var i = 0; i < contentData.length; i++) {
+					var cuePoint = contentData[i].cuePoint
+					var cuePointFloor = Math.floor(cuePoint)
+					var frame = Math.round(100*(cuePoint-cuePointFloor))
+					var ms = Math.round(frame*1000/24)/1000
+					var cuePointMs = cuePointFloor+ms
+					contentData[i].cuePoint = cuePointMs
+					
+					var contentItem;
+					if (contentData[i].level == 1) {
+						contentItem =  new Caption(contentData[i]);
+						this.captions.push(contentItem);
+					} else {
+						contentItem = new Story(contentData[i]);
+						this.stories.push(contentItem);
+					}
+					
+				    this.all.push(contentItem);
+				}
+				
+				function cuePointComparator(a,b) { return a.cuePoint - b.cuePoint; }
+				
+				this.captions.sort(cuePointComparator);
+				this.stories.sort(cuePointComparator);
+				this.all.sort(cuePointComparator);
+				
+				for(var i = 1; i < this.all.length; i++) {
+					this.all[i-1].nextCuePoint = this.all[i].cuePoint;
+				}
+				
+				this.all[this.all.length-1].nextCuePoint = Number.MAX_VALUE;
+				
+				this.getTotalMarkerSlots = function() {
+					var markerSlots = 0;
+					for(var i in this.stories) {
+						markerSlots += this.stories[i].getMarkerSlots();
+					}
+					return markerSlots;
+				}
+				
+				
+				this.currentContent = function(videoTime){
+		
+					for(var i in this.all) {
+						var d = this.all[i];
+						if (d.containsTime(videoTime)) {
+							return d;
+						}
+					}
+					return null
+				}
+				
+				this.getContentById = function(contentId) {
+										
+					for(var i in this.all) {
+						var d = this.all[i];
+						if (d.id == contentId) {
+							return d;
+						}
+					}
+					return null;
+				}
+			}//END CONTENT END CONTENT ////////////////
+
+		
+			function MarkerColumn(content, parentElement) {
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+
+				this.marginSize = 1;
+				this.marginCount = this.content.stories.length -1;
+				this.markerSpace = 100 - (this.marginCount*this.marginSize);
+				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
+
+				function colorChooser(d, i) {
+					if (that.colorSelector) {
+						return that.colorSelector(d,i);
+					} else {
+						return "#f33";
+					}
+				}
+
+			    this.create = function() {
+					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
+
+				
+					this.markers.enter().append("div")
+						.attr("id",function(d,i){return d.id+"-marker"})
+						.style("background-color", colorChooser)
+						.style("border-radius","4px")
+						.style("cursor","pointer")
+						.on("click", function(d,i) {
+							if(that.onclick){
+								that.onclick(d.id);	
+							}
+						 });
+				}
+
+				this.getMarginPixels = function (vidHeight) {
+					return Math.round(this.marginSize/100*vidHeight)
+				}
+				
+
+				this.setHeight = function (vidHeight){
+					this.parentElement.style("height",vidHeight+"px");
+					var markerColumn = this;
+					var markerSize = this.markerSize;
+					this.markers
+						.style("margin-bottom", function(d,i){ return markerColumn.getMarginPixels(vidHeight) + "px"; })
+						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });
+				}
+				
+				this.activateStory = function (storyId){
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+				}
+				
+				this.deactivateStory = function(storyId){
+					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+				}
+				
+				this.repaint = function() {
+					this.markers.style("background-color",colorChooser);
+				}
+				
+			}//END MARKERS END MARKERS ////////////////
+
+
+			function Reveal(content, parentElement) {
+				this.content = content;
+				this.parentElement = parentElement;
+				this.activeStory = null;
+				this.margin = 15;
+				
+				var that = this;
+
+				this.create = function() {
+					this.vidDivs = this.parentElement.selectAll("div .story").data(content.stories);
+					this.vidDivs.enter().append("div")
+							.attr("id",function(d,i){ return d.id })
+							.style("position","absolute")
+							.style("top",that.margin+"px")
+							.style("background-color","#fff")
+							.attr("class","story")
+							.style("z-index","10")
+							.style("overflow","hidden")
+						.append("iframe")
+							.style("margin","4% 0% 4% 4%")
+							.style("height","92%")
+							.style("width","96%")
+							.attr("src",function(d,i){return d.url})
+							.attr("id",function(d,i){ return d.id })
+							.style("position","absolute")
+
+					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
+					this.captionDivs.enter().append("div")
+						.attr("class","caption")
+						.style("z-index","2")
+						.style("font-family","Interstate-Light, verdana, sans-serif")
+						.style("background-color","#fff")
+						.attr("id",function(d,i){ return d.id })
+						.style("position","absolute")
+						.style("top","0")
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
+				}
+				
+				function storyLeft(d) {
+					var vidWidth = that.vidWidth;
+					if (that.activeStory == d.id) {
+						return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px"
+					} else {
+						return vidWidth + "px";
+					}
+				}
+				
+				this.setSize = function(vidWidth, vidHeight){
+					this.vidWidth = vidWidth;
+					this.vidHeight = vidHeight;
+					this.vidDivs
+						.call(styleReveal)
+					this.captionDivs
+						.call(styleReveal)
+						
+       				function styleReveal(){
+						this
+						   .style("left", storyLeft)
+						   .style("height",(vidHeight-that.margin*2)+"px")
+						   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+					}
+				}
+
+				this.showStory = function(story, delay){
+					this.onShow(story);
+					var vidWidth = this.vidWidth;
+					d3.select("#"+story).transition()
+						.duration(1000)
+						.delay(delay)
+						.style("left", storyLeft);
+				}
+				
+				this.hideStory = function(story){
+					this.onHide(story);
+					var vidWidth = this.vidWidth;
+					d3.select("#"+story).transition().duration(750)
+					.style("left", storyLeft);
+				}
+
+				this.activateStory = function(story){
+					this.onActivate();
+					if (this.activeStory == story) return;
+					
+					var oldStory = this.activeStory;
+					this.activeStory = story;
+
+					var delay = 0;
+					if (oldStory) {
+						this.hideStory(oldStory);
+						delay = 1000;
+					}
+					this.showStory(story, delay);
+				}
+				
+				this.deactivateStory = function(){
+					this.onDeactivate();
+					var oldStory = this.activeStory;
+					this.activeStory = null;
+					this.hideStory(oldStory);
+				}
+				
+				var oldStory;
+				this.swapVis = function(currentStory){
+					this.currentStory = currentStory;
+					this.oldStory = oldStory
+					d3.select("#"+this.currentStory.id).style("display","block")
+					if(this.oldStory) d3.select("#"+this.oldStory.id).style("display","none")
+					oldStory=this.currentStory;
+				}
+				
+				
+				
+			}//END REVEAL END REVEAL ////////////////
+			
+			
+			function VideoHandler(playerId) {
+				var that = this;				
+				
+				fVideo = document.getElementById(playerId);
+				
+                $f(fVideo).addEvent('ready', ready);
+				
+                function ready(player_id) {
+					
+					console.log("ready called");
+					
+					that.froogaloop = $f(player_id);
+
+
+					function tick(videoTime) {
+						that.videoTime = parseFloat(videoTime);
+						console.log(that.videoTime)
+					    if (that.onTick) { that.onTick(that.videoTime); }
+				    }
+
+                    // Keep a reference to Froogaloop for this player
+					function getTime(){
+						that.froogaloop.api('getCurrentTime', function(value, player_id) { tick(value); });
+					}
+
+					
+					that.froogaloop.addEvent('play', function(data) {
+						that.timeInt=setInterval(function(){getTime()},1000/24);
+						console.log("play");
+						if (that.onPlay) { that.onPlay(); }
+					});
+	
+					that.froogaloop.addEvent('pause', function(data) {
+						console.log("pause");
+
+						if (that.timeInt) {
+							window.clearInterval(that.timeInt);
+							that.timeInt = null;
+						}
+						if ( (that.videoTime < (that.duration-1)) && that.onPause) { that.onPause(); }
+					});
+					
+					that.froogaloop.addEvent('seek', function(data) { 
+							tick(data.seconds);
+					});
+					
+					that.froogaloop.addEvent('finish', function(data) {
+						console.log("finish");
+						if (that.onFinish) { that.onFinish(); }
+					});
+					
+					that.froogaloop.api('getDuration', function (value, player_id) {
+						that.duration = parseFloat(value);
+					});
+					
+                }
+				
+				this.play = function() {
+					if (this.froogaloop) { this.froogaloop.api("play"); }
+				}
+				
+				this.pause = function() {
+					if (this.froogaloop) { this.froogaloop.api("pause"); }
+				}
+				
+			}
+
+			var content = new Content(contentData);
+
+			//////////////////PAGELOAD PAGELOAD PAGELOAD/////////////////////
+			function pageLoad(){
+
+
+				ww = window.innerWidth, wh = window.innerHeight;
+				var videoFrame=d3.select("#player_1");
+				var videoOffset = document.getElementById("vid");
+				var splash = d3.select("#splash")
+				var mosaic = d3.select("#mosaic");
+				var moslink = d3.select("#moslink");
+				var markersDiv=d3.select("#markers");
+				var vidDiv = d3.select("#vid")
+				var currentStory;
+				var activeBlock = "video";
+				var isPlaying = false;
+				
+				var video = new VideoHandler("player_1");
+				video.onPlay = function() {
+					isPlaying = true;
+					if (reveal.activeStory) {
+						reveal.deactivateStory();
+					}
+				 }
+				
+				video.onPause = function() {
+				   if (!currentStory) {
+					   currentStory = content.currentContent(video.videoTime);
+				   }
+				   if (currentStory && !reveal.activeStory && activeBlock == "video") {
+					   reveal.activateStory(currentStory.id);
+				   }
+				}
+				video.onFinish = function() {
+					isPlaying = false;
+					displayMosaic()
+				}
+				
+				video.onTick = function(timestamp) {
+					if (!currentStory || !currentStory.containsTime(timestamp)) {
+						console.log("change" + timestamp)
+						currentStory = content.currentContent(timestamp);
+						markerColumn.repaint();
+					}
+				 }
+				
+				
+
+				var markerColumn = new MarkerColumn(content, markersDiv);
+				markerColumn.colorSelector = function(d, i) {
+					if (d.id == reveal.activeStory) {//ONCLICK
+						return "#206666";
+					} else if ( d.nextCuePoint < video.videoTime ) {//IS PASSED
+						return "#75BBBC";
+					} else if (d.containsTime(video.videoTime)) {//ACTIVE
+						return "#206666";
+					} else {//DEFAULT
+						return "#549ea4";
+					} 
+				};
+				
+				markerColumn.onclick = function(storyId){
+					video.pause()
+					//reveal.swapVis(content.getContentById(storyId))
+					if (reveal.activeStory == storyId) { 
+					    reveal.deactivateStory();
+					} else {
+					   reveal.activateStory(storyId);
+					}
+				}
+				
+				var reveal = new Reveal(content, vidDiv);
+ 			    reveal.create();
+				reveal.onActivate = function() { video.pause(); }
+			    reveal.onDeactivate = function() { if(activeBlock == "video" && isPlaying) video.play(); }
+				reveal.onShow = function(storyId) { 
+					markerColumn.activateStory(storyId)
+				 }
+				reveal.onHide = function(storyId) {
+					 markerColumn.deactivateStory(storyId);
+				 }
+				
+				markerColumn.create()
+				
+				splash.on("click",function(){
+					splash.style("display","none")
+					videoFrame.style("display","block")
+					sizeVid(videoOffset.offsetWidth)
+					video.play()
+				})
+				
+				moslink.on("click",function(){
+					displayMosaic()
+				}).style("cursor","pointer");
+				
+				
+				function displayMosaic(){
+					var divHeight = vidDiv.style("height")
+								console.log("1")
+					if(activeBlock=="video"){
+						moslink.attr("src","graphics/mos-linka.png")
+					} else if (activeBlock == "mosaic") {
+						moslink.attr("src","graphics/mos-link.png")
+					}
+
+					vidDiv.transition().duration(600)
+						.style("height","0px")
+						.each("end",function(){
+							if(activeBlock=="video"){
+								activeBlock = "mosaic";
+								if(isPlaying)video.pause()
+								videoFrame.style("display","none")
+								mosaic.style("display","table")
+								moslink.attr("src","graphics/mos-linka.png")
+							} else if (activeBlock=="mosaic"){
+								activeBlock = "video";
+								if(isPlaying) video.play()
+								videoFrame.style("display","block")
+								mosaic.style("display","none")
+							}
+							vidDiv.transition().duration(700)
+								.style("height",divHeight)
+								.each("end",function(){
+									vidDiv.style("height","");
+								})
+						})
+					reveal.deactivateStory();
+					console.log("mosaic CurrentStory: " + currentStory);
+					
+				}
+				var vidHeight, vidWidth;
+				
+				sizeVid(videoOffset.offsetWidth);
+				function sizeVid(size){
+					videoFrame
+						.style("height", size*9/16+"px");
+					mosaic
+						.style("height", size*9/16+"px");
+					vidWidth = videoOffset.offsetWidth;
+					vidHeight = videoOffset.offsetHeight;
+					markerColumn.setHeight(videoOffset.offsetHeight);
+					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
+				}
+				
+				//WINDOW RESIZE/////////////////
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var wh2=window.innerHeight;
+					var ww2=window.innerWidth;
+					sizeVid(videoOffset.offsetWidth);
+					
+					
+					if(wh2!=wh){//NEW HEIGHT
+						wh = wh2;
+					} 
+					if(ww2!=ww){//NEW WIDTH
+						ww = ww2;
+					} 
+				}
+				
+			var alienWaterTd = d3.select("#alienWaterTd")
+			var sewerTd = d3.select("#sewerTd")
+			var waterCostTd = d3.select("#waterCostTd")
+			var waterFactsTd = d3.select("#waterFactsTd")
+			
+			alienWaterTd.on("click",function(){reveal.activateStory("campfire");})
+			sewerTd.on("click",function(){reveal.activateStory("sewer");})
+			waterCostTd.on("click",function(){reveal.activateStory("pipeburst");})
+			waterFactsTd.on("click",function(){reveal.activateStory("girlbath");})
+			
+			d3.select("#why100").on("mouseover",function(){botRollover("#why100text")})
+			d3.select("#howview").on("mouseover",function(){botRollover("#howviewtext")})
+			d3.select("#about").on("mouseover",function(){botRollover("#abouttext")})
+			
+			var botContent = d3.select("#botContent")
+			var activeBottom;
+			function botRollover(selector){
+				var s = d3.select(selector)
+				if(activeBottom && activeBottom != selector){
+					console.log("different")
+					d3.select(activeBottom).style("display","none")
+					s.style("display","block")
+				} else {
+					console.log("same")
+					s.style("display","block")
+				}
+				activeBottom=selector;
+			}
+			}//END PAGELOAD()
+			
+        </script>
+    </head>
+	
+    <body onload="pageLoad()">
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		
+		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
+			<div id="pan-logo" style="width: 50%;">
+				<img src="graphics/pan.png" style="max-width: 100%;">
+			</div>
+			<div id="vidmark" style="margin-top: 26px;">
+				<div id="vid" class="left" style="position: relative; overflow: hidden;">
+					<div style="z-index: 5; background-color: #000; opacity: .4; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+					
+					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
+					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
+						<tr>
+							<td id="alienWaterTd" rowspan="2">Alien Water</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td id="sewerTd" rowspan="2">Sewer</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td id="waterCostTd" rowspan="2">Water Cost</td>
+							<td></td>
+							<td></td>
+							<td id="waterFactsTd" rowspan="2">Water Facts</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+				<div id="markers" class="right" style="">
+				
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+				<div id="bot-left" class="left">
+					<div id="bleft" style="float: left; text-align: bottom;">
+						<a id="howview">HOW TO VIEW</a>
+					</div>
+					<div id="bright" style="float: right;">
+						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
+						<a id="about" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
+					</div>
+				</div>
+				<div id="bot-right" class="right">
+					<a><img src="graphics/mos-link.png" id="moslink" style="width: 100%;"/></a>
+				</div>
+				<div class="clear"></div>
+			</div>	
+			<div id="botContent">
+				<div id="howviewtext">
+					The average American consumes 100 gallons of water daily between showering, laundry, drinking, and flushing toilets.
+				</div>
+				<div id="why100text">
+					As the video plays, boxes to the right will light to indicate a related story. Checking these stories out is encouraged and will not disrupt your time in the video.
+				</div>
+				<div id="abouttext">
+					100 Gallons is a project produced by the UNC School of Journalism and Mass Communication. Every summer, fellows are selected among a pool of students who have shown passion in multimedia storytelling techniques.
+				</div>
+			</div>
+			<div id="line" class="left" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
+			<div class="clear"></div>
+			<div id="footer">
+				<img src="graphics/100galbot.png"/>
+				<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
+				<img src="graphics/unc.png" style="margin-left: 10px; vertical-align: 10px;"/>
+				<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
+			</div>
+		</div>
+    </body>
+</html>

@@ -189,9 +189,11 @@
 						.style("cursor","pointer")
 						.on("click", function(d,i) {
 							if(that.onclick){
-								that.onclick(d.id);	
+								that.onclick(d);	
 							}
-						 });
+						 })
+						 .on("mouseover", function(d,i) { console.log("mouseover: " + d.id);})
+						 .on("mouseout", function(d,i) { console.log("mouseout: " + d.id);})
 				}
 
 				this.getMarginPixels = function (vidHeight) {
@@ -207,12 +209,12 @@
 						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });*/
 				}
 				
-				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").attr("src",markerChooser);
+				this.activateStory = function (story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
 				}
 				
-				this.deactivateStory = function(storyId){
-					d3.select("#"+storyId+"-marker").attr("src",markerChooser);
+				this.deactivateStory = function(story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
 				}
 				
 				this.repaint = function() {
@@ -310,21 +312,23 @@
 				}
 
 				this.showStory = function(story, delay){
-					this.onShow(story);
+					window.location.hash=story.id;
+					this.onShow(story.id);
 					var vidWidth = this.vidWidth;
-					var selectedStory = d3.select("#"+story+"-reveal")
+					var selectedStory = d3.select("#"+story.id+"-reveal")
+					alert("#"+story.id+"-reveal")
 					selectedStory.style("display","block")
 						.transition()
 							.duration(1000)
 							.delay(delay)
 							.style("top", storyTop);
-					console.log(story + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
+					console.log(story.id + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
 				}
 				
 				this.hideStory = function(story,isDeactivating){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story+"-reveal").transition().duration(750)
+					d3.select("#"+story.id+"-reveal").transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
 						d3.select("#"+story+"-reveal").style("display","none")
@@ -337,7 +341,6 @@
 				this.activateStory = function(story){
 					this.onActivate();
 					if (this.activeStory == story) return;
-					
 					var oldStory = this.activeStory;
 					this.activeStory = story;
 
@@ -350,6 +353,7 @@
 				}
 				
 				this.deactivateStory = function(){
+					window.location.hash="";
 					if(this.hideDimmer) this.hideDimmer();
 					var oldStory = this.activeStory;
 					this.activeStory = null;
@@ -358,11 +362,9 @@
 				
 				var oldStory;
 				this.swapVis = function(currentStory){
-					this.currentStory = currentStory;
-					this.oldStory = oldStory
-					d3.select("#"+this.currentStory.id).style("display","block")
-					if(this.oldStory) d3.select("#"+this.oldStory.id).style("display","none")
-					oldStory=this.currentStory;
+					d3.select("#"+currentStory.id).style("display","block")
+					if(oldStory) d3.select("#"+this.oldStory.id).style("display","none")
+					this.oldStory=currentStory;
 				}
 				
 				
@@ -372,7 +374,7 @@
 			
 			function VideoHandler(playerId) {
 				var that = this;
-				this.duration = 1e6;			
+				this.duration = 400;			
 				
 				fVideo = document.getElementById(playerId);
 				
@@ -393,16 +395,20 @@
 				    }
 
                     // Keep a reference to Froogaloop for this player
-					function getTime(){
+					function getVidTime(){
 						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
 					}
 
 					that.froogaloop.addEvent('play', function(data) {
-						that.timeInt=setInterval(function(){getTime()},1000/24);
+						that.timeInt=setInterval(function(){getVidTime()},1000/24);
 						console.log("play");
 						if (that.onPlay) { that.onPlay(); }
 					});
-	
+					
+					that.froogaloop.addEvent('playProgress', function(data) {
+						console.log('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
+					});
+					
 					that.froogaloop.addEvent('pause', function(data) {
 						console.log("pause");
 
@@ -449,9 +455,9 @@
 				this.content = content;
 				this.parentElement = parentElement;
 				
-				function clickHandler(storyId) {
+				function clickHandler(story) {
 					return function() {
-						if (that.onClick) that.onClick(storyId)
+						if (that.onClick) that.onClick(story)
 					}
 				}
 					
@@ -459,7 +465,7 @@
 				this.create = function(){
 					for(var i in that.content.stories) {
 						var story = that.content.stories[i];
-						var handler = clickHandler(story.id);
+						var handler = clickHandler(story);
 						var storyElement = that.parentElement.select("#"+story.name);
 						storyElement.on("click", handler)
 					}
@@ -570,7 +576,7 @@
 					   currentStory = content.currentContent(video.videoTime);
 				   }
 				   if (currentStory && !reveal.activeStory && activeBlock == "video") {
-					   reveal.activateStory(currentStory.id);
+					   reveal.activateStory(currentStory);
 				   }
 				}
 				video.onFinish = function() {
@@ -611,13 +617,13 @@
 				};
 				
 				
-				storyMarker.onclick = function(storyId){
+				storyMarker.onclick = function(story){
 					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
-					if (reveal.activeStory == storyId) { 
+					if (reveal.activeStory == story.id) { 
 					    reveal.deactivateStory();
 					} else {
-					   reveal.activateStory(storyId);
+					   reveal.activateStory(story);
 					}
 				}
 								
@@ -648,11 +654,11 @@
 					hideDimmer();
 				}
 				
-				reveal.onShow = function(storyId) { 
-					storyMarker.activateStory(storyId)
+				reveal.onShow = function(story) { 
+					storyMarker.activateStory(story)
 				 }
-				reveal.onHide = function(storyId) {
-					 storyMarker.deactivateStory(storyId);
+				reveal.onHide = function(story) {
+					 storyMarker.deactivateStory(story);
 				 }
 				
 				var dimmerDiv = d3.select("#dimmerDiv")
@@ -690,8 +696,8 @@
 				
 				var mosaic = new Mosaic(content, mosaicTable);
 				mosaic.create();
-				mosaic.onClick = function(storyId) {
-					  reveal.activateStory(storyId);
+				mosaic.onClick = function(story) {
+					  reveal.activateStory(story);
 				}
 				mosaic.onPlayAgain = function(){
 					displayMosaic();
@@ -717,7 +723,7 @@
 							} else if (activeBlock=="mosaic"){
 								activeBlock = "video";
 								mosaicButton.turnOff();
-								if(isPlaying) video.play()
+								//if(isPlaying) video.play()
 								videoFrame.style("display","block")
 								mosaicTable.style("display","none")
 							}

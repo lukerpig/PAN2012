@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>The Cost of Water</title>
+		<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+		<script src="storyJs.js"></script>
+		<style>
+			@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
+			@font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
+			
+			label       {width: 40%; display: block; cursor: pointer; height: 6%; padding-bottom: 0px;}
+			
+			.has-js .label_radio    { background: url(watercost/radio-off.png) no-repeat; background-size: contain;}
+			.has-js label.r_on      { background: url(watercost/radio-on.png) no-repeat;background-size: contain;}
+			.has-js .label_radio input  { opacity: 0; }
+			.cost-form label {position: absolute;}
+			.card {position: relative; max-width: 1200px;}
+			.card img{max-width: 100%;}
+			label#one {left: 15.3%; top: 43.04%}
+			label#two {left: 15.3%; top: 54.96%}
+			label#three {left: 15.3%; top: 67.0%}
+			
+			.forward, .backward, .calculate {cursor: pointer; background-color: transparent; border: none; position: absolute;}
+			.forward {left: 90.25%; top: 42.87%; width: 9.6%; height: 24%;}
+			.backward {left: 1.75%; top: 42.87%; width: 9.6%; height: 24%;}
+			.calculate {left: 81.5%; top: 87.4%; width: 15.4%; height: 9.2%}
+			
+			#card5 { background-image:url(watercost/bg.jpg); border:1px solid red; background-size: 100% 100%; background-repeat: no-repeat; font: 12px sans-serif; }
+			.chart { fill: #6DBDC3; }
+			.chart text { fill: white; }
+			div#details { color: white; font: 28px sans-serif; }
+			.headline { height:168.75px; padding-left: 10px; margin-left: 300px; font: 36px sans-serif; background-color: #FFF; }
+		</style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
+		<script type="text/javascript">
+			var shower = 0, flush = 0, laundry = 0, hands = 0;
+    
+                        var SHOWER = 0
+                        var FLUSH = 1;
+                        var LAUNDRY = 2;
+                        var HANDS = 3;
+						
+						function costPerMonth(region, gallonsPerMonth){
+							return "$" + (region.cost*.00378541*gallonsPerMonth).toFixed(2) + " per person"
+						}
+
+                        var regions = [
+						 { name:"You", cost:2.13, details: function(gallons){
+							  return ["Your estimated water use per day is " + this.cost,
+							  "and your water bill would cost Y",
+							  "based on the national average water cost"] 
+							  }},
+						 { name:"Average U.S. Citizen", cost:2.13, details: function(gallons){ 
+						 	return ["The average American water bill is",
+							costPerMonth(this,gallons)]},
+							total:100 },
+                         { name:"Glasgow, U.K.", cost:7.57, details: function(gallons){
+							return ["In Glasgow, UK, your estimated monthly","water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+                         { name:"Berlin, Germany", cost:6.62, details: function(gallons){ 
+							return ["In Berlin, Germany, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+                         { name:"Oslo, Norway", cost: 3.49, details: function(gallons){ 
+							return ["In Oslo, Norway, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+						 { name:"Sydney, Australia", cost:3.45, details: function(gallons){
+							 return ["In Sydney, Australia, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+						 { name:"Tokyo, Japan", cost:1.65, details: function(gallons){
+							 return ["In Tokyo, Japan, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+                         { name:"Moscow, Russia", cost:0.65, details: function(gallons){
+							  return ["In Moscow, Russia, your estimated monthly",
+							  "water bill costs "+costPerMonth(this, gallons),
+							  "addblurb"]}},
+                         { name:"Lima, Peru", cost:0.22, details: function(gallons){
+							 return ["In Lima, Peru, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons),
+							 "addblurb"]}},
+                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: function(gallons){
+							 return ["In Addis Ababa, Ethiopia, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons),
+							 "addblurb"]}},
+                         { name:"Mumbai, India", cost:0.09, details: function(gallons){
+							 return ["In Mumbai, India, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons),
+							 "addblurb"]}},
+			];
+
+			
+			function showNext(n){
+				d3.select("#card"+n).style("display","none");
+				d3.select("#card"+(n+1)).style("display","block");
+			}
+			
+			function goBack(n){
+				d3.select("#card"+n).style("display","none");
+				d3.select("#card"+(n-1)).style("display","block");
+			}
+			
+			function getShower(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						shower = frm.data[i].value;
+					}
+				}
+				showNext(n);
+			}
+			function getFlush(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						flush = frm.data[i].value
+					}
+				}
+				showNext(n);
+			}
+			function getLaundry(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						laundry = frm.data[i].value
+					}
+				}
+				showNext(n);
+			}
+			function getHands(frm, n){
+				for (var i = 0; i < frm.data.length; i++){
+					if (frm.data[i].checked){
+						hands = frm.data[i].value
+					}
+				}
+				calculate(n);
+			}
+
+	                function regionalCosts(usage) {
+                            for(var i = 0; i < regions.length; i++) {
+								var pushedInfo=!(regions[i].total)?usage*regions[i].cost:regions[i].total*regions[i].cost;
+								regions[i].total=pushedInfo
+							}
+	                }
+
+					function showDetails(d, i) {
+					   var details = regions[i].details;
+					   console.log(details);
+					   d3.select("#details").html(details);
+					}
+
+					function hideDetails(d, i) {
+					   d3.select("#details").html("");
+					}
+
+			function calculate(n){
+				showNext(n);
+				svgHeight();
+				var usage = (+shower + +flush + +laundry + +hands)*1.234;
+				var costs = regionalCosts(usage);
+				var chartHeight = 675;
+				var chartWidth = 1200;
+				var marginRight = 76;
+				var barX = 352;
+				
+				var x = d3.scale.linear()
+					.domain([0, d3.max(regions, function(d) { return d.total; })])
+					.range(["0px",(chartWidth-barX-marginRight)+"px"])
+				
+				
+				var bars = d3.select("#bars").selectAll("rect").data(regions,function(d){return d.name});
+				bars.enter().append("rect")
+					.attr("class","bar")
+					.attr("x",barX)
+					.attr("y", function(d,i){ return (i*50+134) })
+					.attr("width",function(d,i){
+						return x(d.total)
+					})
+					.attr("height","25")
+					.attr("fill","#40A09D")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+						
+				var bartext = d3.select("#bars").selectAll("text").data(regions,function(d){return d.name})
+				bartext.enter().append("text")
+					.text(function(d){return d.name})					
+					.attr("class", "bartext")
+					.attr("x", 340)
+					.attr("y", function(d,i){ return (i*50+158) })
+					.attr("text-anchor", "end")
+					.style("fill","#40A09D")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","25")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+					
+				var infobox = d3.select("#bars").append("text").attr("id","infobox")
+				
+				
+				infobox
+					.attr("class","infobox")
+					.attr("x","513")
+					.attr("y","509")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","30")
+					.style("fill","#40A09D")
+					.style("opacity",".75")
+									
+				function onRollover(d,i){
+					var infoTspan = d3.select("#infobox").selectAll("tspan").data(d.details(usage*30))
+					
+					infoTspan.enter().append("tspan")
+					infoTspan.attr("x", 513).attr("dy", function(d, i) { return i == 0?  0 : 30 })
+						.text(String)
+					infoTspan.exit().remove()
+					
+				}
+			}
+
+
+			var ww = window.innerWidth;
+			var svgElem, player1;
+			
+			function svgHeight(){
+				svgElem = document.getElementById("barchart")
+				var svgW = svgElem.offsetWidth;
+				var svgH = svgElem.offsetWidth*9/16;
+				d3.select("#barchart").style("height",svgH+"px");
+			}
+			
+			function onLoad() {
+				vidSize(document.getElementById("player_1"))	
+				var svgElem, player1;
+				var interactiveDiv=document.getElementById("interactive");
+				svgHeight();
+				setupLabels();
+				
+				//WINDOW RESIZE
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var ww2=window.innerWidth;
+					if(ww2!=ww){
+						ww = ww2;
+						svgHeight();
+					}
+				}
+				
+				d3.select("#skip").on("click",function(){
+					afterVideo();
+				});
+				
+			   ////V//I//M//EE/OOOOO//////////
+				fVideo = document.getElementById("player_1");
+				
+				$f(fVideo).addEvent('ready', ready);
+				
+				function ready(player_id) {
+					froogaloop = $f(player_id)
+				
+					froogaloop.addEvent('play', function(data) {
+						var skipDiv = document.getElementById("skip");
+						skipDiv.style.display="none";
+					});
+					froogaloop.addEvent('finish', function(data) {
+						afterVideo()
+					});
+				}
+				
+				function afterVideo(){
+					d3.select("#video").transition()
+						.duration(700)
+						.style("height","0px")
+						.each("end",function(){ 
+							d3.select("#video").style("display","none")
+							d3.select("#interactive").style("display","block")
+						})
+				}
+
+				function addEvent(element, eventName, callback) {
+					
+					if (element.addEventListener) {
+						element.addEventListener(eventName, callback, false);
+					}
+					else {
+						element.attachEvent(eventName, callback, false);
+					}
+				}	
+			}
+
+               
+		</script>
+	</head>
+	
+	<body onload="onLoad()">
+		<h1>How much does 100 gallons cost?</h1>
+			
+		<div id="container" style="background-color: #FFF;">
+			<p>What would your water cost if you lived in another country? xxyxxy?</p>
+			<div id="video" style="position: relative; overflow: hidden;">
+				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
+			</div>
+			<div id="interactive" style="margin: 0px auto; display: none;">
+				<div class="card" id="card1">
+					<img src="watercost/cost1.jpg"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="24.416" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="16.8" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="9.09" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>
+					</form>
+				</div>
+				<div class="card" id="card2" style="display: none;">
+					<img src="watercost/cost2.jpg"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="flush">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="36.38" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="26.7" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="17" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getFlush(this.form, 2)"></button>
+						<button type="button" class="backward" onclick="goBack(2)"></button>
+					</form>
+				</div>
+				<div class="card" id="card3" style="display: none;">
+					<img src="watercost/cost3.jpg"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="laundry">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="31.08" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="21.7" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="12.2" type="radio" />&nbsp;</label>
+						<button type="button" class="forward" onclick="getLaundry(this.form, 3)"></button>
+						<button type="button" class="backward" onclick="goBack(3)"></button>
+					</form>
+				</div>
+				<div class="card" id="card4" style="display: none;">
+					<img src="watercost/cost4.jpg"/>
+					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="hands">
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="22.619" type="radio" checked />&nbsp;</label>
+						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="15.7" type="radio" checked/>&nbsp;</label>
+						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="8.76" type="radio" />&nbsp;</label>
+						<button type="button" class="calculate" onclick="getHands(this.form, 4)"></button>
+						<button type="button" class="backward" onclick="goBack(4)"></button>
+					</form>
+				</div>
+				<div class="card" id="card5" style="display: none;">
+					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
+						<text style="font-family: Interstate-Light; fill:#40A09D; font-size: 35px;" x="61" y="55"><tspan>Based on your answers, you use about 100 gallons of water per day.</tspan>
+<tspan x="61" y="95">Here’s what that would cost:</tspan></text>
+						<g id="bars">
+						</g>
+					</svg>
+					<div id="details" style="position: absolute; top: 5%; bottom: 60%; right: 2.5%; left: 55%;"></div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		<script>
+			var d = document;
+			var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
+			var gebtn = function(parEl,child) { return parEl.getElementsByTagName(child); };
+			function setupLabels() {
+				
+				var body = gebtn(d,'body')[0];
+				body.className = body.className && body.className != '' ? body.className + ' has-js' : 'has-js';
+				
+				if (!d.getElementById || !d.createTextNode) return;
+				var ls = gebtn(d,'label');
+				for (var i = 0; i < ls.length; i++) {
+					var l = ls[i];
+					if (l.className.indexOf('label_') == -1) continue;
+					var inp = gebtn(l,'input')[0];
+					
+					if (l.className == 'label_radio') {
+						l.className = (safari && inp.checked == true || inp.checked) ? 'label_radio r_on' : 'label_radio r_off';
+						l.onclick = turn_radio;
+					};
+				};
+			};
+
+			var turn_radio = function() {
+				var inp = gebtn(this,'input')[0];
+				if (this.className == 'label_radio r_off' || inp.checked) {
+					var ls = gebtn(this.parentNode,'label');
+					for (var i = 0; i < ls.length; i++) {
+						var l = ls[i];
+						if (l.className.indexOf('label_radio') == -1)  continue;
+						l.className = 'label_radio r_off';
+					};
+					this.className = 'label_radio r_on';
+					if (safari) inp.click();
+				} else {
+					this.className = 'label_radio r_off';
+					if (safari) inp.click();
+				};
+			};
+
+                        
+		</script>
+	
+	</body>
+</html>

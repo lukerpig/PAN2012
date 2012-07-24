@@ -40,15 +40,36 @@
 				}
 				
 				this.getVidFrameWidth = function(vidWidth) {
-					
-					if(this.level == 1)	return this.level * .25 * vidWidth;
-					return .90*vidWidth;
+					if(this.level == 2)	return .70*vidWidth;
+					if(this.level == 3)	return .85*vidWidth;
 
+					return this.level * .25 * vidWidth;
+				}
+				
+				this.containsTime = function(timeInNillis) {
+					return this.cuePointMillis() <= timeInNillis && timeInNillis < this.nextCuePointMillis();
+				}
+				
+				function millis(cuePoint) {
+						var cuePointFloor = Math.floor(cuePoint)
+						var frame = Math.round(100*(cuePoint-cuePointFloor))
+						var ms = Math.round(frame*1000/24)/1000
+						return cuePointFloor + ms;
+				}
+				
+				this.cuePointMillis = function() {
+					if (!this.cuePointMs) {
+						this.cuePointMs = millis(this.cuePoint);
+					}
+					return this.cuePointMs;
 					
 				}
 				
-				this.containsTime = function(time) {
-					return this.cuePoint <= time && time < this.nextCuePoint;
+				this.nextCuePointMillis = function() {
+					if (!this.nextCuePointMs) {
+						this.nextCuePointMs = millis(this.nextCuePoint);
+					}
+					return this.nextCuePointMs;
 				}
 			}
 
@@ -77,13 +98,6 @@
 			    this.captions = [];
 				
 			    for(var i = 0; i < contentData.length; i++) {
-					var cuePoint = contentData[i].cuePoint
-					var cuePointFloor = Math.floor(cuePoint)
-					var frame = Math.round(100*(cuePoint-cuePointFloor))
-					var ms = Math.round(frame*1000/24)/1000
-					var cuePointMs = cuePointFloor+ms
-					contentData[i].cuePoint = cuePointMs
-					
 					var contentItem;
 					if (contentData[i].level == 1) {
 						contentItem =  new Caption(contentData[i]);
@@ -141,38 +155,45 @@
 			}//END CONTENT END CONTENT ////////////////
 
 		
-			function MarkerColumn(content, parentElement) {
+			function StoryMarker(content, parentElement) {
 				var that = this;
 				this.content = content;
 				this.parentElement = parentElement;
+				this.duration = 183;
 
 				this.marginSize = 1;
 				this.marginCount = this.content.stories.length -1;
 				this.markerSpace = 100 - (this.marginCount*this.marginSize);
 				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
 
-				function colorChooser(d, i) {
-					if (that.colorSelector) {
-						return that.colorSelector(d,i);
+				function markerChooser(d, i) {
+					if (that.markerSelector) {
+						return that.markerSelector(d,i);
 					} else {
-						return "#f33";
+						return "1bubble.png";
 					}
 				}
-
+				
+				
 			    this.create = function() {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
 
 				
-					this.markers.enter().append("div")
+					this.markers.enter().append("img")
+						.attr("src",markerChooser)
 						.attr("id",function(d,i){return d.id+"-marker"})
-						.style("background-color", colorChooser)
-						.style("border-radius","4px")
+						.style("position","absolute")
+						.style("left",function(d){
+							return (d.cuePointMillis()/that.duration)*100+"%";
+						})
 						.style("cursor","pointer")
 						.on("click", function(d,i) {
 							if(that.onclick){
-								that.onclick(d.id);	
+								that.onclick(d);	
 							}
-						 });
+						 })
+						 .on("mouseover", function(d,i) { console.log("mouseover: " + d.id);})
+						 .on("mouseout", function(d,i) { console.log("mouseout: " + d.id);})
 				}
 
 				this.getMarginPixels = function (vidHeight) {
@@ -181,24 +202,23 @@
 				
 
 				this.setHeight = function (vidHeight){
-					this.parentElement.style("height",vidHeight+"px");
-					var markerColumn = this;
+					/*this.parentElement.style("height",vidHeight+"px");
 					var markerSize = this.markerSize;
 					this.markers
-						.style("margin-bottom", function(d,i){ return markerColumn.getMarginPixels(vidHeight) + "px"; })
-						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });
+						.style("margin-bottom", function(d,i){ return that.getMarginPixels(vidHeight) + "px"; })
+						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });*/
 				}
 				
-				this.activateStory = function (storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+				this.activateStory = function (story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
 				}
 				
-				this.deactivateStory = function(storyId){
-					d3.select("#"+storyId+"-marker").style("background-color",colorChooser);
+				this.deactivateStory = function(story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
 				}
 				
 				this.repaint = function() {
-					this.markers.style("background-color",colorChooser);
+					this.markers.attr("src",markerChooser);
 				}
 				
 			}//END MARKERS END MARKERS ////////////////
@@ -208,85 +228,119 @@
 				this.content = content;
 				this.parentElement = parentElement;
 				this.activeStory = null;
-				this.margin = 15;
+				this.margin = 4;
 				
 				var that = this;
 
 				this.create = function() {
-					this.vidDivs = this.parentElement.selectAll("div .story").data(content.stories);
-					this.vidDivs.enter().append("div")
-							.attr("id",function(d,i){ return d.id })
-							.style("position","absolute")
-							.style("top",that.margin+"px")
-							.style("background-color","#fff")
-							.attr("class","story")
-							.style("z-index","10")
-							.style("overflow","hidden")
-						.append("iframe")
-							.style("margin","4% 0% 4% 4%")
-							.style("height","92%")
-							.style("width","96%")
-							.attr("src",function(d,i){return d.url})
-							.attr("id",function(d,i){ return d.id })
-							.style("position","absolute")
+					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories).enter().append("div")
+					this.storyDivs
+						.attr("class","story")
+						.call(styleReveals)
+					.append("iframe")
+						.attr("id",function(d,i){ return d.id+"-iframe" })
+						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
+						.style("width","96%")
+						.style("height","88%")
+						.attr("src",function(d,i){return d.url})
+					this.storyDivs.append("div")
+						.call(styleX)
+						
 
 					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
 					this.captionDivs.enter().append("div")
 						.attr("class","caption")
-						.style("z-index","2")
+						.call(styleReveals)
+					.append("div")
 						.style("font-family","Interstate-Light, verdana, sans-serif")
-						.style("background-color","#fff")
-						.attr("id",function(d,i){ return d.id })
 						.style("position","absolute")
-						.style("top","0")
-						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p>"+d.captionContent+"</p></div>"})
+						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
+						.style("width","96%")
+						.style("height","88%")
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
+					this.captionDivs.append("div")
+						.call(styleX)
+						
+					function styleX(){
+						this
+							.attr("class","closebtn")
+							.style("position","absolute")
+							.style("top","5px")
+							.style("right","5px")
+							.style("cursor","pointer")
+							.on("click",function(d){
+								that.deactivateStory()
+							})
+							.html("X")
+					}
+					function styleReveals(){
+						this
+							.attr("id",function(d,i){ return d.id+"-reveal" })
+							.style("position","absolute")
+							.style("top",that.margin+"%")
+							.style("bottom",that.margin+"%")
+							.style("z-index","10")
+							.style("background-color","#fff")
+							.style("left",that.margin+"%")
+							.style("width",(100-(that.margin*2))+"%")
+							.style("display","none")
+					}
 				}
-				
-				function storyLeft(d) {
-					var vidWidth = that.vidWidth;
+								
+				function storyTop(d) {
+					var vidHeight = that.vidHeight;
 					if (that.activeStory == d.id) {
-						return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px"
+						return that.margin+"%"
 					} else {
-						return vidWidth + "px";
+						return "100%";
 					}
 				}
 				
 				this.setSize = function(vidWidth, vidHeight){
 					this.vidWidth = vidWidth;
 					this.vidHeight = vidHeight;
-					this.vidDivs
+					this.storyDivs
 						.call(styleReveal)
 					this.captionDivs
 						.call(styleReveal)
 						
        				function styleReveal(){
 						this
-						   .style("left", storyLeft)
-						   .style("height",(vidHeight-that.margin*2)+"px")
-						   .style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+						   .style("top", storyTop)
+						   .style("height",100-(that.margin*2)+"%")
 					}
 				}
 
 				this.showStory = function(story, delay){
-					this.onShow(story);
+					window.location.hash=story.id;
+					this.onShow(story.id);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story).transition()
-						.duration(1000)
-						.delay(delay)
-						.style("left", storyLeft);
+					var selectedStory = d3.select("#"+story.id+"-reveal")
+					alert("#"+story.id+"-reveal")
+					selectedStory.style("display","block")
+						.transition()
+							.duration(1000)
+							.delay(delay)
+							.style("top", storyTop);
+					console.log(story.id + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
 				}
 				
-				this.hideStory = function(story){
+				this.hideStory = function(story,isDeactivating){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story).transition().duration(750)
-					.style("left", storyLeft);
+					d3.select("#"+story.id+"-reveal").transition().duration(750)
+					.style("top", storyTop)
+					.each("end", function(d){
+						d3.select("#"+story+"-reveal").style("display","none")
+						var frame = document.getElementById(story+"-iframe");
+						if(frame) frame.src=frame.src;
+						if(isDeactivating){that.onDeactivate();};
+					})
 				}
 
 				this.activateStory = function(story){
 					this.onActivate();
 					if (this.activeStory == story) return;
-					
 					var oldStory = this.activeStory;
 					this.activeStory = story;
 
@@ -299,19 +353,18 @@
 				}
 				
 				this.deactivateStory = function(){
-					this.onDeactivate();
+					window.location.hash="";
+					if(this.hideDimmer) this.hideDimmer();
 					var oldStory = this.activeStory;
 					this.activeStory = null;
-					this.hideStory(oldStory);
+					this.hideStory(oldStory,true);
 				}
 				
 				var oldStory;
 				this.swapVis = function(currentStory){
-					this.currentStory = currentStory;
-					this.oldStory = oldStory
-					d3.select("#"+this.currentStory.id).style("display","block")
-					if(this.oldStory) d3.select("#"+this.oldStory.id).style("display","none")
-					oldStory=this.currentStory;
+					d3.select("#"+currentStory.id).style("display","block")
+					if(oldStory) d3.select("#"+this.oldStory.id).style("display","none")
+					this.oldStory=currentStory;
 				}
 				
 				
@@ -320,7 +373,8 @@
 			
 			
 			function VideoHandler(playerId) {
-				var that = this;				
+				var that = this;
+				this.duration = 400;			
 				
 				fVideo = document.getElementById(playerId);
 				
@@ -329,28 +383,32 @@
                 function ready(player_id) {
 					
 					console.log("ready called");
-					
 					that.froogaloop = $f(player_id);
 
 
-					function tick(videoTime) {
+					function tick(videoTime, videoPercent) {
+						console.log(videoTime + " " + videoPercent+"%")
 						that.videoTime = parseFloat(videoTime);
+						that.videoPercent = parseFloat(videoPercent);
 						console.log(that.videoTime)
-					    if (that.onTick) { that.onTick(that.videoTime); }
+					    if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
 				    }
 
                     // Keep a reference to Froogaloop for this player
-					function getTime(){
-						that.froogaloop.api('getCurrentTime', function(value, player_id) { tick(value); });
+					function getVidTime(){
+						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
 					}
 
-					
 					that.froogaloop.addEvent('play', function(data) {
-						that.timeInt=setInterval(function(){getTime()},1000/24);
+						that.timeInt=setInterval(function(){getVidTime()},1000/24);
 						console.log("play");
 						if (that.onPlay) { that.onPlay(); }
 					});
-	
+					
+					that.froogaloop.addEvent('playProgress', function(data) {
+						console.log('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
+					});
+					
 					that.froogaloop.addEvent('pause', function(data) {
 						console.log("pause");
 
@@ -362,7 +420,7 @@
 					});
 					
 					that.froogaloop.addEvent('seek', function(data) { 
-							tick(data.seconds);
+						tick(data.seconds, data.percent);
 					});
 					
 					that.froogaloop.addEvent('finish', function(data) {
@@ -372,6 +430,7 @@
 					
 					that.froogaloop.api('getDuration', function (value, player_id) {
 						that.duration = parseFloat(value);
+						if(that.onDuration) {that.onDuration(that.duration); }
 					});
 					
                 }
@@ -384,6 +443,100 @@
 					if (this.froogaloop) { this.froogaloop.api("pause"); }
 				}
 				
+				this.seekToPercent = function(perCent) {
+					console.log("seeking to " + perCent + " of " + this.duration);
+					if (this.froogaloop) {  this.froogaloop.api('seekTo', perCent*this.duration); }
+				}
+				
+			}
+			
+			function Mosaic(content, parentElement){
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+				
+				function clickHandler(story) {
+					return function() {
+						if (that.onClick) that.onClick(story)
+					}
+				}
+					
+				
+				this.create = function(){
+					for(var i in that.content.stories) {
+						var story = that.content.stories[i];
+						var handler = clickHandler(story);
+						var storyElement = that.parentElement.select("#"+story.name);
+						storyElement.on("click", handler)
+					}
+					
+					
+					var playAgainElement = that.parentElement.select("#playAgain");
+					playAgainElement.on("click", function() { if (that.onPlayAgain) that.onPlayAgain(); })
+
+				}
+				
+			}
+			
+			function Progress(content, divId){
+				var that = this;
+				this.content = content;
+				this.divId=divId;
+				this.parentSelection = d3.select("#"+divId);
+				this.parentElement = document.getElementById(divId)
+				this.progressIndicator = document.getElementById("progressIndicator")
+				
+				
+				
+				this.percent = 0;
+				this.redraw = function(){
+					d3.select("#progressIndicator").style("width",that.percent+"%")
+				}
+				
+				this.setPercent = function(percent){
+					that.percent = percent;
+					that.redraw();
+				}
+				
+				function mouseHandler(d, i) {
+					console.log(that.parentElement.getBoundingClientRect())
+					var width = that.parentElement.getBoundingClientRect().width;
+					var seekX = d3.mouse(that.parentElement)[0];
+					var seekPercent = seekX/width;
+					
+					
+					if (that.onSeek) { that.onSeek(seekPercent); }
+				}
+				
+				this.parentSelection.on("click", mouseHandler)
+				//this.parentSelection.on("mousemove", function(d,i) { console.log(d3.event) })
+			}
+			
+			function ToggleButton(on,off,parentElement){
+				var that = this;
+				this.on = on;
+				this.off = off;
+				this.button = parentElement;
+				this.button.style("cursor","pointer")
+				this.button.on("click",function(){
+					var isOn = that.button.attr("src")==that.on 
+					
+					if(isOn){
+						that.turnOff()
+					} else {
+						that.turnOn()
+					}
+					if(that.onClick){
+						that.onClick(!isOn)	
+					}
+				})
+				
+				this.turnOn = function(){
+					that.button.attr("src",that.on)
+				}
+				this.turnOff = function(){
+					that.button.attr("src",that.off)
+				}
 			}
 
 			var content = new Content(contentData);
@@ -393,19 +546,24 @@
 
 
 				ww = window.innerWidth, wh = window.innerHeight;
-				var videoFrame=d3.select("#player_1");
+				var videoFrame=d3.select("#conceptVideo");
 				var videoOffset = document.getElementById("vid");
 				var splash = d3.select("#splash")
-				var mosaic = d3.select("#mosaic");
+				var mosaicTable = d3.select("#mosaic");
 				var moslink = d3.select("#moslink");
-				var markersDiv=d3.select("#markers");
+				var markersDiv=d3.select("#storyMarker");
 				var vidDiv = d3.select("#vid")
 				var currentStory;
 				var activeBlock = "video";
 				var isPlaying = false;
 				
-				var video = new VideoHandler("player_1");
+				var progress = new Progress(content,"progressBar")
+				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
+				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
+
+				var video = new VideoHandler("conceptVideo");
 				video.onPlay = function() {
+					playButton.turnOn();
 					isPlaying = true;
 					if (reveal.activeStory) {
 						reveal.deactivateStory();
@@ -413,63 +571,116 @@
 				 }
 				
 				video.onPause = function() {
+					playButton.turnOff();
 				   if (!currentStory) {
 					   currentStory = content.currentContent(video.videoTime);
 				   }
 				   if (currentStory && !reveal.activeStory && activeBlock == "video") {
-					   reveal.activateStory(currentStory.id);
+					   reveal.activateStory(currentStory);
 				   }
 				}
 				video.onFinish = function() {
+					playButton.turnOff();
 					isPlaying = false;
 					displayMosaic()
 				}
 				
-				video.onTick = function(timestamp) {
+				video.onTick = function(timestamp, videoPercent) {
+					progress.setPercent(videoPercent*100);
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
 						console.log("change" + timestamp)
 						currentStory = content.currentContent(timestamp);
-						markerColumn.repaint();
+						storyMarker.repaint();
 					}
 				 }
-				
+				 
+				progress.onSeek = function(percent) {
+					currentStory = null;
+					video.seekToPercent(percent);
+				}
 				
 
-				var markerColumn = new MarkerColumn(content, markersDiv);
-				markerColumn.colorSelector = function(d, i) {
+				var storyMarker = new StoryMarker(content, markersDiv);
+				
+				 video.onDuration = function(duration){
+					 storyMarker.duration = duration
+				 }
+				 
+				storyMarker.markerSelector = function(d, i) {
 					if (d.id == reveal.activeStory) {//ONCLICK
-						return "#206666";
-					} else if ( d.nextCuePoint < video.videoTime ) {//IS PASSED
-						return "#75BBBC";
-					} else if (d.containsTime(video.videoTime)) {//ACTIVE
-						return "#206666";
-					} else {//DEFAULT
-						return "#549ea4";
-					} 
+						return "bubbleclick.png";
+					} else if (d.cuePointMillis() < video.videoTime) {//PASSED
+						return "bubblefill.png";
+					} else {
+						return "bubble.png"
+					}
 				};
 				
-				markerColumn.onclick = function(storyId){
+				
+				storyMarker.onclick = function(story){
 					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
-					if (reveal.activeStory == storyId) { 
+					if (reveal.activeStory == story.id) { 
 					    reveal.deactivateStory();
 					} else {
-					   reveal.activateStory(storyId);
+					   reveal.activateStory(story);
+					}
+				}
+								
+				playButton.onClick=function(isOn){
+					if(isOn){
+						if(activeBlock=="mosaic"){
+							displayMosaic();
+						}
+						video.play();
+					} else {
+						video.pause();	
 					}
 				}
 				
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
-				reveal.onActivate = function() { video.pause(); }
-			    reveal.onDeactivate = function() { if(activeBlock == "video" && isPlaying) video.play(); }
-				reveal.onShow = function(storyId) { 
-					markerColumn.activateStory(storyId)
+				reveal.onActivate = function() {
+					video.pause();
+					showDimmer()
+				}
+			    reveal.onDeactivate = function() {
+					if(activeBlock == "video" && isPlaying){
+						 video.play();
+					}
+				}
+				
+				reveal.hideDimmer = function(){
+					hideDimmer();
+				}
+				
+				reveal.onShow = function(story) { 
+					storyMarker.activateStory(story)
 				 }
-				reveal.onHide = function(storyId) {
-					 markerColumn.deactivateStory(storyId);
+				reveal.onHide = function(story) {
+					 storyMarker.deactivateStory(story);
 				 }
 				
-				markerColumn.create()
+				var dimmerDiv = d3.select("#dimmerDiv")
+				dimmerDiv.on("click",function(){
+					reveal.deactivateStory();
+				}).style("cursor","pointer")
+				function hideDimmer(){
+					dimmerDiv.transition()
+						.duration(1000)
+						.style("opacity","0")
+						.each("end",function(){
+							dimmerDiv.style("display","none")	
+						})
+				}
+				function showDimmer(){
+					dimmerDiv.style("display","block")
+						.transition()
+							.duration(1000)
+							.style("opacity",".4")
+				}
+				
+				storyMarker.create()
 				
 				splash.on("click",function(){
 					splash.style("display","none")
@@ -483,29 +694,38 @@
 				}).style("cursor","pointer");
 				
 				
+				var mosaic = new Mosaic(content, mosaicTable);
+				mosaic.create();
+				mosaic.onClick = function(story) {
+					  reveal.activateStory(story);
+				}
+				mosaic.onPlayAgain = function(){
+					displayMosaic();
+				}
+				
+				mosaicButton.onClick = function(isMosaicShowing){
+					displayMosaic()
+				}
+				
 				function displayMosaic(){
 					var divHeight = vidDiv.style("height")
-								console.log("1")
-					if(activeBlock=="video"){
-						moslink.attr("src","graphics/mos-linka.png")
-					} else if (activeBlock == "mosaic") {
-						moslink.attr("src","graphics/mos-link.png")
-					}
 
 					vidDiv.transition().duration(600)
 						.style("height","0px")
 						.each("end",function(){
 							if(activeBlock=="video"){
 								activeBlock = "mosaic";
+								mosaicButton.turnOn()
 								if(isPlaying)video.pause()
 								videoFrame.style("display","none")
-								mosaic.style("display","table")
+								mosaicTable.style("display","table")
 								moslink.attr("src","graphics/mos-linka.png")
 							} else if (activeBlock=="mosaic"){
 								activeBlock = "video";
-								if(isPlaying) video.play()
+								mosaicButton.turnOff();
+								//if(isPlaying) video.play()
 								videoFrame.style("display","block")
-								mosaic.style("display","none")
+								mosaicTable.style("display","none")
 							}
 							vidDiv.transition().duration(700)
 								.style("height",divHeight)
@@ -523,14 +743,25 @@
 				function sizeVid(size){
 					videoFrame
 						.style("height", size*9/16+"px");
-					mosaic
+					mosaicTable
 						.style("height", size*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
-					markerColumn.setHeight(videoOffset.offsetHeight);
 					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
 				}
 				
+			 function getWindowHeight() {
+				 
+			  var myHeight = 0;
+			  if( typeof( window.innerWidth ) == 'number' ) {
+				myHeight = window.innerHeight;
+			  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+				myHeight = document.documentElement.clientHeight;
+			  } 
+			  
+			  return myHeight;
+			}
+			
 				//WINDOW RESIZE/////////////////
 				window.addEventListener('resize', windowResize, false);
 				
@@ -547,17 +778,7 @@
 						ww = ww2;
 					} 
 				}
-				
-			var alienWaterTd = d3.select("#alienWaterTd")
-			var sewerTd = d3.select("#sewerTd")
-			var waterCostTd = d3.select("#waterCostTd")
-			var waterFactsTd = d3.select("#waterFactsTd")
-			
-			alienWaterTd.on("click",function(){reveal.activateStory("campfire");})
-			sewerTd.on("click",function(){reveal.activateStory("sewer");})
-			waterCostTd.on("click",function(){reveal.activateStory("pipeburst");})
-			waterFactsTd.on("click",function(){reveal.activateStory("girlbath");})
-			
+							
 			d3.select("#why100").on("mouseover",function(){botRollover("#why100text")})
 			d3.select("#howview").on("mouseover",function(){botRollover("#howviewtext")})
 			d3.select("#about").on("mouseover",function(){botRollover("#abouttext")})
@@ -583,58 +804,66 @@
 	
     <body onload="pageLoad()">
 		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
-		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		<div id="bg2" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
-		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
+		<div id="container" style="width: 65%; margin: 0px auto;">
 			<div id="pan-logo" style="width: 50%;">
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
 			<div id="vidmark" style="margin-top: 26px;">
-				<div id="vid" class="left" style="position: relative; overflow: hidden;">
-					<div style="z-index: 5; background-color: #000; opacity: .4; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-					
-					<iframe id="player_1" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=player_1" frameborder="0" style="display: block; width: 100%;"></iframe>
+				<div id="vid" style="position: relative; overflow: hidden;">
+					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+					<iframe id="conceptVideo" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=conceptVideo" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
-							<td id="alienWaterTd" rowspan="2">Alien Water</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="everydrop" rowspan="2" >Every Drop</td>
+							<td id="elwha" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Elwha</td>
+							<td id="powersof10" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Powers of 10</td>
+							<td id ="alienwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Alien Water</td>
+							<td id="playAgain" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Play Again</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td id="sewerTd" rowspan="2">Sewer</td>
-							<td></td>
-							<td></td>
+							<td id="footprint" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Footprint</td>
+							<td id="nycsewers" style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" rowspan="2">Sewer</td>
+							<td id="pollution" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Pollution</td>
+							<td id="whereswater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Where's Water</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td id="cloudweight" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Cloud Weight</td>
+							<td id="waterpark" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Waterpark</td>
+							<td id="purestwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Purest Water</td>
+							<td id="rainwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainwater</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td id="waterCostTd" rowspan="2">Water Cost</td>
-							<td></td>
-							<td></td>
-							<td id="waterFactsTd" rowspan="2">Water Facts</td>
+							<td id="rainsmell" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainsmell</td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="watercost" rowspan="2">Water Cost</td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="tanktown" rowspan="2">Tank Town</td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
 						</tr>
 					</table>
 				</div>
-				<div id="markers" class="right" style="">
-				
-				</div>
-				<div class="clear"></div>
+				<div id="vidbot" class="clear"></div>
 			</div>
-			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
-				<div id="bot-left" class="left">
+			<table style="width:100%; margin-top: 8px; margin-bottom: 5px;">
+				<tr>
+					<td style="width: 2%;"><img src="playbtn.png" id="playBtn"/></td>
+					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
+					<td id="mosaic" style="width: 2%;"><img src="moslink.png" id="mosLink"/></td>
+				</tr>
+				<tr>
+					<td style="width: 2%;"></td>
+					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td style="width: 2%;"></td>
+				</tr>
+			</table>
+			<div id="bot-links" style="position: relative; margin: 0px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+				<div id="bot-left">
 					<div id="bleft" style="float: left; text-align: bottom;">
 						<a id="howview">HOW TO VIEW</a>
 					</div>
@@ -642,9 +871,6 @@
 						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
 						<a id="about" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
 					</div>
-				</div>
-				<div id="bot-right" class="right">
-					<a><img src="graphics/mos-link.png" id="moslink" style="width: 100%;"/></a>
 				</div>
 				<div class="clear"></div>
 			</div>	

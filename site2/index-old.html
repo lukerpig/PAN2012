@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
+        <title>100 Gallons: Reflections From A Nation Powered By Water</title>
+        <style>
+			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
+			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
+
+            body {margin: 20px 0px 0px 0px; padding: 0;}
+
+            iframe {display:block; border:0;}
+			
+			.clear{clear: both;}
+			
+			
+			.left{width:96%; float: left;}
+			
+			.right{width:3%; float: right;}
+
+        </style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>   
+
+		<script type="text/javascript">
+			var froogaloop;
+		    function vidFrameWidth(vidWidth) {
+				return this.level * .25 * vidWidth;
+			}
+			function markerHeight(markerSize, vidHeight) {
+				return Math.round((this.level-1)*markerSize*vidHeight/100.0);
+			}
+			var markerData = [
+				{
+					id : "story0",
+					url: "story/story0.html",
+					level: 2,
+					cuePointBegin: 0.000,
+					cuePointEnd: 5.000,
+					getVidFrameWidth: vidFrameWidth,
+					getMarkerHeight: markerHeight,
+				},
+				{
+					id : "story1",
+					url: "story/story1.html",
+					level: 3,
+					cuePointBegin: 5.000,
+					cuePointEnd: 10.000,
+					getVidFrameWidth: vidFrameWidth,
+					getMarkerHeight: markerHeight,
+				},
+			];
+			
+			var captionData = [
+				{
+					id : "caption0",
+					captionTitle: "This is level one",
+					captionContent: "Content goes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. Content ggoes herey. ",
+					level: 1,
+					cuePointBegin: 10.000,
+					cuePointEnd: 15.000,
+					getVidFrameWidth: vidFrameWidth,
+					getMarkerHeight: markerHeight,
+				},
+			]
+			
+			var marginSize = 1;
+			markerWeight=0;
+			for(var i in markerData){
+				if(markerData[i].level==2 || markerData[i].level==3){
+					if(markerData[i].level==2)
+						markerWeight+=1;	
+					if(markerData[i].level==3)
+						markerWeight+=2;
+				}
+			}
+			var marginCount=markerData.length-1;
+			var markerSpace = 100-(marginCount*marginSize);
+			var markerSize = markerSpace/markerWeight;
+			var activeStory = -1;
+			
+			
+			//////////////////PAGELOAD PAGELOAD PAGELOAD/////////////////////
+			function pageLoad(){
+				ww = window.innerWidth, wh = window.innerHeight;
+				var videoFrame=d3.select("#player_1");
+				var videoOffset = document.getElementById("player_1");
+				var markersDiv=d3.select("#markers");
+				var markers=markersDiv.selectAll("div").data(markerData,function(d){return d.id});
+				var vidDiv = d3.select("#vid")
+				var vidIframes = vidDiv.selectAll("iframe .story").data(markerData)
+				var vidHeight, vidWidth;
+				var videoTime;
+				
+				function fapi(event){
+					if(froogaloop){
+						froogaloop.api(event);
+					}
+				}
+				
+				sizeVid(videoOffset.offsetWidth);
+				function sizeVid(size){
+					videoFrame
+						.style("height", size*9/16+"px");
+						vidWidth = videoOffset.offsetWidth;
+						vidHeight = videoOffset.offsetHeight;
+						markersDiv.style("height",vidHeight+"px");
+						markerMargin();
+						sizeIframe();
+				}
+				
+				///////////////////VIDEO TIME TRACK CODE///////////////////
+				function timeManip(seconds){
+					console.log(seconds);
+					videoTime = seconds;
+					//videoPercent = seconds/duration;
+				}
+				
+				//HIDE/REVEAL STORIES
+				function activateStory(story){
+					fapi("pause");
+					if (activeStory == story) return;
+					var delay = 0;
+					if (activeStory >= 0) {
+						hideStory(activeStory);
+						delay = 1000;
+					}
+					showStory(story, delay);
+					activeStory = story;
+				}
+				
+				function deactivateStory(){
+					fapi("play");
+					hideStory(activeStory);
+					activeStory = -1;
+				}
+				
+				function showStory(story, delay){
+					d3.select("#story"+story).transition()
+						.duration(1000)
+						.delay(delay)
+						.style("left",function(d){
+							return (vidWidth-d.getVidFrameWidth(vidWidth)) + "px";
+						});
+				}
+				function hideStory(story){
+					d3.select("#story"+activeStory).transition().duration(750)
+					.style("left", function(d) { return vidWidth + "px"; });
+				}
+				
+				//MAKE MARKERS//////////////				
+				markers.enter().append("div")
+					.style("background-color","#549ea4")
+					.style("border-radius","4px")
+					.style("cursor","pointer")
+					.on("click",function(d,i){
+						if (activeStory == i) { 
+						    deactivateStory();
+						} else {
+						   activateStory(i);
+						}
+					})
+					
+					
+				markerMargin()
+				function markerMargin(){
+					markers
+					.style("margin-bottom",function(d,i){
+						if(i!=marginCount)
+							return Math.round(marginSize/100*vidHeight)+"px"
+					})
+					.style("height",function(d){ 
+					   return d.getMarkerHeight(markerSize, vidHeight)  + "px";
+				    }
+					);
+				}
+				
+				//MAKE IFRAMES////////////////
+				vidIframes.enter().append("iframe")
+					.attr("src",function(d,i){return d.url})
+					.style("z-index","2")
+					.style("background-color","#fff")
+					.attr("class","story")
+					.attr("id",function(d,i){ return "story"+i})
+					.style("position","absolute")
+					.style("top","0")
+					
+				sizeIframe()
+				function sizeIframe(){
+					vidIframes
+					.style("left",function(d){return vidWidth+"px"})
+					.style("height",vidHeight+"px")
+					.style("width",function(d){ return d.getVidFrameWidth(vidWidth) + "px"; });
+				}
+					
+				//WINDOW RESIZE/////////////////
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var wh2=window.innerHeight;
+					var ww2=window.innerWidth;
+					
+					if(wh2!=wh){//NEW HEIGHT
+						wh = wh2;
+					} 
+					if(ww2!=ww){//NEW WIDTH
+						ww = ww2;
+						if(!window.location.hash){
+							sizeVid(videoOffset.offsetWidth);
+						}
+					} 
+				}
+				
+				///////////////////VIMEO VIMEO VIMEO///////////////////
+				//DURATION = video time length; TIMEINT = TIMER THAT COUNTS SECONDS INTO VIDEO; ISPLAYING = SEES IF VIDEO IS PLAYING
+				var duration;
+				var timeInt;
+				var isPlaying = false;
+				fVideo = document.getElementById("player_1");
+
+                $f(fVideo).addEvent('ready', ready);
+                function ready(player_id) {
+                    // Keep a reference to Froogaloop for this player
+                    froogaloop = $f(player_id);
+					
+						froogaloop.addEvent('play', function(data) {
+							timeInt=setInterval(function(){getTime()},50);
+							deactivateStory();
+						});
+	
+						froogaloop.addEvent('pause', function(data) {
+							isPlaying = false;
+							window.clearInterval(timeInt);
+						});
+					
+						froogaloop.addEvent('seek', function(data) { 
+							timeManip (data.seconds);
+						});
+					
+					function getTime(){
+						var dog = function (value, player_id) {
+										timeManip (value);
+									}
+							
+						froogaloop.api('getCurrentTime', dog);
+					}
+					
+					froogaloop.api('getDuration', function (value, player_id) {
+						duration = value;
+					});
+					//froogaloop.addEvent('finish', function(data) {});
+					
+                }
+				
+			}//END PAGELOAD()
+			function addEvent(element, eventName, callback) {
+				
+				if (element.addEventListener) {
+					element.addEventListener(eventName, callback, false);
+				}
+				else {
+					element.attachEvent(eventName, callback, false);
+				}
+			}	
+        </script>
+    </head>
+	
+    <body onload="pageLoad()">
+		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: #7fc3c7; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg1" style="position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		
+		<div id="container" style="max-width: 1200px; width: 90%; margin: 0px auto;">
+			<div id="pan-logo" style="width: 50%;">
+				<img src="graphics/pan.png" style="max-width: 100%;">
+			</div>
+			<div id="vidmark" style="margin-top: 26px;">
+				<div id="vid" class="left" style="position: relative; background-color: #3FC; border: 1px solid red; overflow: hidden;">
+					<iframe id="player_1" src="http://player.vimeo.com/video/45172578?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				</div>
+				<div id="markers" class="right" style="">
+				
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div id="bot-links" style="position: relative; margin: 0px; margin-top: 14px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+				<div id="bot-left" class="left">
+					<div id="bleft" style="float: left; text-align: bottom;">
+						<a>HOW TO VIEW</a>
+					</div>
+					<div id="bright" style="float: right;">
+						<a style="bottom: 0px;">WHY 100 GALLONS?</a>
+						<a style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
+					</div>
+				</div>
+				<div id="bot-right" class="right">
+					<a><img src="graphics/mos-link.png" style="width: 100%;"/></a>
+				</div>
+				<div class="clear"></div>
+			</div>	
+			<div id="line" class="left" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
+			<div class="clear"></div>
+			<div id="footer">
+				<img src="graphics/100galbot.png"/>
+				<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
+				<img src="graphics/unc.png" style="margin-left: 10px; vertical-align: 10px;"/>
+				<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
+			</div>
+		</div>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="536.378px" height="780.521px" viewBox="0 0 536.378 780.521" enable-background="new 0 0 536.378 780.521"
+	 xml:space="preserve">
+<g>
+	<path fill="#6ABCC3" d="M329.795,47.392l-2.106,10.53c18.959,9.479,17.903,17.903,17.903,17.903
+		c20.01,5.263,109.521,70.558,109.521,70.558c43.176,28.433,43.176,48.442,43.176,48.442
+		c50.553,211.678,34.752,419.134,34.752,419.134c-26.328,106.364-67.396,119.005-67.396,119.005
+		C434.049,754.024,330.852,779.3,330.852,779.3c-36.861,7.373-57.922-21.062-57.922-21.062c-20.01-28.435-41.069,0-41.069,0
+		c-16.853,31.595-57.922,15.798-57.922,15.798c-17.903-3.157-101.101-38.964-101.101-38.964
+		c-61.081-27.384-73.72-130.586-73.72-130.586c-1.052-20.011,5.267-153.751,5.267-153.751
+		C9.3,427.212,71.786,135.853,71.786,135.853c12.635-31.595,121.105-69.508,121.105-69.508v-5.267
+		c7.373-1.051,12.637-6.318,12.637-6.318l1.055-4.212l-3.161-6.318l8.424-12.636l2.175-18.333l100.026,15.161L329.795,47.392z
+		 M162.352,163.23c0,0-30.543-35.806-51.604,10.534c0,0-23.17,112.683-9.479,171.655c0,0,5.267,15.797,15.798,7.373l11.584-4.212
+		C128.651,348.581,138.13,358.056,162.352,163.23z"/>
+</g>
+<path fill="#19152B" d="M209.215,35.279c0,0,45.303,0.528,111.104,0.528V0H211.368L209.215,35.279z"/>
+<rect x="32.689" y="381.761" fill="none" width="468" height="82"/>
+<text transform="matrix(1 0 0 1 36.0454 401.4434)"><tspan x="0" y="0" font-family="'Interstate-Regular'" font-size="27">gallons needed to process one barrel </tspan><tspan x="112.021" y="32.4" font-family="'Interstate-Regular'" font-size="27">(31 gallons) of beer </tspan></text>
+<text transform="matrix(1 0 0 1 184.5898 313.1523)" font-family="'Interstate-Bold'" font-size="110">1,500 </text>
+<g>
+	<path fill="#19162B" d="M356.065,532.689c0,0-100.303-36.928-200.108,1.995c0,0-25.45,65.871,1.996,133.241
+		c0,0,79.844,42.913,198.112,2.992C356.065,670.919,374.863,614.697,356.065,532.689z"/>
+	<polyline fill="#19162B" points="358.56,629.001 391.164,629.001 391.164,646.303 359.227,646.303 	"/>
+	<path fill="#19162B" d="M379.189,644.306v21.291c0,0-4.661,9.979-8.65,0v-21.958L379.189,644.306z"/>
+	<polygon fill="#19162B" points="379.853,630.998 379.853,621.684 385.843,616.359 365.88,616.359 371.287,621.518 371.537,631.497 
+			"/>
+	<rect x="188.56" y="580.431" fill="none" width="131.74" height="39.257"/>
+	<text transform="matrix(1 0 0 1 188.5601 616.8076)" fill="#6BBDC4" font-family="'Interstate-Regular'" font-size="49.9025">B</text>
+	<text transform="matrix(1 0 0 1 222.2441 616.8076)" fill="#6BBDC4" font-family="'Interstate-Regular'" font-size="49.9025">E</text>
+	<text transform="matrix(1 0 0 1 252.9341 616.8076)" fill="#6BBDC4" font-family="'Interstate-Regular'" font-size="49.9025">E</text>
+	<text transform="matrix(1 0 0 1 283.6226 616.8076)" fill="#6BBDC4" font-family="'Interstate-Regular'" font-size="49.9025">R</text>
+</g>
+</svg>
