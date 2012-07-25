@@ -32,8 +32,6 @@
         
 		<script type="text/javascript">
 
-		
-
 		    function ContentItem(contentData) {
 			    for(var key in contentData) {
 				    this[key] = contentData[key];
@@ -143,10 +141,10 @@
 				}
 				
 				this.getContentById = function(contentId) {
-										
 					for(var i in this.all) {
 						var d = this.all[i];
-						if (d.id == contentId) {
+						var selectStory = (d.name)?d.name:d.id;
+						if (selectStory == contentId) {
 							return d;
 						}
 					}
@@ -235,6 +233,7 @@
 				this.create = function() {
 					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories).enter().append("div")
 					this.storyDivs
+						.style("top",that.margin+"%")
 						.attr("class","story")
 						.call(styleReveals)
 					.append("iframe")
@@ -256,11 +255,23 @@
 						.style("position","absolute")
 						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
 						.style("width","96%")
-						.style("height","88%")
+						.style("bottom","4%")
 						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
 					this.captionDivs.append("div")
 						.call(styleX)
 						
+					function styleReveals(){
+						this
+							.attr("id",function(d,i){ return d.id+"-reveal" })
+							.style("position","absolute")
+							.style("bottom",that.margin+"%")
+							.style("z-index","10")
+							.style("background-color","#fff")
+							.style("left",that.margin+"%")
+							.style("width",(100-(that.margin*2))+"%")
+							.style("display","none")
+					}
+					
 					function styleX(){
 						this
 							.attr("class","closebtn")
@@ -273,23 +284,13 @@
 							})
 							.html("X")
 					}
-					function styleReveals(){
-						this
-							.attr("id",function(d,i){ return d.id+"-reveal" })
-							.style("position","absolute")
-							.style("top",that.margin+"%")
-							.style("bottom",that.margin+"%")
-							.style("z-index","10")
-							.style("background-color","#fff")
-							.style("left",that.margin+"%")
-							.style("width",(100-(that.margin*2))+"%")
-							.style("display","none")
-					}
+					
 				}
+					
 								
 				function storyTop(d) {
 					var vidHeight = that.vidHeight;
-					if (that.activeStory == d.id) {
+					if (that.activeStory == d) {
 						return that.margin+"%"
 					} else {
 						return "100%";
@@ -311,18 +312,17 @@
 					}
 				}
 
-				this.showStory = function(story, delay){
-					window.location.hash=story.id;
-					this.onShow(story.id);
+				this.showStory = function(story, delay, duration){
+					duration = (typeof(duration)=="undefined")?1000:duration
+					window.location.hash=(story.name)?story.name:story.id;
+					this.onShow(story);
 					var vidWidth = this.vidWidth;
 					var selectedStory = d3.select("#"+story.id+"-reveal")
-					alert("#"+story.id+"-reveal")
 					selectedStory.style("display","block")
 						.transition()
-							.duration(1000)
+							.duration(duration)
 							.delay(delay)
-							.style("top", storyTop);
-					console.log(story.id + "activeStory is: " + this.activeStory+" sel story: " + selectedStory)
+							.style("top", storyTop)
 				}
 				
 				this.hideStory = function(story,isDeactivating){
@@ -331,8 +331,8 @@
 					d3.select("#"+story.id+"-reveal").transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
-						d3.select("#"+story+"-reveal").style("display","none")
-						var frame = document.getElementById(story+"-iframe");
+						d3.select("#"+story.id+"-reveal").style("display","none")
+						var frame = document.getElementById(story.id+"-iframe");
 						if(frame) frame.src=frame.src;
 						if(isDeactivating){that.onDeactivate();};
 					})
@@ -345,11 +345,12 @@
 					this.activeStory = story;
 
 					var delay = 0;
+					var duration;
 					if (oldStory) {
 						this.hideStory(oldStory);
 						delay = 1000;
 					}
-					this.showStory(story, delay);
+					this.showStory(story, delay, duration);
 				}
 				
 				this.deactivateStory = function(){
@@ -499,7 +500,6 @@
 				}
 				
 				function mouseHandler(d, i) {
-					console.log(that.parentElement.getBoundingClientRect())
 					var width = that.parentElement.getBoundingClientRect().width;
 					var seekX = d3.mouse(that.parentElement)[0];
 					var seekPercent = seekX/width;
@@ -607,7 +607,7 @@
 				 }
 				 
 				storyMarker.markerSelector = function(d, i) {
-					if (d.id == reveal.activeStory) {//ONCLICK
+					if (d == reveal.activeStory) {//ONCLICK
 						return "bubbleclick.png";
 					} else if (d.cuePointMillis() < video.videoTime) {//PASSED
 						return "bubblefill.png";
@@ -620,7 +620,7 @@
 				storyMarker.onclick = function(story){
 					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
-					if (reveal.activeStory == story.id) { 
+					if (reveal.activeStory == story) { 
 					    reveal.deactivateStory();
 					} else {
 					   reveal.activateStory(story);
@@ -640,6 +640,7 @@
 				
 				var reveal = new Reveal(content, vidDiv);
  			    reveal.create();
+												
 				reveal.onActivate = function() {
 					video.pause();
 					showDimmer()
@@ -660,7 +661,7 @@
 				reveal.onHide = function(story) {
 					 storyMarker.deactivateStory(story);
 				 }
-				
+
 				var dimmerDiv = d3.select("#dimmerDiv")
 				dimmerDiv.on("click",function(){
 					reveal.deactivateStory();
@@ -737,6 +738,13 @@
 					console.log("mosaic CurrentStory: " + currentStory);
 					
 				}
+				
+				if(window.location.hash){
+				var hashStr = window.location.hash.substring(1)
+				var hashStory = content.getContentById(hashStr);
+				reveal.activateStory(hashStory);
+				} 
+								
 				var vidHeight, vidWidth;
 				
 				sizeVid(videoOffset.offsetWidth);
@@ -858,7 +866,7 @@
 				</tr>
 				<tr>
 					<td style="width: 2%;"></td>
-					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble.png" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
 					<td style="width: 2%;"></td>
 				</tr>
 			</table>
