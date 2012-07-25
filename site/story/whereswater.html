@@ -4,10 +4,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Where's The Water?</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-	<script src="storyJs.js"></script>
+	<script type="text/javascript" src="storyJs.js"></script>
+	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+	<script type="text/javascript" src="slider.js"></script>
 </head>
 
-<body>
+<body onload="Slider.initialize()">
 
 <h1>Tracking the Water</h1>
 
@@ -15,41 +17,62 @@
 
 <h2 class="question">1.	How much water do we have on this planet?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>There are 332.5 million cubic miles of water on our planet, according to the U.S. Geological Society, but hydrologists say that nobody really knows how much water is here. We’ve never had to know because we’ve always had enough. So while we can estimate how much is in the oceans (link to powers of 10), when it comes to ground water, rivers, lakes and soil moisture, we just don’t know. Satellite data tells us how water moves from area to area, but many of the global estimates are simply guesses based on assumptions. </p>
 
 <p>Sources: USGS http://ga.water.usgs.gov/edu/earthhowmuch.html</p>
 <p>http://blog.ucchm.org/2012/06/28/rallying-around-our-known-unknowns-what-we-dont-know-will-hurt-us/</p>
 <p>http://pubs.usgs.gov/pp/1766/</p>
-
+</div>
+</div>
 
 <h2 class="question">2.	Are we running out of water?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Water can’t be destroyed. The total amount of water on the Earth isn’t changing, and it hasn’t changed much for more than 4 billion years. But as the population has grown and the climate has changed, many places are reaching the limits of their supply.</p>
 
 <p>Water moves. We’ve always built our homes, cities and civilizations near water sources. It makes sense not to lug water from miles away if we don’t have to. But with the shifts in global climate, water is dwindling in the places where we’ve always been able to find it and moving to places where it will be harder to access.</p>
 
 <p>http://newscientist1.blogspot.com/2012/02/uncharted-waters-probing-aquifers-to.html</p>
 <p>http://ga.water.usgs.gov/edu/earthhowmuch.html</p>
+</div>
+</div>
 
 <h2 class="question">3.	Where does our water come from?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Most of the water Americans use everyday comes from rivers, lakes, reservoirs and other surface water. But the vast majority of the planet’s available fresh water stored in the ground. Want to know where your water comes from? Check out the EPA’s Local Drinking Water Information.</p>
 
 <p>(http://pubs.usgs.gov/circ/1344/)
+</div>
+</div>
 
 <h2 class="question">4.	How much water is available for us to use?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>The majority of our water is in the ocean, and we can’t drink salt water – at least not until it’s been stripped of the salt. Having water on the planet and having access to it are two different issues. Water needs to be available in a form we can use. Only 3 percent is fresh at any given time. Of that fresh water, almost 70 percent is trapped in glaciers and ice caps. Considering a human can’t live longer than a few days without water, the portion available for drinking only does us good if it’s nearby and clean.</p>
+</div>
+</div>
 
 <h2 class="question">5.	How does water move?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>The water cycle describes how water moves over the surface and through the soil. Water evaporates from the ocean into the atmosphere and returns to the ocean. A portion comes back as rain and snow over the land and is re-evaporated; sinks beneath the soil, recharging the groundwater; or runs off and returns to the ocean via streams and rivers. What the land loses, the ocean or the atmosphere gains, and vice-versa.</p>
 
 <p>We humans have a big footprint on the water cycle. By pumping ground water, piping surface water, desalinating ocean water and melting ice caps, we’re moving water around to places where it would not have been otherwise.</p>
+</div>
+</div>
 
 
 <h2 class="question">6.	What affect do we have on our drinking water?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Nearly 30 percent of global freshwater lies underground. Millions of people around the globe live in dry areas and depend heavily on finite stores of groundwater. It doesn’t rain much in these regions, and with the demands of a growing population, we’re using groundwater faster than it’s being replaced by rain and snowfall.</p>
 
 <p>A recent study from the University of California, Irvine, found that between 2003 and 2010, agriculture sucked 25 million acre-feet out of California’s Central Valley aquifers— almost enough to fill Lake Mead, the nation’s largest reservoir.</p>
@@ -57,16 +80,24 @@
 <p>When we pump water out of the ground, most of it will not return there. Water filled up these underground aquifers during the last ice age when the climate was cool and wet. Now the areas are much drier, and the water won’t come back. When we pump it, some of it’s incorporated into the crops we grow, some of it’s piped off to neighborhoods, and some evaporates and falls as rain elsewhere. So while we’re not destroying it, we’re reducing the amount of our available drinking water. </p>
 
 <p>http://ga.water.usgs.gov/edu/earthwherewater.html</p>
+</div>
+</div>
 
 <h2 class="question">7.	Why should people who live in water-rich areas care?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>When water evaporates from dry areas like the southwestern United States and Australia, it won’t return there because it doesn’t rain much in the desert. Instead that water will dump into areas that don’t need more rain like the Tropics and the Pacific Northwest.</p>
 
 <p>Punishing storms and floods cause sewage to overflow into the water supply. This was the case after Hurricane Katrina, which was why people in New Orleans were told to boil their water before drinking it. </p>
+</div>
+</div>
 
 
 <h2 class="question">8.	Is there a global water crisis?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Serious water problems exist all around the world. Floods in the Amazon surged to a 40-year high, ground water in India decreases at a rate of one foot per year, and in 18 months, more than 7000 Haitians died from a water-borne disease. Some observers like to bundle these problems up and call it a global water crisis, but these events and tragedies generally are not connected. </p>
 
 <p>Most water problems need local solutions. If Atlanta runs out of water, Californians can’t help. The only people who can tackle the water problems in Atlanta are the people who live in Atlanta.</p>
@@ -74,20 +105,26 @@
 <p>(Charles Fishman’s viewpoint blog post)</p>
 <p>http://intelligenttravel.nationalgeographic.com/2012/04/19/red-alert-flooding-in-the-peruvian-amazon/</p>
 <p>http://www.nasa.gov/topics/earth/features/india_water.html</p>
+</div>
+</div>
 
 <h2 class="question">9.	What’s the future of water?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Most Americans under the age of 50 will be confronted with water policy issues in their lifetime. Abundant water today doesn’t mean abundant water in 10 years. Millions of people live in arid and semi-arid regions where there is not enough water. We’re going to have to figure out how to move, trade and share water across political boundaries.</p>
 
 <p>We need to work together to make sure that drinkable water is accessible and available in our communities. If we haven’t done anything significant by 2050, many places will have reached the limits of their water supply. </p>
 
 <h2 class="question">10.	How can I help?</h2>
 
+<div class="answer">
+<div class="answer-content">
 <p>Water is cheap in this country, so people rarely notice it. The first thing you should do is take out your water bill and look at it. Try to understand how much water you use everyday. (link to introductory text: Americans use an average of 100 gallons of water a day.)</p>
 
 <p>There are simple, small ways you can cut back on water use: For many American’s, watering the yard accounts for half of their total water use. Toilets are next in line, so don’t flush every time you pee –That’s why you have a toilet lid. The amount of electricity an average American uses requires 250 gallons of water daily, so another way to save is to turn off your lights. (Check out why here: link to Tracy Boyer’s 2010 article) As soon as you start paying attention to water consumption, you can use less. </p>
-
-
+</div>
+</div>
 
 
 <p><span class="bold">Jay Famiglietti</span> is a hydrologist and a professor of Earth System Science at the University of California, Irvine. He is the founding director of the UC Center for Hydrologic Modeling. Famiglietti’s research group uses satellites and develops computer models to track changing freshwater availability around the globe. He recently appeared in the water documentary “Last Call at the Oasis.”</p>
