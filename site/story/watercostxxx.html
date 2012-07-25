@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>The Cost of Water</title>
-		<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
 		<script src="storyJs.js"></script>
 		<style>
 			@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
@@ -207,7 +207,14 @@
 					var infoTspan = d3.select("#infobox").selectAll("tspan").data(d.details(usage*30))
 					
 					infoTspan.enter().append("tspan")
-					infoTspan.attr("x", 513).attr("dy", function(d, i) { return i == 0?  0 : 30 })
+					infoTspan
+						.attr("x", 513)
+						.attr("dy", function(d, i) { return i == 0?  0 : 30 })
+						.style("font-size",function(d,i){
+							if(i >= 2){
+								return "20"	
+							}
+						})
 						.text(String)
 					infoTspan.exit().remove()
 					

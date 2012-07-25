@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -42,19 +43,73 @@
                         var FLUSH = 1;
                         var LAUNDRY = 2;
                         var HANDS = 3;
+						
+						function costPerMonth(region, gallonsPerMonth){
+							return "$" + (region.cost*.00378541*gallonsPerMonth).toFixed(2) + " per person"
+						}
 
                         var regions = [
-						 { name:"You", cost:8, details:"Amsterdam: $8 per gallon" },
-						 { name:"Average U.S. Citizen", cost:7, details:"Paris: $7 per gallon" },
-                         { name:"Glasgow, U.K.", cost:7.57, details:"New York: $6 per gallon" },
-                         { name:"Berlin, Germany", cost:6.62, details: "San Francisco: $5 per gallon"},
-                         { name:"Oslo, Norway", cost: 3.49, details: "Chapel Hill: $4 per gallon" },
-						 { name:"Sydney, Australia", cost:3.45, details: "London: $3 per gallon" },
-						 { name:"Tokyo, Japan", cost:1.65, details:"Tokyo: $2 per gallon" },
-                         { name:"Moscow, Russia", cost:0.65, details:"Rio: $1 per gallon"  },
-                         { name:"Lima, Peru", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
-                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: "Dublin: FREEEE!!!!!!"},
-                         { name:"Mumbai, India", cost:0.09, details: "Dublin: FREEEE!!!!!!"},
+						 { name:"You", cost:2.13, details: function(gallons){
+							  return ["Your estimated water use per day is " + Math.round(gallons/30) +" gallons,",
+							  "and your water bill would cost " + costPerMonth(this,gallons)+".",
+							  "based on the national average water cost."] 
+							  }},
+						 { name:"Average U.S. Citizen", cost:2.13, details: function(gallons){ 
+						 	return ["In the U.S., the average water bill is",
+							costPerMonth(this,99.8*30)+".",
+							"Based on the assumption that that person uses 100 gallons of water daily.",
+							"U.S. average water cost averaged from many locations"]},
+							total:100 },
+                         { name:"Glasgow, Scotland", cost:7.57, details: function(gallons){
+							return ["In Glasgow, Scotland, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"For thousands of residents living near the city center, water service is",
+							"frequently interrupted by broken water mains because many of the pipes",
+							"date back to the Victorian era."]}},
+                         { name:"Berlin, Germany", cost:6.62, details: function(gallons){ 
+							return ["In Berlin, Germany, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"Berlin draws most of its water from an ancient groundwater reservoir",
+							"formed more than 10,000 years ago during the Ice Age. The groundwater",
+							"resources in this area have returned to the levels maintained 150 years",
+							"before industrialization."]}},
+                         { name:"Oslo, Norway", cost: 3.49, details: function(gallons){ 
+							return ["In Oslo, Norway, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"The city’s water comes from snow or rain in the forests and hills around",
+							"the city. A network of streams and waterways fills up the reservoirs that",
+							"supply the city. "]}},
+						 { name:"Sydney, Australia", cost:3.45, details: function(gallons){
+							 return ["In Sydney, Australia, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Australia is the most arid inhabited continent in the world. Much of its",
+							 "water supply depends upon highly variable rainfall."]}},
+						 { name:"Tokyo, Japan", cost:1.65, details: function(gallons){
+							 return ["In Tokyo, Japan, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "The government manages a water conservation forest in the mountains",
+							 "surrounding Tokyo so the city can have a sustainable, clean water supply."]}},
+                         { name:"Moscow, Russia", cost:0.65, details: function(gallons){
+							  return ["In Moscow, Russia, your estimated monthly",
+							  "water bill costs "+costPerMonth(this, gallons)+".",
+							  "Russia has the largest drinking water reserves and the second largest",
+							  "freshwater reserves in the world."]}},
+                         { name:"Lima, Peru", cost:0.22, details: function(gallons){
+							 return ["In Lima, Peru, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Because of shrinking glaciers and an increasing population, Lima’s water",
+							 "supply is projected to shrink by 25 percent over the next 10 years."]}},
+                         { name:"Addis Ababa, Ethiopia", cost:0.22, details: function(gallons){
+							 return ["In Addis Ababa, Ethiopia, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "The majority of Ethiopians must walk to collect water because their sources",
+							 "are generally located between one and six miles away. Women and children,",
+							 "who are primarily responsible for fetching water, can travel many hours", 
+							 "each day carrying jugs weighing upward of 40 pounds each."]}},
+                         { name:"Mumbai, India", cost:0.09, details: function(gallons){
+							 return ["In Mumbai, India, your estimated monthly",
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Only 23 percent of the Indian population has water piped into their homes."]}},
 			];
 
 			
@@ -102,68 +157,91 @@
 			}
 
 	                function regionalCosts(usage) {
-                            var costs=[];
                             for(var i = 0; i < regions.length; i++) {
-                               costs.push(usage*regions[i].cost);
-			    }
-                            return costs;
+								var pushedInfo=!(regions[i].total)?usage*regions[i].cost:regions[i].total*regions[i].cost;
+								regions[i].total=pushedInfo
+							}
 	                }
 
-                        function showDetails(d, i) {
-                           var details = regions[i].details;
-                           console.log(details);
-                           d3.select("#details").html(details);
-                        }
+					function showDetails(d, i) {
+					   var details = regions[i].details;
+					   console.log(details);
+					   d3.select("#details").html(details);
+					}
 
-                        function hideDetails(d, i) {
-                           d3.select("#details").html("");
-                        }
+					function hideDetails(d, i) {
+					   d3.select("#details").html("");
+					}
 
 			function calculate(n){
 				showNext(n);
 				svgHeight();
-				var usage = parseInt(shower) + parseInt(flush) + parseInt(laundry) + parseInt(hands);
+				var usage = (+shower + +flush + +laundry + +hands)*1.234;
 				var costs = regionalCosts(usage);
-				var barRangePercentage = .8;
-				var marginPercentage = (1-barRangePercentage)/2;
 				var chartHeight = 675;
 				var chartWidth = 1200;
-				var chartSideMargin = 10;
-				var chartTopMargin = 150;
-				var chartBottomMargin = 10;
-				var textbottom = 128;
-
-				
-				var barHeight = chartHeight - chartTopMargin - chartBottomMargin;
-				var barWidth = chartWidth - chartSideMargin - textBottom;
-				
+				var marginRight = 76;
+				var barX = 352;
 				
 				var x = d3.scale.linear()
-					.domain(0, d3.max(costs))
-					.range([352, 1100]);
+					.domain([0, d3.max(regions, function(d) { return d.total; })])
+					.range(["0px",(chartWidth-barX-marginRight)+"px"])
 				
-				var y = d3.scale.ordinal()
-					 .domain([costs])
-					 .rangeBands([(chartHeight-textBottom) , (chartHeight-chartBottomMargin)]);
-
-				d3.select("#bars").selectAll("rect").data(costs)
-			        .enter().append("rect")
-						.attr("x", 32)
-						.attr("y", y)
-						.attr("width", function(d, i) { return barRangePercentage*x;})
-						.attr("height", y.rangeBand())
-						.on("mouseover", showDetails)
-						.on("mouseout", hideDetails);
-
-				d3.select("#bars").selectAll("text").data(costs)
-					.enter().append("text")
-						.attr("x", function(d, i) { return x(d) + x.rangeBand() / 2; })
-						.attr("y", function(d, i) { return barHeight + chartTopMargin - y(d);})
-						.attr("dy", "-.5em")
-						.attr("text-anchor", "middle")
-						.on("mouseover", showDetails)
-						.on("mouseout", hideDetails)
-						.text(function(d, i) { return "$"+ Math.round(d) });
+				
+				var bars = d3.select("#bars").selectAll("rect").data(regions,function(d){return d.name});
+				bars.enter().append("rect")
+					.attr("class","bar")
+					.attr("x",barX)
+					.attr("y", function(d,i){ return (i*50+134) })
+					.attr("width",function(d,i){
+						return x(d.total)
+					})
+					.attr("height","25")
+					.attr("fill","#40A09D")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+						
+				var bartext = d3.select("#bars").selectAll("text").data(regions,function(d){return d.name})
+				bartext.enter().append("text")
+					.text(function(d){return d.name})					
+					.attr("class", "bartext")
+					.attr("x", 340)
+					.attr("y", function(d,i){ return (i*50+158) })
+					.attr("text-anchor", "end")
+					.style("fill","#40A09D")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","25")
+					.style("opacity",".75")
+					.on("mouseover", onRollover)
+					
+				var infobox = d3.select("#bars").append("text").attr("id","infobox")
+				
+				
+				infobox
+					.attr("class","infobox")
+					.attr("x","513")
+					.attr("y","509")
+					.style("font-family","Interstate-Light, verdana, sans-serif")
+					.style("font-size","30")
+					.style("fill","#40A09D")
+					.style("opacity",".75")
+									
+				function onRollover(d,i){
+					var infoTspan = d3.select("#infobox").selectAll("tspan").data(d.details(usage*30))
+					
+					infoTspan.enter().append("tspan")
+					infoTspan
+						.attr("x", 513)
+						.attr("dy", function(d, i) { return i == 0?  0 : 30 })
+						.style("font-size",function(d,i){
+							if(i >= 2 ){
+								return "20"	
+							}
+						})
+						.text(String)
+					infoTspan.exit().remove()
+					
+				}
 			}
 
 
@@ -195,7 +273,6 @@
 					}
 				}
 				
-				
 				d3.select("#skip").on("click",function(){
 					afterVideo();
 				});
@@ -225,8 +302,6 @@
 							d3.select("#video").style("display","none")
 							d3.select("#interactive").style("display","block")
 						})
-						
-					
 				}
 
 				function addEvent(element, eventName, callback) {
@@ -250,14 +325,14 @@
 		<div id="container" style="background-color: #FFF;">
 			<p>What would your water cost if you lived in another country? xxyxxy?</p>
 			<div id="video" style="position: relative; overflow: hidden;">
-				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<iframe id="player_1" src="http://player.vimeo.com/video/46365368?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
 				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
 			</div>
-			<div id="interactive" style="margin: 0px auto;">
+			<div id="interactive" style="margin: 0px auto; display: none;">
 				<div class="card" id="card1">
 					<img src="watercost/cost1.jpg"/>
 					<form class="cost-form" action="#" method="get" accept-charset="utf-8" name="shower">
-						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="24.4" type="radio" checked />&nbsp;</label>
+						<label id="one" class="label_radio" for="above"><input name="data" id="above" value="24.416" type="radio" checked />&nbsp;</label>
 						<label id="two" class="label_radio" for="average"><input name="data" id="average" value="16.8" type="radio" checked/>&nbsp;</label>
 						<label id="three" class="label_radio" for="below"><input name="data" id="below" value="9.09" type="radio" />&nbsp;</label>
 						<button type="button" class="forward" onclick="getShower(this.form, 1)"></button>
@@ -293,7 +368,7 @@
 						<button type="button" class="backward" onclick="goBack(4)"></button>
 					</form>
 				</div>
-				<div class="card" id="card5" style="display: block;">
+				<div class="card" id="card5" style="display: none;">
 					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
 						<text style="font-family: Interstate-Light; fill:#40A09D; font-size: 35px;" x="61" y="55"><tspan>Based on your answers, you use about 100 gallons of water per day.</tspan>
 <tspan x="61" y="95">Here’s what that would cost:</tspan></text>

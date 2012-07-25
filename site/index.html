@@ -286,7 +286,6 @@
 					}
 					
 				}
-					
 								
 				function storyTop(d) {
 					var vidHeight = that.vidHeight;
@@ -344,13 +343,13 @@
 					var oldStory = this.activeStory;
 					this.activeStory = story;
 
-					var delay = 0;
+					var delay = 100;
 					var duration;
 					if (oldStory) {
 						this.hideStory(oldStory);
 						delay = 1000;
 					}
-					this.showStory(story, delay, duration);
+					this.showStory(story, delay);
 				}
 				
 				this.deactivateStory = function(){
@@ -645,10 +644,12 @@
 					video.pause();
 					showDimmer()
 				}
+				
+				
 			    reveal.onDeactivate = function() {
-					if(activeBlock == "video" && isPlaying){
-						 video.play();
-					}
+					window.setTimeout(function(){
+						video.play()
+					},300);
 				}
 				
 				reveal.hideDimmer = function(){
