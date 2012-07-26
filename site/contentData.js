@@ -153,10 +153,10 @@ var contentData = [
 	},
 	{
 		id : "fountain",
-		name: "costofwater",
-		url: "story/costofwater.html",
+		name: "whatdoes100gallonscost",
+		url: "story/whatdoes100gallonscost.html",
 		level: 3,
-		tooltip: "The Cost of Water",
+		tooltip: "What Does 100 Gallons Cost?",
 		cuePoint: 55.04,
 	},
 	{
@@ -182,10 +182,10 @@ var contentData = [
 	},
 	{
 		id : "fishflop",
-		name: "footprint",
-		url: "story/footprint.html",
+		name: "waterfootprintoffood",
+		url: "story/waterfootprintoffood.html",
 		level: 2,
-		tooltip: "Water Footprint",
+		tooltip: "Water Footprint Of Food",
 		cuePoint: 63.18
 	},
 	{
@@ -343,8 +343,8 @@ var contentData = [
 	},
 	{
 		id : "nightcar",
-		name: "rainsmell",
-		url: "story/rainsmell.html",
+		name: "smellingtherain",
+		url: "story/smellingtherain.html",
 		level: 2,
 		tooltip: "Smelling the Rain",
 		cuePoint: 120.02,
@@ -380,10 +380,10 @@ var contentData = [
 	},
 	{
 		id : "tombstone",
-		name: "followthewater",
-		url: "story/followthewater.html",
+		name: "beyondthepalebluedot",
+		url: "story/beyondthepalebluedot.html",
 		level: 2,
-		tooltip: "Follow the Water",
+		tooltip: "Beyond the Pale Blue Dot",
 		cuePoint: 131.08,
 	},
 	{
