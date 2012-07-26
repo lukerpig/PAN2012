@@ -5,11 +5,78 @@
 	<title>Weight of a Cloud</title>
 	<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
 	<script src="storyJs.js"></script>
+	<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<script type="text/javascript">
+ function init() {
+	var rollovers = [
+		{ left: 69.0,  top: 43.0, img: "images/cumulus.png" },
+		{ left: 83.0, top: 8.0, img: "images/cumulonimbus.png" },
+    ];
+	
+	
+	function showPopup(d,i) { 
+		    console.log(d.img) 
+			var img = d3.select("#footprint-container").selectAll("#popup")
+			.data([d], function(d,i) { return d.img });
+			
+			img.exit().style("opacity","0").remove()
+			img.enter()
+			.append("img")
+			.attr("id","popup")
+			.style("position","absolute")
+			.style("top","54%")
+			.style("left","0%")
+			.style("width","100%")
+			.style("opacity","0")
+			
+			
+			img.attr("src",d.img).style("opacity","1")
+		}
+		
+	function hidePopup(d,i) { 
+		    console.log(d.img) 
+			var img = d3.select("#footprint-container").selectAll("#popup")
+			.data([d], function(d,i) { return d.img });
+			
+		
+			
+			img.transition().duration(750).style("opacity","0")
+		}
+		
+		
+	d3.select("#footprint-container").selectAll(".rollover")
+		.data(rollovers).enter()
+		.append("div")
+		.attr("class","rollover")
+		.style("position","absolute")
+		.style("top",function(d,i) { return d.top+"%" })
+		.style("left",function(d,i) { return d.left+"%" })
+		.style("width", "16%")
+		.style("height", "10%")
+		.style("cursor","pointer")
+	.on("mouseover", showPopup)
+	.on("mouseout", hidePopup);
+	
+		
+ }
+
+
+
+</script>
+
 </head>
 
-<body>
-<h1>Weight of a Cloud</h1>
+<body onload="init()">
 
-<img src="images/cloud-weight.jpg"
+
+<div id="footprint-container" style="position:relative; max-width:1200px; max-height:675px;">
+	<img src="images/cloud-weight.jpg"/> 
+</div>
+
+
+
+
 </body>
 </html>
