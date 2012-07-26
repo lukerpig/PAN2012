@@ -284,10 +284,10 @@ var contentData = [
 	},
 	{
 		id : "sewer",
-		name: "nycsewers",
-		url: "story/nycsewers.html",
+		name: "abeautifulwaste",
+		url: "story/abeautifulwaste.html",
 		level: 3,
-		tooltip: "Sewers",
+		tooltip: "A Beautiful Waste",
 		cuePoint: 95.11,
 	},
 	{
@@ -306,10 +306,10 @@ var contentData = [
 	},
 	{
 		id : "laslomitas",
-		name: "laslomitas",
-		url: "story/laslomitas.html",
+		name: "drypromises",
+		url: "story/drypromises.html",
 		level: 2,
-		tooltip: "Las Lomitas",
+		tooltip: "Dry Promises",
 		cuePoint: 104.11,
 	},
 	{
@@ -321,10 +321,10 @@ var contentData = [
 	},
 	{
 		id : "abandonedpark",
-		name: "waterpark",
-		url: "story/waterpark.html",
+		name: "waterparks",
+		url: "story/waterparks.html",
 		level: 2,
-		tooltip: "Waterpark Data",
+		tooltip: "Waterparks",
 		cuePoint: 113.12,
 	},
 	{
@@ -346,7 +346,7 @@ var contentData = [
 		name: "rainsmell",
 		url: "story/rainsmell.html",
 		level: 2,
-		tooltip: "Smelling The Rain",
+		tooltip: "Smelling the Rain",
 		cuePoint: 120.02,
 	},
 	{
@@ -358,10 +358,10 @@ var contentData = [
 	},
 	{
 		id : "tapdrip",
-		name: "pollution",
-		url: "story/pollution.html",
+		name: "isitsafetodrink",
+		url: "story/isitsafetodrink.html",
 		level: 2,
-		tooltip: "Pollution",
+		tooltip: "Is it Safe to Drink?",
 		cuePoint: 124.15,
 	},
 	{
@@ -380,10 +380,10 @@ var contentData = [
 	},
 	{
 		id : "tombstone",
-		name: "alienwater",
-		url: "story/alienwater.html",
+		name: "followthewater",
+		url: "story/followthewater.html",
 		level: 2,
-		tooltip: "Alien Water",
+		tooltip: "Follow the Water",
 		cuePoint: 131.08,
 	},
 	{
