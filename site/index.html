@@ -16,7 +16,7 @@
 			.left{width:96%; float: left;}
 			.right{width:3%; float: right;}
 			
-			.tooltip {background-color: #FFF; color:#2d9999; font-family: Interstate-Light, Verdana, sans-serif; padding: 3px; z-index: 20; white-space:nowrap;}
+			.tooltip {background-color: #FFF; color:#2d9999; font-family: Interstate-Light, Verdana, sans-serif; padding: 3px; z-index: 20; font-size: 14px; white-space:nowrap;}
 			
 			#mosaic tr td {background-color: #206666; width: 20%; height: 20%}
 			#botContent {color: #fff; font-family: Interstate-Light, Verdana, sans-serif; position: relative; width: 96%;}
@@ -253,6 +253,7 @@
 					this.storyDivs
 						.style("top",that.margin+"%")
 						.attr("class","story")
+						.style("background-color","#fff")
 						.call(styleReveals)
 					.append("iframe")
 						.attr("id",function(d,i){ return d.id+"-iframe" })
@@ -268,15 +269,24 @@
 					this.captionDivs.enter().append("div")
 						.attr("class","caption")
 						.call(styleReveals)
+						.style("cursor","pointer")
+						.on("click",function(d,i){
+							if(that.onCaptionClick) that.onCaptionClick(d);
+						})
 					.append("div")
+						.style("color","#fff")
+						.style("background-color","#fff")
 						.style("font-family","Interstate-Light, verdana, sans-serif")
 						.style("position","absolute")
-						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
+						.style("margin", that.margin+"%" + that.margin+"%" + that.margin+"%" + that.margin+"%")
 						.style("width","96%")
 						.style("bottom","4%")
-						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: 100%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
-					this.captionDivs.append("div")
-						.call(styleX)
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: "+(100-that.margin)+"%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
+						.on("click",function(d,i){
+							if(that.onCaptionClick) that.onCaptionClick(d);
+						})
+//					this.captionDivs.append("div")
+//						.call(styleX)
 						
 					function styleReveals(){
 						this
@@ -284,7 +294,6 @@
 							.style("position","absolute")
 							.style("bottom",that.margin+"%")
 							.style("z-index","10")
-							.style("background-color","#fff")
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
 							.style("display","none")
@@ -614,6 +623,7 @@
 				progress.onSeek = function(percent) {
 					currentStory = null;
 					video.seekToPercent(percent);
+					reveal.deactivateStory();
 				}
 				
 
@@ -634,7 +644,7 @@
 				};
 				
 				
-				storyMarker.onclick = function(story){
+				function storyMarkerClicked(story){
 					video.pause()
 					//reveal.swapVis(content.getContentById(storyId))
 					if (reveal.activeStory == story) { 
@@ -643,7 +653,9 @@
 					   reveal.activateStory(story);
 					}
 				}
-								
+				
+				storyMarker.onclick = storyMarkerClicked;
+												
 				playButton.onClick=function(isOn){
 					if(isOn){
 						if(activeBlock=="mosaic"){
@@ -656,6 +668,8 @@
 				}
 				
 				var reveal = new Reveal(content, vidDiv);
+				reveal.onCaptionClick = storyMarkerClicked;
+
  			    reveal.create();
 												
 				reveal.onActivate = function() {

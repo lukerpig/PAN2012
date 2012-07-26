@@ -2,10 +2,8 @@ TODO:
 -Ramdomize starting video (only on Replay?)
 -When mouseover about/why100gallons/howtoview
 -Credit Box/Source Box/Style X
--add toolbars
--Seek on progbar
--caption to size
 -Seek is weird when playing
+-hashtag seeks to spot in vid
 
 -Style Text (ADD TTFs)
 -Update Powers of 10 Numbers
@@ -18,6 +16,11 @@ NICE TO HAVE:
 -Sound plays on puase to mask pause
 -possible custom scrollbar
 -designing what a story looks like/story format
+
+A+:
+-ALT how to view video
+-Tooltipmove on mousemoove
+-Bigger area for tooltip active
 
 
 
