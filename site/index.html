@@ -93,6 +93,7 @@
 				this.all = [];
 				this.stories = [];
 			    this.captions = [];
+				this.storiesWithMarkers = [];
 				
 			    for(var i = 0; i < contentData.length; i++) {
 					var contentItem;
@@ -103,6 +104,9 @@
 						console.log(contentData[i].name)
 						contentItem = new Story(contentData[i]);
 						this.stories.push(contentItem);
+						if (!contentItem.noMarker) {
+							this.storiesWithMarkers.push(contentItem);
+						}
 					}
 					
 				    this.all.push(contentItem);
@@ -173,10 +177,12 @@
 				}
 				
 				
+				
 			    this.create = function() {
-					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
+					this.markers = this.parentElement.selectAll("div").data(content.storiesWithMarkers,function(d){return d.id});
 				
 					this.markers.enter().append("img")
+						
 						.attr("src",markerChooser)
 						.attr("id",function(d,i){return d.id+"-marker"})
 						.style("position","absolute")
@@ -192,7 +198,7 @@
 						 .on("mouseover", showTooltip)
 						 .on("mouseout", hideTooltip)
 				}
-				
+								
 				function showTooltip(d,i){
 					
 					var parent = document.getElementById("storyMarker");
@@ -730,7 +736,13 @@
 					dimmerDiv.style("display","block")
 						.transition()
 							.duration(1000)
-							.style("opacity",".4")
+							.style("opacity",function(){
+								if(isPlaying){
+									return ".4"	
+								} else {
+									return ".75"	
+								}
+							})
 				}
 				
 				storyMarker.create()
@@ -808,6 +820,33 @@
 					vidHeight = videoOffset.offsetHeight;
 					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
 				}
+				
+			d3.select("#howview").style("cursor","pointer").on("click",function(){
+				var howToView = content.getContentById("howtoview");
+				if(reveal.activeStory != howToView){
+					reveal.activateStory(howToView);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
+			
+			d3.select("#why100").style("cursor","pointer").on("click",function(){
+				var why100gallons = content.getContentById("why100gallons");
+				if(reveal.activeStory != why100gallons){
+					reveal.activateStory(why100gallons);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
+			
+			d3.select("#aboutLink").style("cursor","pointer").on("click",function(){
+				var about = content.getContentById("about");
+				if(reveal.activeStory != about){
+					reveal.activateStory(about);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
 				
 			 function getWindowHeight() {
 				 
@@ -909,7 +948,7 @@
 					</div>
 					<div id="bright" style="float: right;">
 						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
-						<a id="about" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
+						<a id="aboutLink" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
 					</div>
 				</div>
 				<div class="clear"></div>
