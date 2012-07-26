@@ -681,9 +681,11 @@
 				
 				
 			    reveal.onDeactivate = function() {
-					window.setTimeout(function(){
-						video.play()
-					},300);
+					if(activeBlock=="video"){
+						window.setTimeout(function(){
+							video.play()
+						},300);
+					}
 				}
 				
 				reveal.hideDimmer = function(){
@@ -759,7 +761,6 @@
 							} else if (activeBlock=="mosaic"){
 								activeBlock = "video";
 								mosaicButton.turnOff();
-								//if(isPlaying) video.play()
 								videoFrame.style("display","block")
 								mosaicTable.style("display","none")
 							}
@@ -769,7 +770,7 @@
 									vidDiv.style("height","");
 								})
 						})
-					reveal.deactivateStory();
+					reveal.deactivateStory(false);
 					console.log("mosaic CurrentStory: " + currentStory);
 					
 				}

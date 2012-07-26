@@ -225,10 +225,10 @@ var contentData = [
 	},
 	{
 		id : "canoe",
-		name: "elwha",
-		url: "story/elwha.html",
+		name: "givingway",
+		url: "story/givingway.html",
 		level: 2,
-		tooltip: "Elwha Dam",
+		tooltip: "Giving Way",
 		cuePoint: 78.02,
 	},
 	{
@@ -247,10 +247,10 @@ var contentData = [
 	},
 	{
 		id : "bottlespray",
-		name: "tanktown",
-		url: "story/tanktown.html",
+		name: "thecloudjuicer",
+		url: "story/thecloudjuicer.html",
 		level: 2,
-		tooltip: "Tank Town",
+		tooltip: "The Cloud Juicer",
 		cuePoint: 83.08,
 	},
 	{
@@ -262,10 +262,10 @@ var contentData = [
 	},
 	{
 		id : "watercooler",
-		name: "purestwater",
-		url: "story/purestwater.html",
+		name: "thepurestofthemall",
+		url: "story/thepurestofthemall.html",
 		level: 2,
-		tooltip: "The Purest Water",
+		tooltip: "The Purest of Them All",
 		cuePoint: 89.10,
 	},
 	{
