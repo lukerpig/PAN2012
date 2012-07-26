@@ -1,9 +1,6 @@
-@import url('') screen;
-
-
 @charset "UTF-8";
 
-body {padding: 0% 4% 0% 0%; margin: 0px; overflow: hidden;}
+body {padding: 0% 4% 0% 0%; margin: 0px; width: 95%;}
 body {color: #333;}
 @font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
 @font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
@@ -16,7 +13,7 @@ img {max-width: 100%;}
 iframe {margin-bottom: 3%;}
 
 h1 {font-family: Interstate-ExtraLight, verdana, sans-serif; font-size: 40px; margin: 0px 0px 15px 0px;}
-h2 {font-family: Interstate-ExtraLight, verdana, sans-serif; font-size: 24px; margin:  0px 0px 15px 0px;}
+h2 {font-family: Interstate-Regular, verdana, sans-serif; font-size: 24px; margin:  0px 0px 15px 0px;}
 p {font: 14px/19px Interstate-Light, verdana, sans-serif; margin:  0 0 22px 0; color: #333;}
 
 .bold {font-family: Interstate-Bold, verdana, sans-serif; font-weight: bold;}

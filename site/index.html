@@ -261,7 +261,7 @@
 						.style("width","96%")
 						.style("height","88%")
 						.attr("src",function(d,i){return d.url})
-					this.storyDivs.append("div")
+					this.storyDivs.append("img")
 						.call(styleX)
 						
 
@@ -301,10 +301,12 @@
 					
 					function styleX(){
 						this
+							.attr("src","graphics/x.png")
 							.attr("class","closebtn")
+							.style("max-width","2%")
 							.style("position","absolute")
-							.style("top","5px")
-							.style("right","5px")
+							.style("top","1.5%")
+							.style("right","1.5%")
 							.style("cursor","pointer")
 							.on("click",function(d){
 								that.deactivateStory()
@@ -857,35 +859,35 @@
 					<iframe id="conceptVideo" src="http://player.vimeo.com/video/45735144?api=1&amp;player_id=conceptVideo" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
-							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="everydrop" rowspan="2" >Every Drop</td>
-							<td id="elwha" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Elwha</td>
-							<td id="powersof10" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Powers of 10</td>
-							<td id ="alienwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Alien Water</td>
-							<td id="playAgain" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Play Again</td>
+							<td style="background-image:url(); background-size: 100% 100%;" id="everydrop"></td>
+							<td id="elwha" style="background-image:url(); background-size: 100% 100%;" rowspan="2"></td>
+							<td id="powersof10" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id ="alienwater" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id="playAgain" style="background-image:url(); background-size: 100% 100%;" rowspan="2"></td>
 						</tr>
 						<tr>
-							<td id="footprint" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Footprint</td>
-							<td id="nycsewers" style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" rowspan="2">Sewer</td>
-							<td id="pollution" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Pollution</td>
-							<td id="whereswater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Where's Water</td>
+							<td id="footprint" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id="nycsewers" style="background-image:url(); background-size: 100% 100%;" rowspan="2"></td>
+							<td id="pollution" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id="whereswater" style="background-image:url(); background-size: 100% 100%;"></td>
 						</tr>
 						<tr>
-							<td id="cloudweight" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Cloud Weight</td>
-							<td id="waterpark" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Waterpark</td>
-							<td id="purestwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Purest Water</td>
-							<td id="rainwater" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainwater</td>
+							<td id="cloudweight" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id="waterpark" style="background-image:url(); background-size: 100% 100%;" rowspan="2"></td>
+							<td id="purestwater" style="background-image:url(); background-size: 100% 100%;" rowspan="2"></td>
+							<td id="rainwater" style="background-image:url(); background-size: 100% 100%;"></td>
 						</tr>
 						<tr>
-							<td id="rainsmell" style="background-image:url(mostest.jpg); background-size: 100% 100%;">Rainsmell</td>
-							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="watercost" rowspan="2">Water Cost</td>
-							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
-							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
-							<td style="background-image:url(http://www.giraffes.org/giraffe-pic.jpg); background-size: 100% 100%;" id="tanktown" rowspan="2">Tank Town</td>
+							<td id="rainsmell" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td id="watercost" style="background-image:url(); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
 						</tr>
 						<tr>
-							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
-							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
-							<td style="background-image:url(mostest.jpg); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
+							<td style="background-image:url(); background-size: 100% 100%;"></td>
 						</tr>
 					</table>
 				</div>
