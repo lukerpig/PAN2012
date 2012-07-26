@@ -18,7 +18,7 @@
 	
 	function showPopup(d,i) { 
 		    console.log(d.img) 
-			var img = d3.select("#footprint-container").selectAll("#popup")
+			var img = d3.select("#cloud-container").selectAll("#popup")
 			.data([d], function(d,i) { return d.img });
 			
 			img.exit().style("opacity","0").remove()
@@ -37,7 +37,7 @@
 		
 	function hidePopup(d,i) { 
 		    console.log(d.img) 
-			var img = d3.select("#footprint-container").selectAll("#popup")
+			var img = d3.select("#cloud-container").selectAll("#popup")
 			.data([d], function(d,i) { return d.img });
 			
 		
@@ -46,7 +46,7 @@
 		}
 		
 		
-	d3.select("#footprint-container").selectAll(".rollover")
+	d3.select("#cloud-container").selectAll(".rollover")
 		.data(rollovers).enter()
 		.append("div")
 		.attr("class","rollover")
@@ -71,7 +71,7 @@
 <body onload="init()">
 
 
-<div id="footprint-container" style="position:relative; max-width:1200px; max-height:675px;">
+<div id="cloud-container" style="position:relative; max-width:1200px; max-height:675px;">
 	<img src="images/cloud-weight.jpg"/> 
 </div>
 

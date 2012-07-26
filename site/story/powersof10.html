@@ -14,7 +14,7 @@
 		var scale = 1.0;
 	
 	
-		svgW=1200, ratH=9, ratW=16;
+		svgW=1200, ratH=8, ratW=16;
 		svgH = svgW*ratH/ratW;
 		var svgOpt = {
 			maxW: 1200,
@@ -267,6 +267,7 @@
 				   vis.push(data[i]);
 				}
 			}
+			if(vis.length != data.length){ vis.push(data[vis.length]) }
 			if(vis.length != data.length){ vis.push(data[vis.length]) }
 			return vis;
 		}

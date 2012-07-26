@@ -6,13 +6,12 @@
 	<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
 	<script type="text/javascript" src="storyJs.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
-	<script type="text/javascript" src="slider.js"></script>
 	<style>
 	</style>
 	<script>
 		function onLoad(){
 			var heightData = [];
-			var questions = d3.selectAll(".question")
+			var questions = d3.selectAll(".question").style("cursor","pointer")
 			var answer = d3.selectAll(".answer").style("overflow","hidden").style("height","0px").attr("showing","false")
 			
 			window.addEventListener('resize', getAnswerSize, false);
@@ -33,21 +32,19 @@
 					var answer = d3.select("#answer-"+(i+1))
 						if(answer.attr("showing")=="false"){
 							console.log(answer.style("height"))
-							answer.transition()
-								.duration(1000)
-								.style("height",d.height+22+"px")
-								.each("end",function(){
-									d3.select(this)
-										.style("height","")
-										.attr("showing","true")
-									
-								})
+							answer.attr("showing","true")
+								.transition()
+									.duration(1000)
+									.style("height",d.height+22+"px")
+									.each("end",function(){
+										d3.select(this)
+											.style("height","")
+									})
 						} else {
 							console.log("hide: " + (i+1))
-							answer.style("height",d.height+22+"px")
+							answer.style("height",d.height+22+"px").attr("showing","false")
 								.transition().duration(1000)
 								.style("height","0px")
-								.attr("showing","false")
 						}
 				})
 		}

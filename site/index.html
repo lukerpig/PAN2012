@@ -13,11 +13,10 @@
             iframe {display:block; border:0;}
 			
 			.clear{clear: both;}
-			
-			
 			.left{width:96%; float: left;}
-			
 			.right{width:3%; float: right;}
+			
+			.tooltip {background-color: #FFF; color:#2d9999; font-family: Interstate-Light, Verdana, sans-serif; padding: 3px; z-index: 20; white-space:nowrap;}
 			
 			#mosaic tr td {background-color: #206666; width: 20%; height: 20%}
 			#botContent {color: #fff; font-family: Interstate-Light, Verdana, sans-serif; position: relative; width: 96%;}
@@ -190,10 +189,29 @@
 								that.onclick(d);	
 							}
 						 })
-						 .on("mouseover", function(d,i) { console.log("mouseover: " + d.id);})
-						 .on("mouseout", function(d,i) { console.log("mouseout: " + d.id);})
+						 .on("mouseover", showTooltip)
+						 .on("mouseout", hideTooltip)
 				}
+				
+				function showTooltip(d,i){
+					
+					var parent = document.getElementById("storyMarker");
+					var div = d3.select(parent).selectAll("#"+d.id+"-tooltip").data([d], function(d) { return d.id; });
+					
+					div.enter().append("div").attr("id", d.id+"-tooltip").attr("class", "tooltip").html(d.tooltip)
+					div.style("left", d3.mouse(parent)[0]+5+"px")
+					   .style("top", d3.mouse(parent)[1]+12+"px")
+					   .style("opacity","1")
+					   .style("position", "absolute")
+				}
+				
+				function hideTooltip(d,i){
+					var parent = document.getElementById("storyMarker");
+					var div = d3.select(parent).selectAll("#"+d.id+"-tooltip").data([d], function(d) { return d.id; });
 
+					div.transition().duration(250).style("opacity","0").remove()
+				}
+				
 				this.getMarginPixels = function (vidHeight) {
 					return Math.round(this.marginSize/100*vidHeight)
 				}
