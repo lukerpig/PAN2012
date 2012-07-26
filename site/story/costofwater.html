@@ -1,10 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>The Cost of Water</title>
-	<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
+		<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
 		<script src="storyJs.js"></script>
 		<style>
 			@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
@@ -49,44 +50,66 @@
 
                         var regions = [
 						 { name:"You", cost:2.13, details: function(gallons){
-							  return ["Your estimated water use per day is " + this.cost,
-							  "and your water bill would cost Y",
-							  "based on the national average water cost"] 
+							  return ["Your estimated water use per day is " + Math.round(gallons/30) +" gallons,",
+							  "and your water bill would cost " + costPerMonth(this,gallons)+".",
+							  "based on the national average water cost."] 
 							  }},
 						 { name:"Average U.S. Citizen", cost:2.13, details: function(gallons){ 
-						 	return ["The average American water bill is",
-							costPerMonth(this,gallons)]},
+						 	return ["In the U.S., the average water bill is",
+							costPerMonth(this,99.8*30)+".",
+							"Based on the assumption that that person uses 100 gallons of water daily.",
+							"U.S. average water cost averaged from many locations"]},
 							total:100 },
-                         { name:"Glasgow, U.K.", cost:7.57, details: function(gallons){
-							return ["In Glasgow, UK, your estimated monthly","water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+                         { name:"Glasgow, Scotland", cost:7.57, details: function(gallons){
+							return ["In Glasgow, Scotland, your estimated monthly",
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"For thousands of residents living near the city center, water service is",
+							"frequently interrupted by broken water mains because many of the pipes",
+							"date back to the Victorian era."]}},
                          { name:"Berlin, Germany", cost:6.62, details: function(gallons){ 
 							return ["In Berlin, Germany, your estimated monthly",
-							"water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"Berlin draws most of its water from an ancient groundwater reservoir",
+							"formed more than 10,000 years ago during the Ice Age. The groundwater",
+							"resources in this area have returned to the levels maintained 150 years",
+							"before industrialization."]}},
                          { name:"Oslo, Norway", cost: 3.49, details: function(gallons){ 
 							return ["In Oslo, Norway, your estimated monthly",
-							"water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+							"water bill costs "+costPerMonth(this, gallons)+".",
+							"The city’s water comes from snow or rain in the forests and hills around",
+							"the city. A network of streams and waterways fills up the reservoirs that",
+							"supply the city. "]}},
 						 { name:"Sydney, Australia", cost:3.45, details: function(gallons){
 							 return ["In Sydney, Australia, your estimated monthly",
-							 "water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Australia is the most arid inhabited continent in the world. Much of its",
+							 "water supply depends upon highly variable rainfall."]}},
 						 { name:"Tokyo, Japan", cost:1.65, details: function(gallons){
 							 return ["In Tokyo, Japan, your estimated monthly",
-							 "water bill costs "+costPerMonth(this, gallons),"addblurb"]}},
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "The government manages a water conservation forest in the mountains",
+							 "surrounding Tokyo so the city can have a sustainable, clean water supply."]}},
                          { name:"Moscow, Russia", cost:0.65, details: function(gallons){
 							  return ["In Moscow, Russia, your estimated monthly",
-							  "water bill costs "+costPerMonth(this, gallons),
-							  "addblurb"]}},
+							  "water bill costs "+costPerMonth(this, gallons)+".",
+							  "Russia has the largest drinking water reserves and the second largest",
+							  "freshwater reserves in the world."]}},
                          { name:"Lima, Peru", cost:0.22, details: function(gallons){
 							 return ["In Lima, Peru, your estimated monthly",
-							 "water bill costs "+costPerMonth(this, gallons),
-							 "addblurb"]}},
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Because of shrinking glaciers and an increasing population, Lima’s water",
+							 "supply is projected to shrink by 25 percent over the next 10 years."]}},
                          { name:"Addis Ababa, Ethiopia", cost:0.22, details: function(gallons){
 							 return ["In Addis Ababa, Ethiopia, your estimated monthly",
-							 "water bill costs "+costPerMonth(this, gallons),
-							 "addblurb"]}},
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "The majority of Ethiopians must walk to collect water because their sources",
+							 "are generally located between one and six miles away. Women and children,",
+							 "who are primarily responsible for fetching water, can travel many hours", 
+							 "each day carrying jugs weighing upward of 40 pounds each."]}},
                          { name:"Mumbai, India", cost:0.09, details: function(gallons){
 							 return ["In Mumbai, India, your estimated monthly",
-							 "water bill costs "+costPerMonth(this, gallons),
-							 "addblurb"]}},
+							 "water bill costs "+costPerMonth(this, gallons)+".",
+							 "Only 23 percent of the Indian population has water piped into their homes."]}},
 			];
 
 			
@@ -211,7 +234,7 @@
 						.attr("x", 513)
 						.attr("dy", function(d, i) { return i == 0?  0 : 30 })
 						.style("font-size",function(d,i){
-							if(i >= 2){
+							if(i >= 2 ){
 								return "20"	
 							}
 						})
@@ -297,13 +320,10 @@
 	</head>
 	
 	<body onload="onLoad()">
-		<h1>How much does 100 gallons cost?</h1>
-			
 		<div id="container" style="background-color: #FFF;">
-			<p>What would your water cost if you lived in another country? xxyxxy?</p>
 			<div id="video" style="position: relative; overflow: hidden;">
-				<iframe id="player_1" src="http://player.vimeo.com/video/45610698?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
-				<div id="skip" style="position: absolute; background-color: #fcf; top: 0; height: 30%; width: 10%;"></div>
+				<iframe id="player_1" src="http://player.vimeo.com/video/46365368?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<div id="skip" style="cursor: e-resize; position: absolute; top: 0; height: 12%; width: 15%;"></div>
 			</div>
 			<div id="interactive" style="margin: 0px auto; display: none;">
 				<div class="card" id="card1">

@@ -95,10 +95,10 @@ var contentData = [
 	},
 	{
 		id : "fatherdaughter",
-		name: "cloudweight",
-		url: "story/cloudweight.html",
+		name: "heavyskies",
+		url: "story/heavyskies.html",
 		level: 2,
-		tooltip: "Weight of a Cloud",
+		tooltip: "Heavy Skies",
 		cuePoint: 34.07,
 	},
 	{
@@ -154,7 +154,7 @@ var contentData = [
 	{
 		id : "fountain",
 		name: "costofwater",
-		url: "story/watercost.html",
+		url: "story/costofwater.html",
 		level: 3,
 		tooltip: "The Cost of Water",
 		cuePoint: 55.04,
