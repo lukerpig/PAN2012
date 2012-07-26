@@ -7,9 +7,54 @@
 	<script type="text/javascript" src="storyJs.js"></script>
 	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
 	<script type="text/javascript" src="slider.js"></script>
+	<style>
+	</style>
+	<script>
+		function onLoad(){
+			var heightData = [];
+			var questions = d3.selectAll(".question")
+			var answer = d3.selectAll(".answer").style("overflow","hidden").style("height","0px").attr("showing","false")
+			
+			window.addEventListener('resize', getAnswerSize, false);
+			
+			getAnswerSize()
+			function getAnswerSize(){
+				d3.selectAll(".answer-content")
+					.each(function(d,i) {heightData[i] = { id: (i+1), height: this.offsetHeight}; })
+					.attr("id", function(d, i) { return "ac-"+(i+1); })
+					
+				questions.data(heightData)
+			}
+			
+			d3.selectAll(".answer")
+				.attr("id",function(d,i){return "answer-"+(i+1)});
+			
+				questions.on("click",function(d,i){
+					var answer = d3.select("#answer-"+(i+1))
+						if(answer.attr("showing")=="false"){
+							console.log(answer.style("height"))
+							answer.transition()
+								.duration(1000)
+								.style("height",d.height+22+"px")
+								.each("end",function(){
+									d3.select(this)
+										.style("height","")
+										.attr("showing","true")
+									
+								})
+						} else {
+							console.log("hide: " + (i+1))
+							answer.style("height",d.height+22+"px")
+								.transition().duration(1000)
+								.style("height","0px")
+								.attr("showing","false")
+						}
+				})
+		}
+	</script>
 </head>
 
-<body onload="Slider.initialize()">
+<body onload="onLoad()">
 
 <h1>Tracking the Water</h1>
 
@@ -115,6 +160,8 @@
 <p>Most Americans under the age of 50 will be confronted with water policy issues in their lifetime. Abundant water today doesn’t mean abundant water in 10 years. Millions of people live in arid and semi-arid regions where there is not enough water. We’re going to have to figure out how to move, trade and share water across political boundaries.</p>
 
 <p>We need to work together to make sure that drinkable water is accessible and available in our communities. If we haven’t done anything significant by 2050, many places will have reached the limits of their water supply. </p>
+</div>
+</div>
 
 <h2 class="question">10.	How can I help?</h2>
 
