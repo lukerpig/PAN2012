@@ -42,7 +42,6 @@
 			.style("width","12.1%")
 			.style("opacity","0")
 			
-			
 			img.attr("src",d.img).style("opacity","1")
 		}
 		
@@ -68,6 +67,7 @@
 		.style("height", "20.9%")
 		.style("cursor","pointer")
 	.on("mouseover", showPopup)
+	.on("click", showPopup)
 	.on("mouseout", hidePopup);
 	
 		

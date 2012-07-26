@@ -175,7 +175,6 @@
 				
 			    this.create = function() {
 					this.markers = this.parentElement.selectAll("div").data(content.stories,function(d){return d.id});
-
 				
 					this.markers.enter().append("img")
 						.attr("src",markerChooser)
