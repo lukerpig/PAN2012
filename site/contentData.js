@@ -110,8 +110,8 @@ var contentData = [
 	},
 	{
 		id : "guysocean",
-		name: "powersof10",
-		url: "story/powersof10.html",
+		name: "sizingupwater",
+		url: "story/sizingupwater.html",
 		level: 2,
 		tooltip: "Sizing Up Water",
 		cuePoint: 41.14,

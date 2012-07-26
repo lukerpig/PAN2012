@@ -3,11 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>SVG Test</title>
-	<link rel="stylesheet" type="text/css" href="watersize/dragdealer.css" />
+	<link rel="stylesheet" type="text/css" href="sizingupwater/dragdealer.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="../style/story.css" />
 	<script src="storyJs.js"></script>
 	
-	<script src="watersize/dragdealer.js"></script>
+	<script src="sizingupwater/dragdealer.js"></script>
 	<script src="http://d3js.org/d3.v2.js"></script>
 	<script type="text/javascript">
 
@@ -276,10 +276,10 @@
 			var g =	numbers.enter().append("g").attr("class","imgjug");
 					g.call(function(){drawParams(this, scaler)});
 					g.append("image")
-						.attr("xlink:href","watersize/gallon.svg")
+						.attr("xlink:href","sizingupwater/gallon.svg")
 						.attr("width","343").attr("height","491");
 					g.append("image")
-						.attr("xlink:href",function(d){ return "watersize/svg/"+d.svg+".svg"})
+						.attr("xlink:href",function(d){ return "sizingupwater/svg/"+d.svg+".svg"})
 						.attr("width","343").attr("height","491");
 		}
 				
@@ -379,9 +379,7 @@
 	</script>
 </head>
 <body onload="onLoad()">
-<h1>Sizing Up Water</h1>
-<p>Water on our planet is truly abundant, but it's hard to picture just how much there actually is. Explore below to see how much one gallon of water actually is.</p>
-<div id="svgContain" style="background-image: url(watersize/bg.jpg); background-size: 100% 100%; background-repeat: no-repeat;">
+<div id="svgContain" style="background-image: url(sizingupwater/bg.jpg); background-size: 100% 100%; background-repeat: no-repeat;">
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg-box" style="width: 100%;">
 	</svg>
 </div>

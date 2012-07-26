@@ -256,7 +256,7 @@
 			}
 			
 			function onLoad() {
-				vidSize(document.getElementById("player_1"))	
+				vidSize(document.getElementById("costofwatervid"))	
 				var svgElem, player1;
 				var interactiveDiv=document.getElementById("interactive");
 				svgHeight();
@@ -278,13 +278,12 @@
 				});
 				
 			   ////V//I//M//EE/OOOOO//////////
-				fVideo = document.getElementById("player_1");
+				fVideo = document.getElementById("costofwatervid");
 				
 				$f(fVideo).addEvent('ready', ready);
 				
 				function ready(player_id) {
 					froogaloop = $f(player_id)
-				
 					froogaloop.addEvent('play', function(data) {
 						var skipDiv = document.getElementById("skip");
 						skipDiv.style.display="none";
@@ -322,7 +321,7 @@
 	<body onload="onLoad()">
 		<div id="container" style="background-color: #FFF;">
 			<div id="video" style="position: relative; overflow: hidden;">
-				<iframe id="player_1" src="http://player.vimeo.com/video/46365368?api=1&amp;player_id=player_1" frameborder="0" style="width: 100%;"></iframe>
+				<iframe id="costofwatervid" src="http://player.vimeo.com/video/46365368?api=1&amp;player_id=costofwatervid" frameborder="0" style="width: 100%;"></iframe>
 				<div id="skip" style="cursor: e-resize; position: absolute; top: 0; height: 12%; width: 15%;"></div>
 			</div>
 			<div id="interactive" style="margin: 0px auto; display: none;">
