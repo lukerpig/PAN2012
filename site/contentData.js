@@ -183,7 +183,7 @@ var contentData = [
 	{
 		id : "poolroad",
 		captionTitle: "Fuquay-Varina, NC",
-		captionContent: "Water can act as a cooling agent to lower body temperature. That's the action of these neighborhood kids avoiding the summer's heat in their wading pool.",
+		captionContent: "Water can act as a cooling agent to lower body temperature. These neighborhood kids avoid the summer's heat in their wading pool.",
 		level: 1,
 		cuePoint: 52.14,
 	},
