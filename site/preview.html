@@ -1,0 +1,1065 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=700,maximum-scale=1.0,user-scalable=yes">
+        <title>100 Gallons: Reflections From A Nation Powered By Water</title>
+        <style>
+			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
+			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
+			@font-face {font-family: Interstate-Bold; src: url("fonts/Interstate-Bold.otf");}
+			
+			.bold{font-family: Interstate-Bold, Verdana, sans-serif;}
+			
+            body {margin: 20px 0px 0px 0px; padding: 0;}
+			
+			.csDimmerText{ color: 6ABCC3; cursor: pointer; width: 70%; margin: 0px auto; background-color: #fff; padding: 4%; font-family: Interstate-Light, verdana, sans-serif;}
+			.csDimmerText a{ word-break: break-all }
+
+
+
+            iframe {display:block; border:0;}
+			
+			.clear{clear: both;}
+			.left{width:96%; float: left;}
+			.right{width:3%; float: right;}
+			
+			.tooltip {background-color: #FFF; color:#2d9999; font-family: Interstate-Light, Verdana, sans-serif; padding: 3px; z-index: 20; font-size: 14px; white-space:nowrap;}
+			
+			#mosaic tr td {width: 20%; height: 20%}
+			
+			.mosTd {cursor: pointer;}
+
+        </style>
+		<script src="http://d3js.org/d3.v2.js"></script>
+        <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script> 
+		
+		<script src="contentData.js"></script>
+        
+        
+		<script type="text/javascript">
+
+		    function ContentItem(contentData) {
+			    for(var key in contentData) {
+				    this[key] = contentData[key];
+				}
+				
+				this.getVidFrameWidth = function(vidWidth) {
+					if(this.level == 2)	return .70*vidWidth;
+					if(this.level == 3)	return .85*vidWidth;
+
+					return this.level * .25 * vidWidth;
+				}
+				
+				this.containsTime = function(timeInNillis) {
+					return this.cuePointMillis() <= timeInNillis && timeInNillis < this.nextCuePointMillis();
+				}
+				
+				function millis(cuePoint) {
+						var cuePointFloor = Math.floor(cuePoint)
+						var frame = Math.round(100*(cuePoint-cuePointFloor))
+						var ms = Math.round(frame*1000/24)/1000
+						return cuePointFloor + ms;
+				}
+				
+				this.cuePointMillis = function() {
+					if (!this.cuePointMs) {
+						this.cuePointMs = millis(this.cuePoint);
+					}
+					return this.cuePointMs;
+					
+				}
+				
+				this.nextCuePointMillis = function() {
+					if (!this.nextCuePointMs) {
+						this.nextCuePointMs = millis(this.nextCuePoint);
+					}
+					return this.nextCuePointMs;
+				}
+			}
+
+		    function Caption(captionData) {
+				this.inheritFrom = ContentItem;
+				this.inheritFrom(captionData);
+			}
+
+
+			function Story(storyData) {
+				this.inheritFrom = ContentItem;
+				this.inheritFrom(storyData);
+
+				this.getMarkerHeight = function(markerSize, vidHeight) {
+					var lvl = this.level;
+					var h =  Math.round((this.level-1)*markerSize*vidHeight/100.0);
+					return h;
+			    }
+
+			    this.getMarkerSlots = function() { return this.level-1; }
+		    }
+
+		    function Content(contentData) {
+				this.all = [];
+				this.stories = [];
+			    this.captions = [];
+				this.storiesWithMarkers = [];
+				
+			    for(var i = 0; i < contentData.length; i++) {
+					var contentItem;
+					if (contentData[i].level == 1) {
+						contentItem =  new Caption(contentData[i]);
+						this.captions.push(contentItem);
+					} else {
+						console.log(contentData[i].name)
+						contentItem = new Story(contentData[i]);
+						this.stories.push(contentItem);
+						if (!contentItem.noMarker) {
+							this.storiesWithMarkers.push(contentItem);
+						}
+					}
+					
+				    this.all.push(contentItem);
+				}
+				
+				function cuePointComparator(a,b) { return a.cuePoint - b.cuePoint; }
+				
+				this.captions.sort(cuePointComparator);
+				this.stories.sort(cuePointComparator);
+				this.all.sort(cuePointComparator);
+				
+				for(var i = 1; i < this.all.length; i++) {
+					this.all[i-1].nextCuePoint = this.all[i].cuePoint;
+				}
+				
+				this.all[this.all.length-1].nextCuePoint = Number.MAX_VALUE;
+				
+				this.getTotalMarkerSlots = function() {
+					var markerSlots = 0;
+					for(var i in this.stories) {
+						markerSlots += this.stories[i].getMarkerSlots();
+					}
+					return markerSlots;
+				}
+				
+				
+				this.currentContent = function(videoTime){
+		
+					for(var i in this.all) {
+						var d = this.all[i];
+						if (d.containsTime(videoTime)) {
+							return d;
+						}
+					}
+					return null
+				}
+				
+				this.getContentById = function(contentId) {
+					for(var i in this.all) {
+						var d = this.all[i];
+						var selectStory = (d.name)?d.name:d.id;
+						if (selectStory == contentId) {
+							return d;
+						}
+					}
+					return null;
+				}
+			}//END CONTENT END CONTENT ////////////////
+
+		
+			function StoryMarker(content, parentElement) {
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+				this.duration = 143;
+
+				this.marginSize = 1;
+				this.marginCount = this.content.stories.length -1;
+				this.markerSpace = 100 - (this.marginCount*this.marginSize);
+				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
+
+				function markerChooser(d, i) {
+					if (that.markerSelector) {
+						return that.markerSelector(d,i);
+					} else {
+						return "1bubble.png";
+					}
+				}
+				
+				
+				
+			    this.create = function() {
+					this.markers = this.parentElement.selectAll("div").data(content.storiesWithMarkers,function(d){return d.id});
+				
+					this.markers.enter().append("img")
+						
+						.attr("src",markerChooser)
+						.attr("id",function(d,i){return d.id+"-marker"})
+						.style("position","absolute")
+						.style("left",function(d){
+							return (d.cuePointMillis()/that.duration)*100+"%";
+						})
+						.style("cursor","pointer")
+						.on("click", function(d,i) {
+							if(that.onclick){
+								that.onclick(d);	
+							}
+						 })
+						 .on("mouseover", showTooltip)
+						 .on("mouseout", hideTooltip)
+				}
+								
+				function showTooltip(d,i){
+					
+					var parent = document.getElementById("storyMarker");
+					var div = d3.select(parent).selectAll("#"+d.id+"-tooltip").data([d], function(d) { return d.id; });
+					
+					div.enter().append("div").attr("id", d.id+"-tooltip").attr("class", "tooltip").html(d.tooltip)
+					div.style("left", d3.mouse(parent)[0]+5+"px")
+					   .style("top", d3.mouse(parent)[1]+12+"px")
+					   .style("opacity","1")
+					   .style("position", "absolute")
+				}
+				
+				function hideTooltip(d,i){
+					var parent = document.getElementById("storyMarker");
+					var div = d3.select(parent).selectAll("#"+d.id+"-tooltip").data([d], function(d) { return d.id; });
+
+					div.transition().duration(250).style("opacity","0").remove()
+				}
+				
+				this.getMarginPixels = function (vidHeight) {
+					return Math.round(this.marginSize/100*vidHeight)
+				}
+				
+
+				this.setHeight = function (vidHeight){
+					/*this.parentElement.style("height",vidHeight+"px");
+					var markerSize = this.markerSize;
+					this.markers
+						.style("margin-bottom", function(d,i){ return that.getMarginPixels(vidHeight) + "px"; })
+						.style("height", function(d){ return d.getMarkerHeight(markerSize, vidHeight)  + "px"; });*/
+				}
+				
+				this.activateStory = function (story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
+				}
+				
+				this.deactivateStory = function(story){
+					d3.select("#"+story.id+"-marker").attr("src",markerChooser);
+				}
+				
+				this.repaint = function() {
+					this.markers.attr("src",markerChooser);
+				}
+				
+			}//END MARKERS END MARKERS ////////////////
+
+
+			function Reveal(content, parentElement) {
+				this.content = content;
+				this.parentElement = parentElement;
+				this.activeStory = null;
+				this.margin = 4;
+				
+				var that = this;
+
+				this.create = function() {
+					this.storyDivs = this.parentElement.selectAll("div .story").data(content.stories).enter().append("div")
+					this.storyDivs
+						.style("top",that.margin+"%")
+						.attr("class","story")
+						.style("background-color","#fff")
+						.call(styleReveals)
+					.append("iframe")
+						.attr("id",function(d,i){ return d.id+"-iframe" })
+						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
+						.style("width","96%")
+						.style("height","88%")
+						.attr("src",function(d,i){return d.url})
+					this.storyDivs.append("div")
+						.attr("class","csDimmer")
+						.attr("id",function(d,i){ return d.name+"-dim"})
+						.style("position","absolute")
+						.style("z-index","40")
+						.style("top","0%")
+						.style("bottom","0%")
+						.style("left","0%")
+						.style("right","0%")
+						.style("background-image","url('csbg.png')")
+						.style("overflow-y","scroll")
+						.style("display","none")
+						.style("cursor","pointer")
+						.on("click",function(){
+							d3.select(this).style("display","none")
+							d3.select(".csDimmerText").remove()
+						})
+						
+					this.storyDivs.append("img")
+						.call(styleX)
+					
+					var creditSource = this.storyDivs.append("div")
+					creditSource
+						.attr("class","credit-source")
+						.attr("id",function(d){return d.name+"cs"})
+						.style("position","absolute")
+						.style("bottom","1%")
+						.style("right","5%")
+						.each(function(d){
+							if(d.credits){
+								appendCredit(d)
+							}
+							if(d.sources){
+								appendSource(d)
+							}
+						})
+						
+						function appendCredit(d){	
+							d3.select("#"+d.name+"cs").append("span")
+								.html("Credits")
+								.attr("class","creditsource")
+								.attr("id","credits")
+								.style("margin-right","15%")
+								.on("click", onCreditClick )
+						}
+						
+						function appendSource(d){
+							d3.select("#"+d.name+"cs").append("span")
+								.html("Sources")
+								.attr("class","creditsource")
+								.attr("id","sources")
+								.on("click", onSourceClick )
+						}
+							
+					function onCreditClick(d,i){
+						var data = d;
+						var index = i;
+						var csDimmer = d3.select("#"+d.name+"-dim")
+						csDimmer
+							.style("display","block")
+							.style("opacity","1")
+							.append("div")
+								.attr("class","csDimmerText")
+								.html(function(d,i){
+									text="CREDITS<br/><br/>";
+									for(var i in data.credits){
+										for(var j in data.credits[i]){
+											if(j=="job"){
+												text = text+"<span class='bold'>"+data.credits[i][j]+": </span>"
+											} else if (j=="name"){
+												text = text+data.credits[i][j]+"<br/>"
+											}
+										}
+									}
+									return text;
+								})
+					}
+					
+					function onSourceClick(d,i){
+						var data = d;
+						var index = i;
+						var csDimmer = d3.select("#"+d.name+"-dim")
+						csDimmer
+							.style("display","block")
+							.style("opacity","1")
+							.append("div")
+								.attr("class","csDimmerText")
+								.html(function(d,i){
+									text="SOURCES<br/><br/>";
+									for(var i in data.sources){
+										text = text+data.sources[i]+"<br/><br/>"
+									}
+									return text;
+								})
+					}
+						
+
+					this.captionDivs = this.parentElement.selectAll("div .caption").data(content.captions);
+					this.captionDivs.enter().append("div")
+						.attr("class","caption")
+						.call(styleReveals)
+						.style("cursor","pointer")
+						.on("click",function(d,i){
+							if(that.onCaptionClick) that.onCaptionClick(d);
+						})
+					.append("div")
+						.style("color","#fff")
+						.style("background-color","#fff")
+						.style("font-family","Interstate-Light, verdana, sans-serif")
+						.style("position","absolute")
+						.style("margin", that.margin+"%" + that.margin+"%" + that.margin+"%" + that.margin+"%")
+						.style("width","96%")
+						.style("bottom","4%")
+						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: "+(100-that.margin)+"%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
+						.on("click",function(d,i){
+							if(that.onCaptionClick) that.onCaptionClick(d);
+						})
+						
+					function styleReveals(){
+						this
+							.attr("id",function(d,i){ return d.id+"-reveal" })
+							.style("position","absolute")
+							.style("bottom",that.margin+"%")
+							.style("z-index","10")
+							.style("left",that.margin+"%")
+							.style("width",(100-(that.margin*2))+"%")
+							.style("display","none")
+					}
+					
+					function styleX(){
+						this
+							.attr("src","graphics/x.png")
+							.attr("class","closebtn")
+							.style("max-width","2%")
+							.style("position","absolute")
+							.style("top","1.5%")
+							.style("right","1.5%")
+							.style("cursor","pointer")
+							.on("click",function(d){
+								that.deactivateStory()
+							})
+							.html("X")
+					}
+					
+				}
+								
+				function storyTop(d) {
+					var vidHeight = that.vidHeight;
+					if (that.activeStory == d) {
+						return that.margin+"%"
+					} else {
+						return "100%";
+					}
+				}
+				
+				this.setSize = function(vidWidth, vidHeight){
+					this.vidWidth = vidWidth;
+					this.vidHeight = vidHeight;
+					this.storyDivs
+						.call(styleReveal)
+					this.captionDivs
+						.call(styleReveal)
+						
+       				function styleReveal(){
+						this
+						   .style("top", storyTop)
+						   .style("height",function(d){ return vidHeight*.92 + "px"; })
+					}
+				}
+
+				this.showStory = function(story, delay, duration){
+					duration = (typeof(duration)=="undefined")?1000:duration
+					window.location.hash=(story.level>=2)?story.name:"";
+					this.onShow(story);
+					var vidWidth = this.vidWidth;
+					var selectedStory = d3.select("#"+story.id+"-reveal")
+					selectedStory.style("display","block")
+						.transition()
+							.duration(duration)
+							.delay(delay)
+							.style("top", storyTop)
+				}
+				
+				this.hideStory = function(story,isDeactivating){
+					this.onHide(story);
+					var vidWidth = this.vidWidth;
+					d3.select("#"+story.id+"-reveal").transition().duration(750)
+					.style("top", storyTop)
+					.each("end", function(d){
+						d3.select("#"+story.id+"-reveal").style("display","none")
+						var frame = document.getElementById(story.id+"-iframe");
+						if(frame) frame.src=frame.src;
+						if(isDeactivating){that.onDeactivate();};
+					})
+				}
+
+				this.activateStory = function(story){
+					this.onActivate();
+					if (this.activeStory == story) return;
+					var oldStory = this.activeStory;
+					this.activeStory = story;
+
+					var delay = 50;
+					var duration;
+					if (oldStory) {
+						this.hideStory(oldStory);
+						delay = 1000;
+					}
+					this.showStory(story, delay);
+				}
+				
+				this.deactivateStory = function(){
+					window.location.hash="";
+					if(this.hideDimmer) this.hideDimmer();
+					var oldStory = this.activeStory;
+					this.activeStory = null;
+					this.hideStory(oldStory,true);
+				}
+				
+				var oldStory;
+				this.swapVis = function(currentStory){
+					d3.select("#"+currentStory.id).style("display","block")
+					if(oldStory) d3.select("#"+this.oldStory.id).style("display","none")
+					this.oldStory=currentStory;
+				}
+				
+				
+				
+			}//END REVEAL END REVEAL ////////////////
+			
+			
+			function VideoHandler(playerId) {
+				var that = this;
+				this.duration = 400;			
+				
+				fVideo = document.getElementById(playerId);
+				
+                $f(fVideo).addEvent('ready', ready);
+				
+                function ready(player_id) {
+					
+					console.log("ready called");
+					that.froogaloop = $f(player_id);
+
+
+					function tick(videoTime, videoPercent) {
+						console.log(videoTime + " " + videoPercent+"%")
+						that.videoTime = parseFloat(videoTime);
+						that.videoPercent = parseFloat(videoPercent);
+						console.log(that.videoTime)
+					    if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
+				    }
+
+                    // Keep a reference to Froogaloop for this player
+					function getVidTime(){
+						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
+					}
+
+					that.froogaloop.addEvent('play', function(data) {
+						that.timeInt=setInterval(function(){getVidTime()},1000/24);
+						console.log("play");
+						if (that.onPlay) { that.onPlay(); }
+					});
+					
+					that.froogaloop.addEvent('playProgress', function(data) {
+						console.log('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
+					});
+					
+					that.froogaloop.addEvent('pause', function(data) {
+						console.log("pause");
+
+						if (that.timeInt) {
+							window.clearInterval(that.timeInt);
+							that.timeInt = null;
+						}
+						if ( (that.videoTime < (that.duration-1)) && that.onPause) { that.onPause(); }
+					});
+					
+					that.froogaloop.addEvent('seek', function(data) { 
+						tick(data.seconds, data.percent);
+					});
+					
+					that.froogaloop.addEvent('finish', function(data) {
+						console.log("finish");
+						if (that.onFinish) { that.onFinish(); }
+					});
+					
+					that.froogaloop.api('getDuration', function (value, player_id) {
+						that.duration = parseFloat(value);
+						if(that.onDuration) {that.onDuration(that.duration); }
+					});
+					
+                }
+				
+				this.play = function() {
+					if (this.froogaloop) { this.froogaloop.api("play"); }
+				}
+				
+				this.pause = function() {
+					if (this.froogaloop) { this.froogaloop.api("pause"); }
+				}
+				
+				this.seekToPercent = function(perCent) {
+					console.log("seeking to " + perCent + " of " + this.duration);
+					if (this.froogaloop) {  this.froogaloop.api('seekTo', perCent*this.duration); }
+				}
+				
+			}
+			
+			function Mosaic(content, parentElement){
+				var that = this;
+				this.content = content;
+				this.parentElement = parentElement;
+				
+				function clickHandler(story) {
+					return function() {
+						if (that.onClick) that.onClick(story)
+					}
+				}
+								
+				this.create = function(){
+					
+					var mosTd = d3.selectAll(".mosTd")
+					mosTd.on("mouseover",function(){
+						var activeTd = d3.select(this)
+						var id = activeTd.attr("id")
+						id=id.substr(0,id.length-2)
+						activeTd.style("background-image","url(mosaic/"+id+"-on.jpg)")
+					})
+					
+					mosTd.on("mouseout",function(){
+						var activeTd = d3.select(this)
+						var id = activeTd.attr("id")
+						id=id.substr(0,id.length-2)
+						activeTd.style("background-image","url(mosaic/"+id+".jpg)")
+					})
+					
+					for(var i in that.content.stories) {
+						var story = that.content.stories[i];
+						var handler = clickHandler(story);
+						var storyElement = that.parentElement.select("#"+story.name+"Td");
+						storyElement.on("click", handler)
+					}
+					
+					
+					var playAgainElement = that.parentElement.select("#playAgain");
+					playAgainElement.on("click", function() { if (that.onPlayAgain) that.onPlayAgain(); })
+
+				}
+				
+			}
+			
+			function Progress(content, divId){
+				var that = this;
+				this.content = content;
+				this.divId=divId;
+				this.parentSelection = d3.select("#"+divId);
+				this.parentElement = document.getElementById(divId)
+				this.progressIndicator = document.getElementById("progressIndicator")
+				
+				
+				
+				this.percent = 0;
+				this.redraw = function(){
+					d3.select("#progressIndicator").style("width",that.percent+"%")
+				}
+				
+				this.setPercent = function(percent){
+					that.percent = percent;
+					that.redraw();
+				}
+				
+				function mouseHandler(d, i) {
+					var width = that.parentElement.getBoundingClientRect().width;
+					var seekX = d3.mouse(that.parentElement)[0];
+					var seekPercent = seekX/width;
+					
+					
+					if (that.onSeek) { that.onSeek(seekPercent); }
+				}
+				
+				this.parentSelection.on("click", mouseHandler)
+				//this.parentSelection.on("mousemove", function(d,i) { console.log(d3.event) })
+			}
+			
+			function ToggleButton(on,off,parentElement){
+				var that = this;
+				this.on = on;
+				this.off = off;
+				this.button = parentElement;
+				this.button.style("cursor","pointer")
+				this.button.on("click",function(){
+					var isOn = that.button.attr("src")==that.on 
+					
+					if(isOn){
+						that.turnOff()
+					} else {
+						that.turnOn()
+					}
+					if(that.onClick){
+						that.onClick(!isOn)	
+					}
+				})
+				
+				this.turnOn = function(){
+					that.button.attr("src",that.on)
+				}
+				this.turnOff = function(){
+					that.button.attr("src",that.off)
+				}
+			}
+
+			var content = new Content(contentData);
+
+			//////////////////PAGELOAD PAGELOAD PAGELOAD/////////////////////
+			function pageLoad(){
+
+
+				ww = window.innerWidth, wh = window.innerHeight;
+				var videoFrame=d3.select("#conceptVideo");
+				var videoOffset = document.getElementById("vid");
+				var splash = d3.select("#splash")
+				var mosaicTable = d3.select("#mosaic");
+				var moslink = d3.select("#moslink");
+				var markersDiv=d3.select("#storyMarker");
+				var vidDiv = d3.select("#vid")
+				var currentStory;
+				var activeBlock = "video";
+				var isPlaying = false;
+				
+				var progress = new Progress(content,"progressBar")
+				var playButton = new ToggleButton("pausebtn.png","playbtn.png",d3.select("#playBtn"))
+				var mosaicButton = new ToggleButton("vidlink.png","moslink.png",d3.select("#mosLink"))
+
+				var video = new VideoHandler("conceptVideo");
+				video.onPlay = function() {
+					playButton.turnOn();
+					isPlaying = true;
+					if (reveal.activeStory) {
+						reveal.deactivateStory();
+					}
+				 }
+				
+				video.onPause = function() {
+					playButton.turnOff();
+				   if (!currentStory) {
+					   currentStory = content.currentContent(video.videoTime);
+				   }
+				   if (currentStory && !reveal.activeStory && activeBlock == "video") {
+					   reveal.activateStory(currentStory);
+				   }
+				}
+				video.onFinish = function() {
+					playButton.turnOff();
+					isPlaying = false;
+					displayMosaic()
+				}
+				
+				video.onTick = function(timestamp, videoPercent) {
+					progress.setPercent(videoPercent*100);
+					if (!currentStory || !currentStory.containsTime(timestamp)) {
+						console.log("change" + timestamp)
+						currentStory = content.currentContent(timestamp);
+						storyMarker.repaint();
+					}
+				 }
+				 
+				progress.onSeek = function(percent) {
+					currentStory = null;
+					video.seekToPercent(percent);
+					reveal.deactivateStory();
+				}
+				
+
+				var storyMarker = new StoryMarker(content, markersDiv);
+				
+				 video.onDuration = function(duration){
+					 storyMarker.duration = duration
+				 }
+				 
+				storyMarker.markerSelector = function(d, i) {
+					if (d == reveal.activeStory) {//ONCLICK
+						return "bubbleclick.png";
+					} else if (d.cuePointMillis() < video.videoTime) {//PASSED
+						return "bubblefill.png";
+					} else {
+						return "bubble.png"
+					}
+				};
+				
+				
+				function storyMarkerClicked(story){
+					video.pause()
+					//reveal.swapVis(content.getContentById(storyId))
+					if (reveal.activeStory == story) { 
+					    reveal.deactivateStory();
+					} else {
+					   reveal.activateStory(story);
+					}
+				}
+				
+				storyMarker.onclick = storyMarkerClicked;
+												
+				playButton.onClick=function(isOn){
+					if(isOn){
+						if(activeBlock=="mosaic"){
+							displayMosaic();
+						}
+						video.play();
+					} else {
+						video.pause();	
+					}
+				}
+				
+				var reveal = new Reveal(content, vidDiv);
+				reveal.onCaptionClick = storyMarkerClicked;
+
+ 			    reveal.create();
+												
+				reveal.onActivate = function() {
+					video.pause();
+					showDimmer()
+				}
+				
+				
+			    reveal.onDeactivate = function() {
+					if(activeBlock=="video"){
+						window.setTimeout(function(){
+							video.play()
+						},300);
+					}
+				}
+				
+				reveal.hideDimmer = function(){
+					hideDimmer();
+				}
+				
+				reveal.onShow = function(story) { 
+					storyMarker.activateStory(story)
+				 }
+				reveal.onHide = function(story) {
+					 storyMarker.deactivateStory(story);
+				 }
+
+				var dimmerDiv = d3.select("#dimmerDiv")
+				dimmerDiv.on("click",function(){
+					reveal.deactivateStory();
+				}).style("cursor","pointer")
+				function hideDimmer(){
+					dimmerDiv.transition()
+						.duration(1000)
+						.style("opacity","0")
+						.each("end",function(){
+							dimmerDiv.style("display","none")	
+						})
+				}
+				function showDimmer(){
+					dimmerDiv.style("display","block")
+						.transition()
+							.duration(1000)
+							.style("opacity",function(){
+								if(isPlaying){
+									return ".4"	
+								} else {
+									return ".75"	
+								}
+							})
+				}
+				
+				storyMarker.create()
+				
+				splash.on("click",function(){
+					splash.style("display","none")
+					videoFrame.style("display","block")
+					sizeVid(videoOffset.offsetWidth)
+					video.play()
+				})
+				
+				moslink.on("click",function(){
+					displayMosaic()
+				}).style("cursor","pointer");
+				
+				
+				var mosaic = new Mosaic(content, mosaicTable);
+				mosaic.create();
+				mosaic.onClick = function(story) {
+					  reveal.activateStory(story);
+				}
+				mosaic.onPlayAgain = function(){
+					displayMosaic();
+				}
+				
+				mosaicButton.onClick = function(isMosaicShowing){
+					displayMosaic()
+				}
+				
+				function displayMosaic(){
+					var divHeight = vidDiv.style("height")
+
+					vidDiv.transition().duration(600)
+						.style("height","0px")
+						.each("end",function(){
+							if(activeBlock=="video"){
+								activeBlock = "mosaic";
+								mosaicButton.turnOn()
+								if(isPlaying)video.pause()
+								videoFrame.style("display","none")
+								mosaicTable.style("display","table")
+								moslink.attr("src","graphics/mos-linka.png")
+							} else if (activeBlock=="mosaic"){
+								activeBlock = "video";
+								mosaicButton.turnOff();
+								videoFrame.style("display","block")
+								mosaicTable.style("display","none")
+							}
+							vidDiv.transition().duration(700)
+								.style("height",divHeight)
+								.each("end",function(){
+									vidDiv.style("height","");
+								})
+						})
+					reveal.deactivateStory(false);
+					console.log("mosaic CurrentStory: " + currentStory);
+					
+				}
+				
+				if(window.location.hash){
+				var hashStr = window.location.hash.substring(1)
+				var hashStory = content.getContentById(hashStr);
+				reveal.activateStory(hashStory);
+				} 
+								
+				var vidHeight, vidWidth;
+				
+				sizeVid(videoOffset.offsetWidth);
+				function sizeVid(size){
+					videoFrame
+						.style("height", size*9/16+"px");
+					mosaicTable
+						.style("height", size*9/16+"px");
+					vidWidth = videoOffset.offsetWidth;
+					vidHeight = videoOffset.offsetHeight;
+					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
+				}
+				
+			d3.select("#howview").style("cursor","pointer").on("click",function(){
+				var howToView = content.getContentById("howtoview");
+				if(reveal.activeStory != howToView){
+					reveal.activateStory(howToView);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
+			
+			d3.select("#why100").style("cursor","pointer").on("click",function(){
+				var why100gallons = content.getContentById("why100gallons");
+				if(reveal.activeStory != why100gallons){
+					reveal.activateStory(why100gallons);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
+			
+			d3.select("#aboutLink").style("cursor","pointer").on("click",function(){
+				var about = content.getContentById("about");
+				if(reveal.activeStory != about){
+					reveal.activateStory(about);
+				} else {
+					reveal.deactivateStory();	
+				}
+			});
+				
+			 function getWindowHeight() {
+				 
+			  var myHeight = 0;
+			  if( typeof( window.innerWidth ) == 'number' ) {
+				myHeight = window.innerHeight;
+			  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+				myHeight = document.documentElement.clientHeight;
+			  } 
+			  
+			  return myHeight;
+			}
+			
+				//WINDOW RESIZE/////////////////
+				window.addEventListener('resize', windowResize, false);
+				
+				function windowResize(){
+					var wh2=window.innerHeight;
+					var ww2=window.innerWidth;
+					sizeVid(videoOffset.offsetWidth);
+					
+					
+					if(wh2!=wh){//NEW HEIGHT
+						wh = wh2;
+					} 
+					if(ww2!=ww){//NEW WIDTH
+						ww = ww2;
+					} 
+				}
+										
+			}//END PAGELOAD()
+			
+        </script>
+    </head>
+	
+    <body onload="pageLoad()">
+		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
+		<div id="bg2" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
+		
+		<div id="container" style="width: 65%; margin: 0px auto;">
+			<div id="pan-logo" style="width: 50%;">
+				<img src="graphics/pan.png" style="max-width: 100%;">
+			</div>
+			<div id="vidmark" style="margin-top: 26px;">
+				<div id="vid" style="position: relative; overflow: hidden;">
+					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+					<iframe id="conceptVideo" src="http://player.vimeo.com/video/46397237?api=1&amp;player_id=conceptVideo" frameborder="0" style="display: block; width: 100%;"></iframe>
+					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
+						<tr>
+							<td id="isitsafetodrinkTd" style="background-image:url(mosaic/isitsafetodrink.jpg); background-size: 100% 100%;" class="mosTd"></td>
+							<td id="whatdoes100gallonscostTd" style="background-image:url(mosaic/whatdoes100gallonscost.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
+							<td id="waterparksTd" style="background-image:url(mosaic/waterparks.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="givingwayTd" style="background-image:url(mosaic/givingway.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="abeautifulwasteTd" style="background-image:url(mosaic/abeautifulwaste.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
+						</tr>
+						<tr>
+							<td id="waterfootprintoffoodTd" style="background-image:url(mosaic/waterfootprintoffood.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="replayTd" style="background-image:url(mosaic/replay.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
+							<td id="thecloudjuicerTd" style="background-image:url(mosaic/thecloudjuicer.jpg); background-size: 100% 100%" class="mosTd"></td>
+						</tr>
+						<tr>
+							<td id="sizingupwaterTd" style="background-image:url(mosaic/sizingupwater.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="fracturedTd" style="background-image:url(mosaic/fractured.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
+							<td id="everydropTd" style="background-image:url(mosaic/everydrop.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
+							<td id="drypromisesTd" style="background-image:url(mosaic/drypromises.jpg); background-size: 100% 100%" class="mosTd"></td>
+						</tr>
+						<tr>
+							<td id="thepurestofthemallTd" style="background-image:url(mosaic/thepurestofthemall.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="staffeditorialTd" style="background-image:url(mosaic/staffeditorial.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="blogTd" style="background-image:url(mosaic/blog.jpg); background-size: 100% 100%" class="mosTd"></td>
+						</tr>
+						<tr>
+							<td id="heavyskiesTd" style="background-image:url(mosaic/heavyskies.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="smellingtherainTd" style="background-image:url(mosaic/smellingtherain.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="aboutTd" style="background-image:url(mosaic/about.jpg); background-size: 100% 100%;" class="mosTd"></td>
+							<td id="beyondthepalebluedotTd" style="background-image:url(mosaic/beyondthepalebluedot.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="trackingthewaterTd" style="background-image:url(mosaic/trackingthewater.jpg); background-size: 100% 100%" class="mosTd"></td>
+						</tr>
+					</table>
+				</div>
+				<div id="vidbot" class="clear"></div>
+			</div>
+			<table style="width:100%; margin-top: 8px; margin-bottom: 5px;">
+				<tr>
+					<td style="width: 2%;"><img src="playbtn.png" id="playBtn"/></td>
+					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 4px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:4px;"></div></div></td>
+					<td id="mosaic" style="width: 2%;"><img src="moslink.png" id="mosLink"/></td>
+				</tr>
+				<tr>
+					<td style="width: 2%;"></td>
+					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble.png" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td style="width: 2%;"></td>
+				</tr>
+			</table>
+			<div id="bot-links" style="position: relative; margin: 0px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
+				<div id="bot-left">
+					<div id="bleft" style="float: left; text-align: bottom;">
+						<a id="howview">HOW TO VIEW</a>
+					</div>
+					<div id="bright" style="float: right;">
+						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
+						<a id="aboutLink" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>	
+			<div id="line" style="border-bottom: 1px solid #edf6f7; margin-top: 20px;"></div>
+			<div class="clear"></div>
+			<div id="footer">
+				<img src="graphics/100galbot.png"/>
+				<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
+				<img src="graphics/unc.png" style="margin-left: 10px; vertical-align: 10px;"/>
+				<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
+			</div>
+		</div>
+    </body>
+</html>

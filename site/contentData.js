@@ -13,6 +13,15 @@ var contentData = [
 		level: 3,
 		tooltip: "Every Drop",
 		cuePoint: 7.19,
+		sources: [	"Water facts. (n.d.). Water.org. Retrieved July 27, 2012, from  <a href=\"http://water.org/water-crisis/water-facts/water/\" target=\"_blank\">http://water.org/water-crisis/water-facts/water/</a> ",
+					"Watkins, K. (2006). Human development report 2006: Beyond scarcity: Power, poverty and the global water crisis. New York: United Nations Development Programme. Retrieved July 27, 2012, from <a href=\"http://hdr.undp.org/en/media/HDR06-complete.pdf\" target=\"_blank\">http://hdr.undp.org/en/media/HDR06-complete.pdf</a>",
+					"Water facts. (n.d.). Water Information Program. Retrieved July 27, 2012, from <a href=\"http://www.waterinfo.org/resources/water-facts\" target=\"_blank\">http://www.waterinfo.org/resources/water-facts</a>",
+					"Scott, Matt. (2009, June 30). 40 Shocking Facts about Water. Retrieved from <a href=\"http://matadornetwork.com/change/40-shocking-facts-about-water/\" target=\"_blank\">http://matadornetwork.com/change/40-shocking-facts-about-water/</a>",
+					"Water conservation facts and tips. (n.d.). NationalGeographic.com. Retrieved July 27, 2012, from <a href=\"http://environment.nationalgeographic.com/environment/freshwater/water-conservation-tips/\" target=\"_blank\">http://environment.nationalgeographic.com/environment/freshwater/water-conservation-tips/</a>",
+					" Water Facts. (n.d.). Drop in the Bucket. Retrieved July 27, 2012, from <a href=\"http://www.dropinthebucket.org/water-facts\" target=\"_blank\">http://www.dropinthebucket.org/water-facts</a>",
+					"Water trivia facts. (n.d.). United States Environmental Protection Agency. Retrieved July 27, 2012, from <a href=\"http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm\" target=\"_blank\">http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm</a>",
+					"<a href=\"http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/\" target=\"_blank\">http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/</a>",
+					" Fact 15: Water pollution. (n.d.). UNESCO World Water Assessment Program. Retrieved July 27, 2012, from <a href=\"http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/\" target=\"_blank\">http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/</a>"],
 	},
 	{
 		id : "catwash",
@@ -100,6 +109,11 @@ var contentData = [
 		level: 2,
 		tooltip: "Heavy Skies",
 		cuePoint: 34.07,
+		sources: [	"<a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
+					"Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
+					"<a href=\"http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/\" target=\"_blank\">http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/</a>",
+					"How much does a cloud weigh? (2009, August 8). Green Earth Facts. Retrieved July 27, 2012, from <a href=\"http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/\" target=\"_blank\">http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/</a>",
+					"A cloud weighs more than you might think. (2011, January 13). Zidbits. Retrieved July 27, 2012, from <a href=\"http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/\" target=\"_blank\">http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/</a>"]
 	},
 	{
 		id : "walkbeach",
@@ -115,6 +129,28 @@ var contentData = [
 		level: 2,
 		tooltip: "Sizing Up Water",
 		cuePoint: 41.14,
+		credits: [{job:"Programming",name:"Dylan Gilroy"},{job:"Graphics",name:"Kelly McHugh, Dylan Gilroy, Cyrus Honeycutt"}],
+		sources: [	"Bonsor, K. How Fire Engines Work. (n.d). How Stuff Works. Retrieved July 27, 2012 from <a href=\"http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm\" target=\"_blank\">http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm</a>",
+					"Caspian Sea. (n.d.). Caspian Environment Programme. Retrieved July 27, 2012, from <a href=\"http://www.caspianenvironment.org/newsite/Caspian-Background.htm\" target=\"_blank\">http://www.caspianenvironment.org/newsite/Caspian-Background.htm</a>",
+					"Did you know? (2012). Water Conservation Retrieved July 27, 2012 from City of Wichita at <a href=\"http://www.wichita.gov/CityOffices/WaterAndSewer/CustomerService/Conservation/DidYouKnow.htm\" target=\"_blank\">http://www.wichita.gov/CityOffices/WaterAndSewer/CustomerService/Conservation/DidYouKnow.htm</a>",
+					"Drinking water. (2009). Report Card for America's Infrastructure. Retrieved July 27, 2012, from <a href=\"http://www.infrastructurereportcard.org/fact-sheet/drinking-water\" target=\"_blank\">http://www.infrastructurereportcard.org/fact-sheet/drinking-water</a>",
+					"Empire State Building facts. (n.d.). New York Transportation. Retrieved July 27, 2012, from <a href=\"http://www.newyorktransportation.com/info/empirefact2.html\" target=\"_blank\">http://www.newyorktransportation.com/info/empirefact2.html</a>",
+					"Frequently asked questions. (n.d.). Goodyear Blimp. Retrieved July 27, 2012, from <a href=\"http://www.goodyearblimp.com/faqs/faqs_construction.html\" target=\"_blank\">http://www.goodyearblimp.com/faqs/faqs_construction.html</a>",
+					"How many square feet are in a football field? (n.d.). Answers.com. Retrieved July 27, 2012, from <a href=\"http://wiki.answers.com/Q/How_many_square_feet_are_in_a_football_field\" target=\"_blank\">http://wiki.answers.com/Q/How_many_square_feet_are_in_a_football_field</a>",
+					"How much cement can a cement truck hold in a full load? (n.d.). Askville. Retrieved July 27, 2012 from <a href=\"http://askville.amazon.com/cement-truck-hold-full-load/AnswerViewer.do?requestId=157572\" target=\"_blank\">http://askville.amazon.com/cement-truck-hold-full-load/AnswerViewer.do?requestId=157572</a>",
+					"How much water is there on Earth? (n.d.). HowStuffWorks.com. Retrieved July 27, 2012, from <a href=\"http://science.howstuffworks.com/environmental/earth/geophysics/question157.htm\" target=\"_blank\">http://science.howstuffworks.com/environmental/earth/geophysics/question157.htm</a>",
+					"How much water is there on, in, and above the Earth? (n.d.). U.S. Geological Survey. Retrieved July 27, 2012, from <a href=\"http://ga.water.usgs.gov/edu/earthhowmuch.html\" target=\"_blank\">http://ga.water.usgs.gov/edu/earthhowmuch.html</a>",
+					"Lake Superior facts. (n.d.). Retrieved July 27, 2012, from <a href=\"http://law2.umkc.edu/faculty/projects/ftrials/superior/superiorfacts.html\" target=\"_blank\">http://law2.umkc.edu/faculty/projects/ftrials/superior/superiorfacts.html</a>",
+					"Levy, J. (2005). The Great Pyramid of Giza: Measuring length, area, volume, and angles. New York: Rosen Publishing.",
+					"QUIZ: Bottled water. (2012). CNBC.com. Retrieved July 27, 2012, from <a href=\"http://www.cnbc.com/id/39403240/QUIZ_Bottled_Water?question=1\" target=\"_blank\">http://www.cnbc.com/id/39403240/QUIZ_Bottled_Water?question=1</a>",
+					"Shower vs bath. (n.d.). Consumer Energy Center. Retrieved July 27, 2012 from California Energy Center at <a href=\"http://www.consumerenergycenter.org/myths/shower_vs_bath.html\" target=\"_blank\">http://www.consumerenergycenter.org/myths/shower_vs_bath.html</a>",
+					"Table 358: U.S. water withdrawals and consumptive use per day by end use: 1940 to 2005. (2010). U.S. Census National Data Book. Retrieved July 27, 2012, from <a href=\"http://www.census.gov/compendia/statab/2010/tables/10s0358.xls\" target=\"_blank\">http://www.census.gov/compendia/statab/2010/tables/10s0358.xls</a>",
+					"United States. (2012, July 17). C.I.A. World Factbook. Retrieved July 27, 2012, from <a href=\"https://www.cia.gov/library/publications/the-world-factbook/geos/us.html\" target=\"_blank\">https://www.cia.gov/library/publications/the-world-factbook/geos/us.html</a>",
+					"The water cycle: Water storage in ice and snow. (n.d.). U.S. Geological Survey. Retrieved July 27, 2012, from <a href=\"http://ga.water.usgs.gov/edu/watercycleice.html\" target=\"_blank\">http://ga.water.usgs.gov/edu/watercycleice.html</a>",
+					"Water trivia facts. (n.d.). United States Environmental Protection Agency. Retrieved July 27, 2012, from <a href=\"http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm\" target=\"_blank\">http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm</a>",
+					"Water facts. (n.d.). Water Information Program. Retrieved July 27, 2012, from <a href=\"http://www.waterinfo.org/resources/water-facts\" target=\"_blank\">http://www.waterinfo.org/resources/water-facts</a>",
+					"Water facts and trivia. (n.d.). Lenntech. Retrieved July 27, 2012 from <a href=\"http://www.lenntech.com/water-trivia-facts.htm\" target=\"_blank\">http://www.lenntech.com/water-trivia-facts.htm</a>",
+					"Water in your body. (2009). Nestle Waters. Retrieved July 27, 2012, from <a href=\"http://www.nestle-waters.com/healthy-hydration/understanding-hydration/body-water.html\" target=\"_blank\">http://www.nestle-waters.com/healthy-hydration/understanding-hydration/body-water.html</a>"],
 	},
 	{
 		id : "starefountain",
@@ -158,6 +194,8 @@ var contentData = [
 		level: 3,
 		tooltip: "What Does 100 Gallons Cost?",
 		cuePoint: 55.04,
+		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
+		sources: [	"Gleick, P. H. (with Cooley, H., Cohen, M. J., Morikawa, M., Morrison, J., & Palaniappan, M.). (2009). The world's water 2008-2009: The biennial report on freshwater resources. Washington, DC: Island Press."]
 	},
 	{
 		id : "stareocean",
@@ -186,7 +224,10 @@ var contentData = [
 		url: "story/waterfootprintoffood.html",
 		level: 2,
 		tooltip: "Water Footprint Of Food",
-		cuePoint: 63.18
+		cuePoint: 63.18,
+		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
+		sources: [	"From lettuce to beef, what's the water footprint of your food? (2009). Treehugger.com  Retrieved July 27, 2012 from <a href=\"http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html\" target=\"_blank\">http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html</a>",
+					"Product Gallery. (n.d.). Waterfootprint. Retrieved July 27, 2012 from <a href=\"http://www.waterfootprint.org/?page=files/productgallery\" target=\"_blank\">http://www.waterfootprint.org/?page=files/productgallery</a>"]
 	},
 	{
 		id : "doglake",
@@ -326,6 +367,9 @@ var contentData = [
 		level: 2,
 		tooltip: "Waterparks",
 		cuePoint: 113.12,
+		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Research",name:"Kelly McHugh"}],
+		sources: [	"Water trivia facts. (n.d.). United States Environmental Protection Agency. Retrieved July 27, 2012 from <a href=\"http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm\" target=\"_blank\">http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm</a>",
+					"Theme Index (2011). Global Attractions Attendance Report. Retrieved July 27, 2012 from <a href=\"http://www.waterparks.org/otherArticles/2011TEAAECOMReport.pdf\" target=\"_blank\">http://www.waterparks.org/otherArticles/2011TEAAECOMReport.pdf</a>"]
 	},
 	{
 		id : "umbrella",
@@ -363,6 +407,8 @@ var contentData = [
 		level: 2,
 		tooltip: "Is it Safe to Drink?",
 		cuePoint: 124.15,
+		credits: [{job:"Research/Design",name:"Kelly McHugh"}],
+		sources: [	"Gallup, Public concern about the pollution of drinking water in the United States from 1990 to 2012, Gallup poll: Public concern about air pollution in the United States from 1989 to 2012, Gallup poll: Public concern about the pollution of rivers, lakes and reservoirs in the United States from 1989 to 2012, statista.com"]
 	},
 	{
 		id : "road",
