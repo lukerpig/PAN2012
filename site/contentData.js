@@ -55,7 +55,7 @@ var contentData = [
 	{
 		id : "waterslidedown",
 		captionTitle: "San Dimas, CA",
-		captionContent: "Stomach drop! That sinking feeling you get when you go down a water slide happens when you speed down the slide, and your organs shift as each part of your body accelerates individually.",
+		captionContent: "Stomach drop! That sinking feeling you get when you speed down a water slide happens as each part of your body accelerates individually, and your organs shift.",
 		level: 1,
 		cuePoint: 21.08,
 	},
