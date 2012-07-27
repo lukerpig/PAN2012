@@ -207,7 +207,7 @@
 					.attr("text-anchor", "end")
 					.style("fill","#40A09D")
 					.style("font-family","Interstate-Light, verdana, sans-serif")
-					.style("font-size","25")
+					.style("font-size","25px")
 					.style("opacity",".75")
 					.on("mouseover", onRollover)
 					
@@ -219,7 +219,7 @@
 					.attr("x","513")
 					.attr("y","509")
 					.style("font-family","Interstate-Light, verdana, sans-serif")
-					.style("font-size","30")
+					.style("font-size","30px")
 					.style("fill","#40A09D")
 					.style("opacity",".75")
 									
@@ -232,7 +232,7 @@
 						.attr("dy", function(d, i) { return i == 0?  0 : 30 })
 						.style("font-size",function(d,i){
 							if(i >= 2 ){
-								return "20"	
+								return "20px"	
 							}
 						})
 						.text(String)
@@ -363,8 +363,8 @@
 				</div>
 				<div class="card" id="card5" style="display: none;">
 					<svg id="barchart" class="chart" width="100%" max-width="1200" max-height="675" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin">
-						<text style="font-family: Interstate-Light; fill:#40A09D; font-size: 35px;" x="61" y="55"><tspan>Based on your answers, you use about 100 gallons of water per day.</tspan>
-<tspan x="61" y="95">Here’s what that would cost:</tspan></text>
+						<text style="font-family: Interstate-Light; fill:#40A09D; font-size: 35px;" x="61" y="55"><tspan>Roll over the bars below to see how much your bill would cost</tspan>
+<tspan x="61" y="95">in different locations around the world.</tspan></text>
 						<g id="bars">
 						</g>
 					</svg>
