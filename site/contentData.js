@@ -506,11 +506,9 @@ var contentData = [
 	},
 	{
 		id : "about",
-		name: "about",
-		url: "about.html",
-		level: 2,
-		tooltip: "About",
-		cuePoint: 12,
-		noMarker: true,
+		captionTitle: "About the 2012 project",
+		captionContent: "Our 2012 Fellows present a Powering a Nation special report, \"100 Gallons.\"<br/><br/>\"100 Gallons\" explores how our most critical resource goes far beyond traditional power. More than fossil fuels, commerce or industry, water powers life.<br/><br/>The purpose of this project is to restore and encourage a sense of respect and wonder to our cultural view of water and to start a conversation about water problems and solutions in our country. We also seek to put those issues into a global context.<br/><br/>Content gathering for this project adheres to strict journalistic principles. Even for our centerpiece video, which takes a creative look at our everyday water usage, we photographed real people and real moments. The experimental element of \"100 Gallons\" is taking that creative concept presentation and using it as an interface to engage the user in an immersive exploration with a single click.<br/><br/>This presentation is an experiment in journalistic storytelling.<br/><br/>See more about the staff <a href=\"http://poweringanation.org/index.php/about.html\">here</a>.",
+		level: 1,
+		cuePoint: -3,
 	},
 ];
