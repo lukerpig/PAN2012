@@ -413,7 +413,7 @@
 							.style("z-index","10")
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
-							.style("display","none")
+							//.style("display","none")
 					}
 					
 				}
@@ -463,7 +463,7 @@
 					d3.select("#"+story.id+"-reveal").transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
-						d3.select("#"+story.id+"-reveal").style("display","none")
+						//d3.select("#"+story.id+"-reveal").style("display","none")
 						var frame = document.getElementById(story.id+"-iframe");
 						if(frame) frame.src=frame.src;
 						if(isDeactivating){that.onDeactivate();};
