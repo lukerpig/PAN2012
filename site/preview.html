@@ -413,7 +413,13 @@
 							.style("z-index","10")
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
-							//.style("display","none")
+							.style("display",function(d){
+								if(d.name=="sizingupwater"){
+									return "block"
+								} else {
+									return "none"
+								}
+							})
 					}
 					
 				}
@@ -463,7 +469,13 @@
 					d3.select("#"+story.id+"-reveal").transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
-						//d3.select("#"+story.id+"-reveal").style("display","none")
+						d3.select("#"+story.id+"-reveal").style("display",function(d){
+								if(d.name=="sizingupwater"){
+									return "block"
+								} else {
+									return "none"
+								}
+							})
 						var frame = document.getElementById(story.id+"-iframe");
 						if(frame) frame.src=frame.src;
 						if(isDeactivating){that.onDeactivate();};
@@ -497,7 +509,13 @@
 				var oldStory;
 				this.swapVis = function(currentStory){
 					d3.select("#"+currentStory.id).style("display","block")
-					if(oldStory) d3.select("#"+this.oldStory.id).style("display","none")
+					if(oldStory) d3.select("#"+this.oldStory.id).style("display",function(d){
+								if(d.name=="sizingupwater"){
+									return "block"
+								} else {
+									return "none"
+								}
+							})
 					this.oldStory=currentStory;
 				}
 				
