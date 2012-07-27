@@ -6,9 +6,36 @@
         <title>100 Gallons: Reflections From A Nation Powered By Water</title>
 		<link rel="Shortcut Icon" href="favicon.ico"/>
 		<style>
-			@font-face {font-family: Interstate-Thin; src: url("fonts/Interstate-Thin.otf");}
-			@font-face {font-family: Interstate-Light; src: url("fonts/Interstate-Light.otf");}
-			@font-face {font-family: Interstate-Bold; src: url("fonts/Interstate-Bold.otf");}
+			@font-face {
+				font-family: Interstate-Thin;
+				src:	url("../fonts/Interstate-Thin.otf"),
+						url("../fonts/Interstate-Thin.ttf");
+			}
+			@font-face {
+				font-family: Interstate-Light;
+				src:url("../fonts/Interstate-Light.otf"),
+					url("../fonts/Interstate-Light.ttf");
+			}
+			@font-face {
+				font-family: Interstate-Bold;
+				src:url("../fonts/Interstate-Bold.otf"),
+					url("../fonts/Interstate-Bold.ttf");
+			}
+			@font-face {
+				font-family: Interstate-Regular;
+				src:url("../fonts/Interstate-Regular.otf"),
+					url("../fonts/Interstate-Regular.ttf");
+			}
+			@font-face {
+				font-family: Interstate-ExtraLight;
+				src:url("../fonts/Interstate-ExtraLight.otf"),
+					url("../fonts/Interstate-ExtraLight.ttf");
+			}
+			@font-face {
+				font-family: Interstate-Lightitalic;
+				src:url("../fonts/Interstate-Lightitalic.otf"),
+					url("../fonts/Interstate-Lightitalic.ttf");
+			}
 			
 			.bold{font-family: Interstate-Bold, Verdana, sans-serif;}
 			
@@ -876,6 +903,7 @@
 						.each("end",function(){
 							if(activeBlock=="video"){
 								activeBlock = "mosaic";
+								window.location.hash="mosaic";
 								mosaicButton.turnOn()
 								if(isPlaying)video.pause()
 								videoFrame.style("display","none")
@@ -898,9 +926,20 @@
 				}
 				
 				if(window.location.hash){
-				var hashStr = window.location.hash.substring(1)
-				var hashStory = content.getContentById(hashStr);
-				reveal.activateStory(hashStory);
+					var hashStr = window.location.hash.substring(1)
+
+					if(hashStr == "mosaic"){
+						activeBlock = "mosaic";
+						window.location.hash="mosaic";
+						mosaicButton.turnOn()
+						if(isPlaying)video.pause()
+						videoFrame.style("display","none")
+						mosaicTable.style("display","table")
+						moslink.attr("src","graphics/mos-linka.png")
+					} else {
+						var hashStory = content.getContentById(hashStr);
+						reveal.activateStory(hashStory);
+					}
 				} 
 								
 				var vidHeight, vidWidth;
@@ -1043,7 +1082,7 @@
 					</div>
 					<div id="bright" style="float: right;">
 						<span id="why100" style="bottom: 0px;">WHY 100 GALLONS?</span>
-						<a href="http://poweringanation.org/index.php/about.html" target="_blank" style="color: #fff; bottom: 0px; margin: 0px 15px;"><span id="aboutLink">ABOUT</span></a>
+						<span id="aboutLink" style="bottom: 0px; margin: 0px 15px;">ABOUT</span>
 					</div>
 				</div>
 				<div class="clear"></div>
@@ -1064,7 +1103,6 @@
 		  <script>
 		   CFInstall.check({
 			 mode: "overlay",
-			 destination: "http://www.100gallons.org"
 		   });
 		  </script>
     </body>
