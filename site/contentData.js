@@ -223,7 +223,7 @@ var contentData = [
 		name: "waterfootprintoffood",
 		url: "story/waterfootprintoffood.html",
 		level: 2,
-		tooltip: "Graphic: Water Footprint Of Food",
+		tooltip: "Graphic: Eating Water",
 		cuePoint: 63.18,
 		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
 		sources: [	"From lettuce to beef, what's the water footprint of your food? (2009). Treehugger.com  Retrieved July 27, 2012 from <a href=\"http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html\" target=\"_blank\">http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html</a>",
