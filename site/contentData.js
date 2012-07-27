@@ -312,7 +312,7 @@ var contentData = [
 	{
 		id : "urinal",
 		captionTitle: "Chapel Hill, NC",
-		captionContent: "We pee to get rid of extra water and to clear out our systems. The chemical that makes pee yellow also turns bruises yellow.",
+		captionContent: "We pee to get rid of extra water and to clear out our systems. The chemical that makes pee yellow also turns bruises yellow. And although the Army Field Manual doesn't recommend it, a person can drink their own pee in emergency situations.",
 		level: 1,
 		cuePoint: 91.03,
 	},
