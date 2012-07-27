@@ -443,8 +443,10 @@
 				}
 
 				this.showStory = function(story, delay, duration){
-					duration = (typeof(duration)=="undefined")?1000:duration
-					window.location.hash=(story.level>=2)story.name:"_";
+					duration = (typeof(duration)=="undefined")?1000:duration;
+					if(story.level>=2){
+						window.location.hash=story.name;
+					}
 					this.onShow(story);
 					var vidWidth = this.vidWidth;
 					var selectedStory = d3.select("#"+story.id+"-reveal")
@@ -902,7 +904,7 @@
 					
 				}
 				
-				if(window.location.hash){
+				if(window.location.hash && window.location.hash!="_"){
 					var hashStr = window.location.hash.substring(1)
 
 					if(hashStr == "mosaic"){
