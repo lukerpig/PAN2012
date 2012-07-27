@@ -430,7 +430,7 @@ var contentData = [
 		name: "isitsafetodrink",
 		url: "story/isitsafetodrink.html",
 		level: 2,
-		tooltip: "Graphic: Is it Safe to Drink?",
+		tooltip: "Graphic: Safe to Drink?",
 		cuePoint: 124.15,
 		credits: [{job:"Research/Design",name:"Kelly McHugh"}],
 		sources: [	"<a href=\"http://www.statista.com/statistics/223427/public-concern-about-the-pollution-of-drinking-water-in-the-us/\">http://www.statista.com/statistics/223427/public-concern-about-the-pollution-of-drinking-water-in-the-us/</a>",
