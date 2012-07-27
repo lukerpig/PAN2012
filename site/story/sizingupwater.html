@@ -285,7 +285,9 @@
 					g.call(function(){drawParams(this, scaler)});
 					g.append("image")
 						.attr("xlink:href","sizingupwater/gallon.svg")
-						.attr("width","343").attr("height","491");
+						.attr("width","343")
+						.attr("height","491")
+						.attr("opacity",".75");
 					g.append("image")
 						.attr("xlink:href",function(d){ return "sizingupwater/svg/"+d.svg+".svg"})
 						.attr("width","343").attr("height","491");
@@ -392,7 +394,7 @@
 	</svg>
 </div>
 <div id="my-slider" class="dragdealer">
-	<div class="red-bar handle">Drag</div>
+	<div class="red-bar handle" style="font-family: Interstate-ExtraLight, verdana, sans-serif;">Drag</div>
 </div>
 
 </body>
