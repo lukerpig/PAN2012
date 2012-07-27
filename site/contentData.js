@@ -11,7 +11,7 @@ var contentData = [
 		name: "everydrop",
 		url: "story/everydrop.html",
 		level: 3,
-		tooltip: "Every Drop",
+		tooltip: "Motion Graphic: Every Drop",
 		cuePoint: 7.19,
 		sources: [	"Water facts. (n.d.). Water.org. Retrieved July 27, 2012, from  <a href=\"http://water.org/water-crisis/water-facts/water/\" target=\"_blank\">http://water.org/water-crisis/water-facts/water/</a> ",
 					"Watkins, K. (2006). Human development report 2006: Beyond scarcity: Power, poverty and the global water crisis. New York: United Nations Development Programme. Retrieved July 27, 2012, from <a href=\"http://hdr.undp.org/en/media/HDR06-complete.pdf\" target=\"_blank\">http://hdr.undp.org/en/media/HDR06-complete.pdf</a>",
@@ -35,7 +35,7 @@ var contentData = [
 		name: "trackingthewater",
 		url: "story/trackingthewater.html",
 		level: 3,
-		tooltip: "Tracking the Water",
+		tooltip: "Text: Tracking the Water",
 		cuePoint: 15.04,
 	},
 	{
@@ -64,7 +64,7 @@ var contentData = [
 		name: "fractured",
 		url: "story/fractured.html",
 		level: 3,
-		tooltip: "Fractured",
+		tooltip: "Video: Fractured",
 		cuePoint: 22.23,
 	},
 	{
@@ -107,7 +107,7 @@ var contentData = [
 		name: "heavyskies",
 		url: "story/heavyskies.html",
 		level: 2,
-		tooltip: "Heavy Skies",
+		tooltip: "Graphic: Heavy Skies",
 		cuePoint: 34.07,
 		sources: [	"<a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
 					"Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
@@ -127,7 +127,7 @@ var contentData = [
 		name: "sizingupwater",
 		url: "story/sizingupwater.html",
 		level: 2,
-		tooltip: "Sizing Up Water",
+		tooltip: "Interactive Graphic: Sizing Up Water",
 		cuePoint: 41.14,
 		credits: [{job:"Programming",name:"Dylan Gilroy"},{job:"Graphics",name:"Kelly McHugh, Dylan Gilroy, Cyrus Honeycutt"}],
 		sources: [	"Bonsor, K. How Fire Engines Work. (n.d). How Stuff Works. Retrieved July 27, 2012 from <a href=\"http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm\" target=\"_blank\">http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm</a>",
@@ -192,7 +192,7 @@ var contentData = [
 		name: "whatdoes100gallonscost",
 		url: "story/whatdoes100gallonscost.html",
 		level: 3,
-		tooltip: "What Does 100 Gallons Cost?",
+		tooltip: "Interactive Graphic: What Does 100 Gallons Cost?",
 		cuePoint: 55.04,
 		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
 		sources: [	"Gleick, P. H. (with Cooley, H., Cohen, M. J., Morikawa, M., Morrison, J., & Palaniappan, M.). (2009). The world's water 2008-2009: The biennial report on freshwater resources. Washington, DC: Island Press."]
@@ -223,7 +223,7 @@ var contentData = [
 		name: "waterfootprintoffood",
 		url: "story/waterfootprintoffood.html",
 		level: 2,
-		tooltip: "Water Footprint Of Food",
+		tooltip: "Graphic: Water Footprint Of Food",
 		cuePoint: 63.18,
 		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
 		sources: [	"From lettuce to beef, what's the water footprint of your food? (2009). Treehugger.com  Retrieved July 27, 2012 from <a href=\"http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html\" target=\"_blank\">http://www.treehugger.com/green-food/from-lettuce-to-beef-whats-the-water-footprint-of-your-food.html</a>",
@@ -269,7 +269,7 @@ var contentData = [
 		name: "givingway",
 		url: "story/givingway.html",
 		level: 2,
-		tooltip: "Giving Way",
+		tooltip: "Video: Giving Way",
 		cuePoint: 78.02,
 	},
 	{
@@ -291,7 +291,7 @@ var contentData = [
 		name: "thecloudjuicer",
 		url: "story/thecloudjuicer.html",
 		level: 2,
-		tooltip: "The Cloud Juicer",
+		tooltip: "Video: The Cloud Juicer",
 		cuePoint: 83.08,
 	},
 	{
@@ -306,7 +306,7 @@ var contentData = [
 		name: "thepurestofthemall",
 		url: "story/thepurestofthemall.html",
 		level: 2,
-		tooltip: "The Purest of Them All",
+		tooltip: "Text: The Purest of Them All",
 		cuePoint: 89.10,
 	},
 	{
@@ -328,7 +328,7 @@ var contentData = [
 		name: "abeautifulwaste",
 		url: "story/abeautifulwaste.html",
 		level: 3,
-		tooltip: "A Beautiful Waste",
+		tooltip: "Video: A Beautiful Waste",
 		cuePoint: 95.11,
 	},
 	{
@@ -350,7 +350,7 @@ var contentData = [
 		name: "drypromises",
 		url: "story/drypromises.html",
 		level: 2,
-		tooltip: "Dry Promises",
+		tooltip: "Video: Dry Promises",
 		cuePoint: 104.11,
 	},
 	{
@@ -404,7 +404,7 @@ var contentData = [
 		name: "smellingtherain",
 		url: "story/smellingtherain.html",
 		level: 2,
-		tooltip: "Smelling the Rain",
+		tooltip: "Text: Smelling the Rain",
 		cuePoint: 120.02,
 	},
 	{
@@ -433,7 +433,7 @@ var contentData = [
 		name: "isitsafetodrink",
 		url: "story/isitsafetodrink.html",
 		level: 2,
-		tooltip: "Is it Safe to Drink?",
+		tooltip: "Graphic: Is it Safe to Drink?",
 		cuePoint: 124.15,
 		credits: [{job:"Research/Design",name:"Kelly McHugh"}],
 		sources: [	"Gallup, Public concern about the pollution of drinking water in the United States from 1990 to 2012, Gallup poll: Public concern about air pollution in the United States from 1989 to 2012, Gallup poll: Public concern about the pollution of rivers, lakes and reservoirs in the United States from 1989 to 2012, statista.com"]
@@ -471,7 +471,7 @@ var contentData = [
 		name: "beyondthepalebluedot",
 		url: "story/beyondthepalebluedot.html",
 		level: 2,
-		tooltip: "Beyond the Pale Blue Dot",
+		tooltip: "Text: Beyond the Pale Blue Dot",
 		cuePoint: 131.08,
 	},
 	{
@@ -484,7 +484,7 @@ var contentData = [
 	{
 		id : "drylips",
 		captionTitle: "Mojave National Preserve, CA",
-		captionContent: "Thirsty? The human body cannot survive much more than a week without water. Bob Leisure prefers a cold can of beer as he surveys his land at sunset.",
+		captionContent: "The human body cannot survive much more than a week without water. Drowning can take a matter of minutes, and if you drink too much in a short period of time, your blood can become waterlogged, and you can die within a few hours.",
 		level: 1,
 		cuePoint: 134.11,
 	},
