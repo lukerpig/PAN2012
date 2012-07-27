@@ -734,11 +734,9 @@
 				 }
 				 
 				progress.onSeek = function(percent) {
-					video.pause()
 					currentStory = null;
 					video.seekToPercent(percent);
 					reveal.deactivateStory();
-					video.play()
 				}
 				
 
