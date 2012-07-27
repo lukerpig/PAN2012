@@ -381,7 +381,7 @@ var contentData = [
 	{
 		id : "quickcut1",
 		captionTitle: "United States",
-		captionContent: "Water can’t be destroyed. The total amount of water on the Earth isn’t changing, and it hasn’t changed much for more than 4 billion years.",
+		captionContent: "Water can't be destroyed. The total amount of water on the Earth isn't changing, and it hasn't changed much for more than 4 billion years.",
 		level: 1,
 		cuePoint: 117.08,
 	},
