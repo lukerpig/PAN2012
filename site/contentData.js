@@ -319,7 +319,7 @@ var contentData = [
 	{
 		id : "plop",
 		captionTitle: "Chapel Hill, NC",
-		captionContent: "A sound that everyone knows but no one talks about.",
+		captionContent: "This is a sound that everyone knows but no one talks about. A turd is 75 percent water.",
 		level: 1,
 		cuePoint: 92.20,
 	},
