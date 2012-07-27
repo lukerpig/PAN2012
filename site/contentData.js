@@ -47,7 +47,7 @@ var contentData = [
 	{
 		id : "washmachine",
 		captionTitle: "Brooklyn, NY",
-		captionContent:  "Wash and fold, wash and fold. Did you know that traditional washing machines use anywhere between 30 to 50 gallons of water? ",
+		captionContent:  "Wash and fold, wash and fold. Did you know that traditional washing machines use anywhere from 30 to 50 gallons of water per load? ",
 		level: 1,
 		cuePoint: 19.14,
 	},
