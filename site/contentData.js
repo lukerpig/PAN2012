@@ -214,7 +214,7 @@ var contentData = [
 	{
 		id : "aquarium",
 		captionTitle: "Coney Island, NY",
-		captionContent: "Water makes up 95 percent of jellyfish bodies. Lots of water, but no brain.",
+		captionContent: "Jellyfish are 95 percent water, and they don't have brains.",
 		level: 1,
 		cuePoint: 62.01,
 	},
