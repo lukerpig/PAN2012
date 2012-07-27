@@ -20,7 +20,6 @@ var contentData = [
 					"Water conservation facts and tips. (n.d.). NationalGeographic.com. Retrieved July 27, 2012, from <a href=\"http://environment.nationalgeographic.com/environment/freshwater/water-conservation-tips/\" target=\"_blank\">http://environment.nationalgeographic.com/environment/freshwater/water-conservation-tips/</a>",
 					" Water Facts. (n.d.). Drop in the Bucket. Retrieved July 27, 2012, from <a href=\"http://www.dropinthebucket.org/water-facts\" target=\"_blank\">http://www.dropinthebucket.org/water-facts</a>",
 					"Water trivia facts. (n.d.). United States Environmental Protection Agency. Retrieved July 27, 2012, from <a href=\"http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm\" target=\"_blank\">http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm</a>",
-					"<a href=\"http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/\" target=\"_blank\">http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/</a>",
 					" Fact 15: Water pollution. (n.d.). UNESCO World Water Assessment Program. Retrieved July 27, 2012, from <a href=\"http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/\" target=\"_blank\">http://www.unesco.org/new/en/natural-sciences/environment/water/wwap/facts-and-figures/all-facts-wwdr3/fact-15-water-pollution/</a>"],
 	},
 	{
@@ -109,9 +108,7 @@ var contentData = [
 		level: 2,
 		tooltip: "Graphic: Heavy Skies",
 		cuePoint: 34.07,
-		sources: [	"<a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
-					"Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
-					"<a href=\"http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/\" target=\"_blank\">http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/</a>",
+		sources: ["Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
 					"How much does a cloud weigh? (2009, August 8). Green Earth Facts. Retrieved July 27, 2012, from <a href=\"http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/\" target=\"_blank\">http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/</a>",
 					"A cloud weighs more than you might think. (2011, January 13). Zidbits. Retrieved July 27, 2012, from <a href=\"http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/\" target=\"_blank\">http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/</a>"]
 	},
