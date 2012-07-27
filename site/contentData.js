@@ -127,7 +127,7 @@ var contentData = [
 		name: "sizingupwater",
 		url: "story/sizingupwater.html",
 		level: 2,
-		tooltip: "Interactive Graphic: Sizing Up Water",
+		tooltip: "Interactive: Sizing Up Water",
 		cuePoint: 41.14,
 		credits: [{job:"Programming",name:"Dylan Gilroy"},{job:"Graphics",name:"Kelly McHugh, Dylan Gilroy, Cyrus Honeycutt"}],
 		sources: [	"Bonsor, K. How Fire Engines Work. (n.d). How Stuff Works. Retrieved July 27, 2012 from <a href=\"http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm\" target=\"_blank\">http://science.howstuffworks.com/transport/engines-equipment/fire-engine1.htm</a>",
@@ -192,7 +192,7 @@ var contentData = [
 		name: "whatdoes100gallonscost",
 		url: "story/whatdoes100gallonscost.html",
 		level: 3,
-		tooltip: "Interactive Graphic: What Does 100 Gallons Cost?",
+		tooltip: "Interactive: What Does 100 Gallons Cost?",
 		cuePoint: 55.04,
 		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
 		sources: [	"Gleick, P. H. (with Cooley, H., Cohen, M. J., Morikawa, M., Morrison, J., & Palaniappan, M.). (2009). The world's water 2008-2009: The biennial report on freshwater resources. Washington, DC: Island Press."]
@@ -269,7 +269,7 @@ var contentData = [
 		name: "givingway",
 		url: "story/givingway.html",
 		level: 2,
-		tooltip: "Video: Giving Way",
+		tooltip: "Video/Text: Giving Way",
 		cuePoint: 78.02,
 	},
 	{
@@ -350,7 +350,7 @@ var contentData = [
 		name: "drypromises",
 		url: "story/drypromises.html",
 		level: 2,
-		tooltip: "Video: Dry Promises",
+		tooltip: "Video/Text: Dry Promises",
 		cuePoint: 104.11,
 	},
 	{
