@@ -253,7 +253,7 @@ var contentData = [
 	{
 		id : "boxing",
 		captionTitle: "Palm Springs, CA",
-		captionContent: "At Palm Springs Boxing Club, Rick Quevedo works out. When you sweat, your body is expelling heat by pumping water out of your skin pores.",
+		captionContent: "At Palm Springs Boxing Club, Rick Quevedo works out. When you sweat, your body is expelling heat by pumping warm water out of your skin pores.",
 		level: 1,
 		cuePoint: 72.17,
 	},
