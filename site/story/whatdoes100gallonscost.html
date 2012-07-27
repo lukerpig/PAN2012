@@ -199,11 +199,13 @@
 						
 				var bartext = d3.select("#bars").selectAll("text").data(regions,function(d){return d.name})
 				bartext.enter().append("text")
-					.text(function(d){
-						if(d.name=="you"
-						return d.name
-					})					
-					.attr("class", "bartext")
+					.text(function(d){return d.name})
+					.attr("class", function(){
+						if(d.name=="You"){
+							return "bartext bold";
+						}
+						return "bartext"
+					})
 					.attr("x", 340)
 					.attr("y", function(d,i){ return (i*50+158) })
 					.attr("text-anchor", "end")
