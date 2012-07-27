@@ -47,17 +47,17 @@ var contentData = [
 	},
 	{
 		id : "washmachine",
-		captionTitle: "",
-		captionContent: "WATERSLIDE ",
+		captionTitle: "Brooklyn, NY",
+		captionContent:  "Wash and fold, wash and fold. Did you know that traditional washing machines use anywhere between 30 to 50 gallons of water? ",
 		level: 1,
 		cuePoint: 19.14,
 	},
 	{
-		id : "washmachine",
-		captionTitle: "Brooklyn, NY",
-		captionContent: "Wash and fold, wash and fold. Did you know that traditional washing machines use anywhere between 30 to 50 gallons of water? ",
+		id : "waterslidedown",
+		captionTitle: "San Dimas, CA",
+		captionContent: "Stomach drop! That sinking feeling you get when you go down a water slide happens when you speed down the slide, and your organs shift as each part of your body accelerates individually.",
 		level: 1,
-		cuePoint: 19.14,
+		cuePoint: 21.08,
 	},
 	{
 		id : "campfire",
