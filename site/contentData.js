@@ -191,7 +191,7 @@ var contentData = [
 		level: 3,
 		tooltip: "Interactive: What Does 100 Gallons Cost?",
 		cuePoint: 55.04,
-		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
+		credits: [{job:"Graphics",name:"Kelly McHugh"},{job:"Programming",name:"Dylan Gilroy"}],
 		sources: [	"Gleick, P. H. (with Cooley, H., Cohen, M. J., Morikawa, M., Morrison, J., & Palaniappan, M.). (2009). The world's water 2008-2009: The biennial report on freshwater resources. Washington, DC: Island Press."]
 	},
 	{
