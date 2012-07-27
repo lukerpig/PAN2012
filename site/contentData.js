@@ -275,7 +275,7 @@ var contentData = [
 	{
 		id : "sprinklers",
 		captionTitle: "Palm Desert, CA",
-		captionContent: "A booming retirement and vacation destination has sprung up around the golf courses in Palm Desert. Chuck Sandoval's lawn is one of the greenest on the block. His secret: only water after the sun sets. ",
+		captionContent: "A booming retirement and vacation destination has sprung up around the golf courses of Palm Desert. Chuck Sandoval's lawn is one of the greenest on the block. His secret: only water after the sun sets. ",
 		level: 1,
 		cuePoint: 79.22,
 	},
