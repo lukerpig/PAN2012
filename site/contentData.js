@@ -379,11 +379,25 @@ var contentData = [
 		cuePoint: 116.00,
 	},
 	{
+		id : "quickcut1",
+		captionTitle: "United States",
+		captionContent: "Water can’t be destroyed. The total amount of water on the Earth isn’t changing, and it hasn’t changed much for more than 4 billion years.",
+		level: 1,
+		cuePoint: 117.08,
+	},
+	{
 		id : "carwash",
 		captionTitle: "West Hollywood, CA",
 		captionContent: "The Santa Palm Car Wash is \"the car wash of the stars.\" A car wash uses about 45 gallons of water per car. Compare that to 140 gallons if you wash your car in your driveway.",
 		level: 1,
 		cuePoint: 117.23,
+	},
+	{
+		id : "quickcut2",
+		captionTitle: "United States",
+		captionContent: "Most of the water on the planet is in the ocean. Only three percent is fresh at any given time, and of that freshwater, almost 70 percent is trapped in glaciers and ice caps.",
+		level: 1,
+		cuePoint: 119.13,
 	},
 	{
 		id : "nightcar",
@@ -394,11 +408,25 @@ var contentData = [
 		cuePoint: 120.02,
 	},
 	{
+		id : "quickcut3",
+		captionTitle: "United States",
+		captionContent: "The vast majority of the planet's available freshwater is stored in the ground.",
+		level: 1,
+		cuePoint: 122.02,
+	},
+	{
 		id : "bikerfall",
 		captionTitle: "Pacific Coast Highway, CA",
 		captionContent: "Moments before this shot, Billy Kent stood stoically gazing out across the ocean. Then....",
 		level: 1,
 		cuePoint: 122.14,
+	},
+	{
+		id : "quickcut4",
+		captionTitle: "United States",
+		captionContent: "Water moves. We've always built our civilizations near water sources. But with global climate change, water is dwindling in places where we've always been able to find it and moving to places where it will be harder to access. ",
+		level: 1,
+		cuePoint: 124.01,
 	},
 	{
 		id : "tapdrip",
@@ -411,11 +439,25 @@ var contentData = [
 		sources: [	"Gallup, Public concern about the pollution of drinking water in the United States from 1990 to 2012, Gallup poll: Public concern about air pollution in the United States from 1989 to 2012, Gallup poll: Public concern about the pollution of rivers, lakes and reservoirs in the United States from 1989 to 2012, statista.com"]
 	},
 	{
+		id : "quickcut5",
+		captionTitle: "United States",
+		captionContent: "Millions of people live in arid regions where there isn't enough water. Most Americans under the age of 50 will be confronted with water policy issues in their lifetime.",
+		level: 1,
+		cuePoint: 126.07,
+	},
+	{
 		id : "road",
 		captionTitle: "Mojave National Preserve, CA",
 		captionContent: "In summer 2012 more than half the U.S. suffered extreme or moderate <a href = \"http:\/\/www.npr.org/2012/07/18/156989764/interactive-mapping-the-u-s-drought?utm_source=NPR&utm_medium=facebook&utm_campaign=20120718\" target = \"_blank\" >drought</a> conditions, the worst since the 1950s for the amount of land affected.",
 		level: 1,
 		cuePoint: 126.21,
+	},
+	{
+		id : "quickcut6",
+		captionTitle: "West Hollywood, CA",
+		captionContent: "Serious water problems exist all around the world. But these issues are not usually connected to each other. Water problems are local, but so are water solutions.",
+		level: 1,
+		cuePoint: 128.14,
 	},
 	{
 		id : "ivdrip",
