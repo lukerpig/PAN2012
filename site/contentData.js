@@ -498,7 +498,7 @@ var contentData = [
 	{
 		id : "why100gallons",
 		captionTitle: "Why 100 Gallons",
-		captionContent: "In a single day, the average U.S. citizen uses about 100 gallons of water.<br/>This project explores the significance of this simple number.",
+		captionContent: "In a single day, the average U.S. resident uses about 100 gallons of water.<br/>This project explores the significance of this simple number.",
 		level: 1,
 		cuePoint: -2,
 	},
