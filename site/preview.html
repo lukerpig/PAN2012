@@ -18,7 +18,7 @@
 			
 			.creditsource {color: #6ABCC3; cursor: pointer; font-family: Interstate-Light, verdana, sans-serif;}
 			
-			.csDimmerText {width: 70%; margin: 0px auto; background-color: #fff; padding: 4%;}
+			.csDimmerText {width: 70%; margin: 0px auto; font-family: Interstate-Light, verdana, sans-serif; background-color: #fff; padding: 4%;}
 			.csDimmerText a{ word-break: break-all }
 
 			.closebtn {max-width: 2%; position: absolute; top: 1.5%; right: 1.5%; .cursor: pointer;}
@@ -614,9 +614,8 @@
 					}
 					
 					
-					var playAgainElement = that.parentElement.select("#playAgain");
+					var playAgainElement = that.parentElement.select("#replayTd");
 					playAgainElement.on("click", function() { if (that.onPlayAgain) that.onPlayAgain(); })
-
 				}
 				
 			}
@@ -858,7 +857,12 @@
 					  reveal.activateStory(story);
 				}
 				mosaic.onPlayAgain = function(){
+					var rand = Math.floor(Math.random()*4)
+					if(true){
+						videoFrame.attr("src","http://player.vimeo.com/video/46433786?api=1&amp;player_id=conceptVideo")	
+					}
 					displayMosaic();
+					//sizeVid();
 				}
 				
 				mosaicButton.onClick = function(isMosaicShowing){
@@ -979,7 +983,7 @@
 		<div id="bg1" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bgbottom.jpg);  background-color: #77c2c8; background-position: top center; background-size: 100%; border: 1px solid transparent; background-repeat: no-repeat; z-index: -2;"></div>
 		<div id="bg2" style="height: 100%; width: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-image:url(graphics/bggrad.png); background-size: 100% 100%; background-repeat: no-repeat; z-index: -1"></div>
 		
-		<div id="container" style="width: 65%; margin: 0px auto;">
+		<div id="container" style="width: 80%; margin: 0px auto;">
 			<div id="pan-logo" style="width: 50%;">
 				<img src="graphics/pan.png" style="max-width: 100%;">
 			</div>
@@ -996,7 +1000,7 @@
 							<td id="abeautifulwasteTd" style="background-image:url(mosaic/abeautifulwaste.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
 						</tr>
 						<tr>
-							<td id="waterfootprintoffoodTd" style="background-image:url(mosaic/waterfootprintoffood.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="eatingwaterTd" style="background-image:url(mosaic/eatingwater.jpg); background-size: 100% 100%" class="mosTd"></td>
 							<td id="replayTd" style="background-image:url(mosaic/replay.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
 							<td id="thecloudjuicerTd" style="background-image:url(mosaic/thecloudjuicer.jpg); background-size: 100% 100%" class="mosTd"></td>
 						</tr>
@@ -1009,7 +1013,7 @@
 						<tr>
 							<td id="thepurestofthemallTd" style="background-image:url(mosaic/thepurestofthemall.jpg); background-size: 100% 100%" class="mosTd"></td>
 							<td id="staffeditorialTd" style="background-image:url(mosaic/staffeditorial.jpg); background-size: 100% 100%" class="mosTd"></td>
-							<td id="blogTd" style="background-image:url(mosaic/blog.jpg); background-size: 100% 100%" class="mosTd"></td>
+							<td id="blogTd" style="background-image:url(mosaic/blog.jpg); background-size: 100% 100%" class="mosTd"><a href="http://poweringanation.tumblr.com/" target="_blank" style="height: 100%; width: 100%; display: block;"></a></td>
 						</tr>
 						<tr>
 							<td id="heavyskiesTd" style="background-image:url(mosaic/heavyskies.jpg); background-size: 100% 100%" class="mosTd"></td>

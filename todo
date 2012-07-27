@@ -1,16 +1,12 @@
 TODO:
--Ramdomize starting video (only on Replay?)
--When mouseover about/why100gallons/howtoview
--Credit Box/Source Box
+-Ramdomize starting video (only on Replay?)/progbar on new vid doesn't work
 -Seek is weird when playing
 -hashtag seeks to spot in vid?
--Style pullquote
--when iframes turn on, moves page
--howtoview on posterframe looks bad
-
--Style Text (ADD TTFs)
--Update Powers of 10 Numbers
--New waterparks graphic
+-Google Analytics
+-Chrome Frame
+-Shoudl concept vid be on front page of PAN.org?
+-FAVICON
+-Tooltip on Mosaic
 
 NICE TO HAVE:
 -scroll iframe overflow

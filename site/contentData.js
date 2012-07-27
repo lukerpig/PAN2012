@@ -220,8 +220,8 @@ var contentData = [
 	},
 	{
 		id : "fishflop",
-		name: "waterfootprintoffood",
-		url: "story/waterfootprintoffood.html",
+		name: "eatingwater",
+		url: "story/eatingwater.html",
 		level: 2,
 		tooltip: "Graphic: Eating Water",
 		cuePoint: 63.18,
@@ -436,7 +436,9 @@ var contentData = [
 		tooltip: "Graphic: Is it Safe to Drink?",
 		cuePoint: 124.15,
 		credits: [{job:"Research/Design",name:"Kelly McHugh"}],
-		sources: [	"Gallup, Public concern about the pollution of drinking water in the United States from 1990 to 2012, Gallup poll: Public concern about air pollution in the United States from 1989 to 2012, Gallup poll: Public concern about the pollution of rivers, lakes and reservoirs in the United States from 1989 to 2012, statista.com"]
+		sources: [	"<a href=\"http://www.statista.com/statistics/223427/public-concern-about-the-pollution-of-drinking-water-in-the-us/\">http://www.statista.com/statistics/223427/public-concern-about-the-pollution-of-drinking-water-in-the-us/</a>",
+					"<a href=\"http://www.statista.com/statistics/223405/public-concern-about-the-pollution-of-rivers-lakes-and-reservoirs-in-the-us/\">http://www.statista.com/statistics/223405/public-concern-about-the-pollution-of-rivers-lakes-and-reservoirs-in-the-us/</a>",
+					"<a href=\"http://www.statista.com/statistics/223413/public-concern-about-air-pollution-in-the-us/\">http://www.statista.com/statistics/223413/public-concern-about-air-pollution-in-the-us/</a>"]
 	},
 	{
 		id : "quickcut5",
