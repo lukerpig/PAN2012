@@ -306,7 +306,7 @@ var contentData = [
 		name: "thepurestofthemall",
 		url: "story/thepurestofthemall.html",
 		level: 2,
-		tooltip: "Text: The Purest of Them All",
+		tooltip: "Text: The Purest",
 		cuePoint: 89.10,
 	},
 	{
@@ -404,7 +404,7 @@ var contentData = [
 		name: "smellingtherain",
 		url: "story/smellingtherain.html",
 		level: 2,
-		tooltip: "Text: Smelling the Rain",
+		tooltip: "Text: Smelling Rain",
 		cuePoint: 120.02,
 	},
 	{
@@ -471,7 +471,7 @@ var contentData = [
 		name: "beyondthepalebluedot",
 		url: "story/beyondthepalebluedot.html",
 		level: 2,
-		tooltip: "Text: Beyond the Pale Blue Dot",
+		tooltip: "Text: Beyond Earth",
 		cuePoint: 131.08,
 	},
 	{
