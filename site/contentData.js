@@ -491,7 +491,7 @@ var contentData = [
 	{
 		id : "howtoview",
 		captionTitle: "How to View",
-		captionContent: "There are two ways to experience the content on this site:<br/><br/>1.	Pause at any moment during the main 2-minute video to explore water facts, stories, graphics or videos connected to that moment. The white bubbles beneath the progress bar indicate the more in-depth content.<br/><br/>2.	Watch our 2-minute video until the end and then explore the visual-index page at the end, which is populated by all stories in this project.<br/><br/>This presentation is an experiment in journalistic storytelling.  We welcome feedback about your experience. (link to contact form on legacy site?)",
+		captionContent: "Pause at any time during the centerpiece video to explore each moment.<br/> The white bubbles beneath the progress bar indicate our more in-depth stories. <br/>If you miss something, don't worry &mdash; all content is featured at the end.",
 		level: 1,
 		cuePoint: -1,
 	},
