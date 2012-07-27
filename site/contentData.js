@@ -229,7 +229,7 @@ var contentData = [
 	{
 		id : "doglake",
 		captionTitle: "Austin, TX",
-		captionContent: "Dogs have wet noses to help them detect smelling chemicals in the air. Some dogs can even smell a dead body underwater.",
+		captionContent: "Dogs have wet noses to help them detect smells in the air. Some dogs can even smell a dead body underwater.",
 		level: 1,
 		cuePoint: 65.09,
 	},
