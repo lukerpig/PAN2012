@@ -2,13 +2,36 @@
 
 body {padding: 0% 10% 0% 6%; margin: 0px;}
 body {color: #333;}
-@font-face {font-family: Interstate-Thin; src: url("../fonts/Interstate-Thin.otf");}
-@font-face {font-family: Interstate-Light; src: url("../fonts/Interstate-Light.otf");}
-@font-face {font-family: Interstate-Bold; src: url("../fonts/Interstate-Bold.otf");}
-@font-face {font-family: Interstate-Regular; src: url("../fonts/Interstate-Regular.otf");}
-@font-face {font-family: Interstate-ExtraLight; src: url("../fonts/Interstate-ExtraLight.otf");}
-@font-face {font-family: Interstate-ExtraLight; src: url("../fonts/Interstate-ExtraLight.otf");}
-@font-face {font-family: Interstate-Lightitalic; src: url("../fonts/Interstate-Lightitalic.otf");}
+@font-face {
+	font-family: Interstate-Thin;
+	src:	url("../fonts/Interstate-Thin.otf"),
+			url("../fonts/Interstate-Thin.ttf");
+	}
+@font-face {
+	font-family: Interstate-Light;
+	src:url("../fonts/Interstate-Light.otf"),
+		url("../fonts/Interstate-Light.ttf");
+	}
+@font-face {
+	font-family: Interstate-Bold;
+	src:url("../fonts/Interstate-Bold.otf"),
+		url("../fonts/Interstate-Bold.ttf");
+	}
+@font-face {
+	font-family: Interstate-Regular;
+	src:url("../fonts/Interstate-Regular.otf"),
+		url("../fonts/Interstate-Regular.ttf");
+	}
+@font-face {
+	font-family: Interstate-ExtraLight;
+	src:url("../fonts/Interstate-ExtraLight.otf"),
+		url("../fonts/Interstate-ExtraLight.ttf");
+	}
+@font-face {
+	font-family: Interstate-Lightitalic;
+	src:url("../fonts/Interstate-Lightitalic.otf"),
+		url("../fonts/Interstate-Lightitalic.ttf");
+	}
 
 img {max-width: 100%;}
 

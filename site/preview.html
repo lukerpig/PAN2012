@@ -114,7 +114,6 @@
 						contentItem =  new Caption(contentData[i]);
 						this.captions.push(contentItem);
 					} else {
-						console.log(contentData[i].name)
 						contentItem = new Story(contentData[i]);
 						this.stories.push(contentItem);
 						if (!contentItem.noMarker) {
@@ -484,6 +483,7 @@
 					window.location.hash="";
 					if(this.hideDimmer) this.hideDimmer();
 					var oldStory = this.activeStory;
+					if(!oldStory) return;
 					this.activeStory = null;
 					this.hideStory(oldStory,true);
 				}
@@ -518,7 +518,6 @@
 						console.log(videoTime + " " + videoPercent+"%")
 						that.videoTime = parseFloat(videoTime);
 						that.videoPercent = parseFloat(videoPercent);
-						console.log(that.videoTime)
 					    if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
 				    }
 
@@ -534,7 +533,6 @@
 					});
 					
 					that.froogaloop.addEvent('playProgress', function(data) {
-						console.log('playProgress event : ' + data.seconds + ' : ' + data.percent + ' : ' + data.duration);
 					});
 					
 					that.froogaloop.addEvent('pause', function(data) {
@@ -552,7 +550,6 @@
 					});
 					
 					that.froogaloop.addEvent('finish', function(data) {
-						console.log("finish");
 						if (that.onFinish) { that.onFinish(); }
 					});
 					
@@ -650,7 +647,6 @@
 				}
 				
 				this.parentSelection.on("click", mouseHandler)
-				//this.parentSelection.on("mousemove", function(d,i) { console.log(d3.event) })
 			}
 			
 			function ToggleButton(on,off,parentElement){
@@ -858,10 +854,13 @@
 				}
 				mosaic.onPlayAgain = function(){
 					var rand = Math.floor(Math.random()*4)
-					if(true){
-						videoFrame.attr("src","http://player.vimeo.com/video/46433786?api=1&amp;player_id=conceptVideo")	
+					if(rand==0){
+						videoFrame.attr("src","http://player.vimeo.com/video/46433786?api=1&player_id=conceptVideo")	
+					} else {
+						videoFrame.attr("src","http://player.vimeo.com/video/46397237?api=1&player_id=conceptVideo")	
 					}
 					displayMosaic();
+					progress.progressIndicator.style("width","0%")
 					//sizeVid();
 				}
 				
@@ -895,7 +894,6 @@
 								})
 						})
 					reveal.deactivateStory(false);
-					console.log("mosaic CurrentStory: " + currentStory);
 					
 				}
 				
