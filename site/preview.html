@@ -44,9 +44,11 @@
 			
             body {margin: 20px 0px 0px 0px; padding: 0;}
 			
+			.markerbubble { position: absolute; cursor: pointer}
+			
 			.creditsource {color: #6ABCC3; cursor: pointer; font-family: Interstate-Light, verdana, sans-serif;}
 			
-			.csDimmerText {width: 70%; margin: 0px auto; font-family: Interstate-Light, verdana, sans-serif; background-color: #fff; padding: 4%;}
+			.csDimmerText {width: 70%; margin: 0px auto; font-family: Interstate-Light, verdana, sans-serif; padding: 4%; color: #fff;}
 			.csDimmerText a{ word-break: break-all }
 
 			.closebtn {max-width: 2%; position: absolute; top: 1.5%; right: 1.5%; .cursor: pointer;}
@@ -223,12 +225,11 @@
 					this.markers.enter().append("img")
 						
 						.attr("src",markerChooser)
+						.attr("class","markerbubble")
 						.attr("id",function(d,i){return d.id+"-marker"})
-						.style("position","absolute")
 						.style("left",function(d){
 							return (d.cuePointMillis()/that.duration)*100+"%";
 						})
-						.style("cursor","pointer")
 						.on("click", function(d,i) {
 							if(that.onclick){
 								that.onclick(d);	
@@ -415,18 +416,18 @@
 						.on("click",function(d,i){
 							if(that.onCaptionClick) that.onCaptionClick(d);
 						})
-					.append("div")
-						.style("color","#fff")
-						.style("background-color","#fff")
-						.style("font-family","Interstate-Light, verdana, sans-serif")
-						.style("position","absolute")
-						.style("margin", that.margin+"%" + that.margin+"%" + that.margin+"%" + that.margin+"%")
-						.style("width","96%")
-						.style("bottom","4%")
-						.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: "+(100-that.margin)+"%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
-						.on("click",function(d,i){
-							if(that.onCaptionClick) that.onCaptionClick(d);
-						})
+						.append("div")
+							.style("color","#fff")
+							.style("background-color","#fff")
+							.style("font-family","Interstate-Light, verdana, sans-serif")
+							.style("position","absolute")
+							.style("margin", that.margin+"%" + that.margin+"%" + that.margin+"%" + that.margin+"%")
+							.style("width","96%")
+							.style("bottom","4%")
+							.html(function(d,i){return "<div style='position: absolute; bottom: 0; width: "+(100-that.margin)+"%;'><h1>"+d.captionTitle+"</h1><p style='margin-bottom: 0px;'>"+d.captionContent+"</p></div>"})
+							.on("click",function(d,i){
+								if(that.onCaptionClick) that.onCaptionClick(d);
+							})
 						
 					function styleReveals(){
 						this

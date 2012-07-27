@@ -108,7 +108,8 @@ var contentData = [
 		level: 2,
 		tooltip: "Graphic: Heavy Skies",
 		cuePoint: 34.07,
-		sources: ["Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
+		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Programming",name:"Stephanie Bullins"}],
+		sources: [	"Aviation weather - principles. (n.d.). Free Online Private Pilot Ground School. Retrieved July 27, 2012, from <a href=\"http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html\" target=\"_blank\">http://www.free-online-private-pilot-ground-school.com/Aviation-Weather-Principles.html</a>",
 					"How much does a cloud weigh? (2009, August 8). Green Earth Facts. Retrieved July 27, 2012, from <a href=\"http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/\" target=\"_blank\">http://greenearthfacts.com/weather/how-much-does-a-cloud-weigh/</a>",
 					"A cloud weighs more than you might think. (2011, January 13). Zidbits. Retrieved July 27, 2012, from <a href=\"http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/\" target=\"_blank\">http://zidbits.com/2011/01/a-cloud-weighs-more-than-you-might-think/</a>"]
 	},
