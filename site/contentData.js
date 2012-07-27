@@ -365,7 +365,7 @@ var contentData = [
 		name: "waterparks",
 		url: "story/waterparks.html",
 		level: 2,
-		tooltip: "Waterparks",
+		tooltip: "Graphic: Waterparks",
 		cuePoint: 113.12,
 		credits: [{job:"Graphics",name:"Cyrus Honeycutt"},{job:"Research",name:"Kelly McHugh"}],
 		sources: [	"Water trivia facts. (n.d.). United States Environmental Protection Agency. Retrieved July 27, 2012 from <a href=\"http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm\" target=\"_blank\">http://water.epa.gov/learn/kids/drinkingwater/water_trivia_facts.cfm</a>",
