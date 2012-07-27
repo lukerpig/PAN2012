@@ -200,7 +200,7 @@ var contentData = [
 	{
 		id : "stareocean",
 		captionTitle: "Venice Beach, CA",
-		captionContent: "The first time you see the ocean, you could stare hypnotically all day at the rhythmic, repetitive waves.",
+		captionContent: "The oceans remain one of our planet's mystery; 95 percent of these watery depths are still unexplored. But we are going deeper, driven by the unknown. Friedrich Nietzsche said, \"if you gaze into the abyss, the abyss gazes also into you.\" .",
 		level: 1,
 		cuePoint: 56.20,
 	},
