@@ -200,7 +200,7 @@
 				var bartext = d3.select("#bars").selectAll("text").data(regions,function(d){return d.name})
 				bartext.enter().append("text")
 					.text(function(d){return d.name})
-					.attr("class", function(){
+					.attr("class", function(d){
 						if(d.name=="You"){
 							return "bartext bold";
 						}
