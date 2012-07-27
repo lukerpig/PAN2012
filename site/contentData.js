@@ -118,7 +118,7 @@ var contentData = [
 	{
 		id : "walkbeach",
 		captionTitle: "Venice Beach, CA",
-		captionContent: "The surf's roar, the endless waves, and changing tides call us to walk on the beach. And we all wonder what's on the other shore.",
+		captionContent: "Messages in bottles have always captured our imagination. The oldest one found so far, which was set adrift to track ocean currents, spent almost 98 years at sea.",
 		level: 1,
 		cuePoint: 36.13,
 	},
