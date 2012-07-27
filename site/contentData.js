@@ -356,7 +356,7 @@ var contentData = [
 	{
 		id : "underwater",
 		captionTitle: "Santa Monica, CA",
-		captionContent: "The rippling patterns on the pool floor form when sunlight shines through waves.The patterns are called caustics.",
+		captionContent: "The rippling patterns on the pool floor form when sunlight shines through waves. The patterns are called caustics.",
 		level: 1,
 		cuePoint: 106.14,
 	},
@@ -462,7 +462,7 @@ var contentData = [
 	{
 		id : "ivdrip",
 		captionTitle: "Chapel Hill, NC",
-		captionContent: "When patients are hooked up to IVs, a saline solution is pumped into their veins.The liquid restores necessary minerals and nutrients into their bodies.",
+		captionContent: "When patients are hooked up to IVs, a saline solution is pumped into their veins. The liquid restores necessary minerals and nutrients into their bodies.",
 		level: 1,
 		cuePoint: 128.21,
 	},
