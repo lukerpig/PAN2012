@@ -956,6 +956,11 @@
 					reveal.deactivateStory();	
 				}
 			});
+			
+			d3.select("#aboutTd").style("cursor","pointer").on("click",function(){
+				var about = content.getContentById("about");
+				reveal.activateStory(about);
+			});
 				
 			 function getWindowHeight() {
 				 
