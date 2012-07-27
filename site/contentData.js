@@ -232,7 +232,7 @@ var contentData = [
 	{
 		id : "doglake",
 		captionTitle: "Austin, TX",
-		captionContent: "Dogs, like people, are often drawn to water. Some of us even doggie paddle like they do.",
+		captionContent: "Dogs have wet noses to help them detect smelling chemicals in the air. Some dogs can even smell a dead body underwater.",
 		level: 1,
 		cuePoint: 65.09,
 	},
