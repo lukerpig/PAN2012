@@ -448,7 +448,7 @@ var contentData = [
 	{
 		id : "road",
 		captionTitle: "Mojave National Preserve, CA",
-		captionContent: "In summer 2012 more than half the U.S. suffered extreme or moderate <a href = \"http:\/\/www.npr.org/2012/07/18/156989764/interactive-mapping-the-u-s-drought?utm_source=NPR&utm_medium=facebook&utm_campaign=20120718\" target = \"_blank\" >drought</a> conditions, the worst since the 1950s for the amount of land affected.",
+		captionContent: "In summer 2012, more than half the U.S. suffered extreme or moderate <a href = \"http:\/\/www.npr.org/2012/07/18/156989764/interactive-mapping-the-u-s-drought?utm_source=NPR&utm_medium=facebook&utm_campaign=20120718\" target = \"_blank\" >drought</a> conditions, the worst since the 1950s for the amount of land affected.",
 		level: 1,
 		cuePoint: 126.21,
 	},
