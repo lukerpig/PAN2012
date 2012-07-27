@@ -10,7 +10,7 @@
 		c50.553,211.678,34.752,419.134,34.752,419.134c-26.328,106.364-67.396,119.005-67.396,119.005
 		C435.048,754.024,331.851,779.3,331.851,779.3c-36.859,7.373-57.921-21.062-57.921-21.062c-20.01-28.438-41.069,0-41.069,0
 		c-16.853,31.595-57.922,15.798-57.922,15.798c-17.903-3.157-101.101-38.964-101.101-38.964
-		c-61.081-27.387-73.72-130.586-73.72-130.586c-1.052-20.014,5.267-153.751,5.267-153.751
+		c-61.081-27.388-73.72-130.586-73.72-130.586c-1.052-20.015,5.267-153.751,5.267-153.751
 		c4.915-23.522,67.401-314.881,67.401-314.881c12.635-31.595,121.105-69.508,121.105-69.508v-5.267
 		c7.373-1.051,12.637-6.318,12.637-6.318l1.055-4.212l-3.161-6.318l8.424-12.636l2.175-18.333l100.025,15.161L330.794,47.392z
 		 M163.352,163.23c0,0-30.543-35.806-51.604,10.534c0,0-23.17,112.683-9.479,171.655c0,0,5.267,15.797,15.798,7.373l11.584-4.212
@@ -20,10 +20,13 @@
 <rect x="56.69" y="386.761" fill="none" width="434.001" height="82"/>
 <g>
 	<g>
-		<rect x="3.781" y="420.261" fill="none" width="532.598" height="75"/>
-		<text transform="matrix(1 0 0 1 28.9546 472.748)" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72">Sizing Up Water</text>
+		<rect x="-4" y="402.748" fill="none" width="532.597" height="75"/>
+		<text transform="matrix(1 0 0 1 22.1226 462.2354)" enable-background="new    "><tspan x="0" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-1">Sizin</tspan><tspan x="142.846" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72">g</tspan><tspan x="182.661" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-2"> </tspan><tspan x="197.853" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-1">U</tspan><tspan x="244.436" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-2">p</tspan><tspan x="281.371" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72"> W</tspan><tspan x="362.443" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-1">a</tspan><tspan x="399.307" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-2">t</tspan><tspan x="421.482" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72" letter-spacing="-1">e</tspan><tspan x="458.777" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="72">r</tspan></text>
 	</g>
 </g>
 <rect x="28.955" y="519.761" fill="none" width="488.734" height="172"/>
-<text transform="matrix(1 0 0 1 28.9546 539.4434)"><tspan x="0" y="0" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">The U.S. uses 410 billion gallons a day. To </tspan><tspan x="0" y="32.4" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">put that in perspective, start small, go </tspan><tspan x="0" y="64.8" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">big. Drag the slider to begin with one </tspan><tspan x="0" y="97.2" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">gallon and watch it multiply from there.</tspan></text>
+<text transform="matrix(1 0 0 1 28.9546 519.4434)" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">The U.S. uses 410 billion gallons a day. To </text>
+<text transform="matrix(1 0 0 1 28.9546 551.8438)" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">put that in perspective, start small, go </text>
+<text transform="matrix(1 0 0 1 28.9546 584.2432)" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">big. Drag the slider to begin with one </text>
+<text transform="matrix(1 0 0 1 28.9546 616.6436)" fill="#FFFFFF" font-family="'Interstate-ExtraLight'" font-size="27">gallon and watch it multiply from there.</text>
 </svg>

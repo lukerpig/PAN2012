@@ -4,18 +4,22 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="536.378px" height="780.521px" viewBox="0 0 536.378 780.521" enable-background="new 0 0 536.378 780.521"
 	 xml:space="preserve">
-<rect x="163.537" y="201.337" fill-rule="evenodd" clip-rule="evenodd" fill="none" width="335.21" height="91.324"/>
-<text transform="matrix(1 0 0 1 209.8838 288.8154)" font-family="'Interstate-Bold'" font-size="120">300</text>
-<rect x="-19.884" y="404.235" fill="none" width="587.72" height="62.157"/>
-<text transform="matrix(1 0 0 1 83.7939 425.5352)"><tspan x="0" y="0" font-family="'MyriadPro-Regular'" font-size="30">amount needed to produce all </tspan><tspan x="-22.26" y="36" font-family="'MyriadPro-Regular'" font-size="30">American newspapers for one day</tspan></text>
-<rect x="189.037" y="313.761" fill="none" width="284.211" height="50.877"/>
-<text transform="matrix(1 0 0 1 252.4434 350.2104)" font-family="'Interstate-Bold'" font-size="50">million</text>
+<rect x="163.537" y="201.337" fill="none" width="335.21" height="91.324"/>
+<text transform="matrix(1 0 0 1 209.8838 288.8154)" fill="#19152B" font-family="'Interstate-Bold'" font-size="120">300</text>
+<rect x="-19.884" y="404.235" fill="none" width="587.719" height="62.156"/>
+<text transform="matrix(1 0 0 1 83.7939 425.5352)" fill="#19152B" font-family="'MyriadPro-Regular'" font-size="30">amount needed to produce all </text>
+<text transform="matrix(1 0 0 1 61.5337 461.5352)" fill="#19152B" font-family="'MyriadPro-Regular'" font-size="30">American newspapers for one day</text>
+<rect x="189.037" y="313.761" fill="none" width="284.21" height="50.877"/>
+<text transform="matrix(1 0 0 1 252.4434 350.21)" fill="#19152B" font-family="'Interstate-Bold'" font-size="50">million</text>
 <g>
-	<polygon fill="#19162B" stroke="#19162B" stroke-miterlimit="10" points="409.36,688.708 273.975,688.708 138.591,688.708 
-		138.591,511.212 409.36,511.212 	"/>
+	<polygon fill="#19162B" stroke="#19162B" stroke-miterlimit="10" points="409.361,688.708 273.975,688.708 138.591,688.708 
+		138.591,511.212 409.361,511.212 	"/>
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="273.975" y1="511.212" x2="273.975" y2="688.708"/>
 	<rect x="162.258" y="523.044" fill="none" width="83.527" height="23.666"/>
-	<text transform="matrix(1 0 0 1 162.2568 544.3574)"><tspan x="0" y="0" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">N</tspan><tspan x="20.873" y="0" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">E</tspan><tspan x="38.853" y="0" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">W</tspan><tspan x="64.082" y="0" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">S</tspan></text>
+	<text transform="matrix(1 0 0 1 162.2568 544.3574)" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">N</text>
+	<text transform="matrix(1 0 0 1 183.1299 544.3574)" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">E</text>
+	<text transform="matrix(1 0 0 1 201.1099 544.3574)" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">W</text>
+	<text transform="matrix(1 0 0 1 226.3389 544.3574)" fill="#12BCC3" font-family="'Interstate-Regular'" font-size="29.2347">S</text>
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="155.295" y1="561.33" x2="250.658" y2="561.33"/>
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="156.34" y1="577.337" x2="251.7" y2="577.337"/>
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="156.34" y1="594.046" x2="251.7" y2="594.046"/>
@@ -24,13 +28,13 @@
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="156.34" y1="646.249" x2="251.7" y2="646.249"/>
 	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="156.34" y1="662.953" x2="251.7" y2="662.953"/>
 	<rect x="291.726" y="527.223" fill="none" stroke="#12BCC3" stroke-miterlimit="10" width="48.723" height="50.114"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.065" y1="534.877" x2="392.653" y2="534.877"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.065" y1="552.279" x2="392.653" y2="552.279"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.065" y1="570.381" x2="392.653" y2="570.381"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="594.046" x2="390.913" y2="594.046"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="612.142" x2="390.913" y2="612.142"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="629.544" x2="390.913" y2="629.544"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="646.249" x2="390.913" y2="646.249"/>
-	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="662.953" x2="390.913" y2="662.953"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.066" y1="534.877" x2="392.654" y2="534.877"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.066" y1="552.279" x2="392.654" y2="552.279"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="355.066" y1="570.381" x2="392.654" y2="570.381"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="594.046" x2="390.914" y2="594.046"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="612.142" x2="390.914" y2="612.142"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="629.544" x2="390.914" y2="629.544"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="646.249" x2="390.914" y2="646.249"/>
+	<line fill="none" stroke="#12BCC3" stroke-miterlimit="10" x1="295.553" y1="662.953" x2="390.914" y2="662.953"/>
 </g>
 </svg>
