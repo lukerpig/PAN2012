@@ -444,7 +444,7 @@
 
 				this.showStory = function(story, delay, duration){
 					duration = (typeof(duration)=="undefined")?1000:duration
-					window.location.hash=(story.level>=2)?story.name:"";
+					window.location.hash=(story.level>=2)story.name:"_";
 					this.onShow(story);
 					var vidWidth = this.vidWidth;
 					var selectedStory = d3.select("#"+story.id+"-reveal")
@@ -484,7 +484,7 @@
 				}
 				
 				this.deactivateStory = function(){
-					window.location.hash="";
+					window.location.hash="_";
 					if(this.hideDimmer) this.hideDimmer();
 					var oldStory = this.activeStory;
 					if(!oldStory) return;
@@ -1004,7 +1004,7 @@
 			<div id="vidmark" style="margin-top: 26px;">
 				<div id="vid" style="position: relative; overflow: hidden;">
 					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-					<iframe id="conceptVideo" src="http://player.vimeo.com/video/46397237?api=1&amp;player_id=conceptVideo" frameborder="0" style="display: block; width: 100%;"></iframe>
+					<iframe id="conceptVideo" src="http://player.vimeo.com/video/46397237?api=1&amp;player_id=conceptVideo" width="1280" height="720" frameborder="0" style="display: block; width: 100%;"></iframe>
 					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
 						<tr>
 							<td id="isitsafetodrinkTd" style="background-image:url(mosaic/isitsafetodrink.jpg); background-size: 100% 100%;" class="mosTd"></td>
@@ -1048,7 +1048,7 @@
 				</tr>
 				<tr>
 					<td style="width: 2%;"></td>
-					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"><img src="2bubble.png" style="opacity: 0; filter: alpha(opacity = 0);"></div></td>
+					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"></div></td>
 					<td style="width: 2%;"></td>
 				</tr>
 			</table>
