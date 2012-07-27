@@ -176,7 +176,7 @@ var contentData = [
 	{
 		id : "backfall",
 		captionTitle: "Austin, TX",
-		captionContent: "The spring-fed swimming pool is home to the Barton Springs salamander, an animal that lives only in Barton Springs. It was listed as an endangered species in 1997.",
+		captionContent: "This spring-fed swimming pool is home to the Barton Springs salamander, an animal that lives only in Barton Springs. It was listed as an endangered species in 1997.",
 		level: 1,
 		cuePoint: 51.04,
 	},
