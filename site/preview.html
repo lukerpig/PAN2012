@@ -509,62 +509,60 @@
 			function VideoHandler(playerId) {
 				var that = this;
 				this.duration = 400;			
-				
-				fVideo = document.getElementById(playerId);
-				
-                $f(fVideo).addEvent('ready', ready);
-				
-                function ready(player_id) {
+			
+				this.setUpVid = function (playerId){				
+					fVideo = document.getElementById(playerId);
 					
-					console.log("ready called");
-					that.froogaloop = $f(player_id);
-
-
-					function tick(videoTime, videoPercent) {
-						console.log(videoTime + " " + videoPercent+"%")
-						that.videoTime = parseFloat(videoTime);
-						that.videoPercent = parseFloat(videoPercent);
-					    if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
-				    }
-
-                    // Keep a reference to Froogaloop for this player
-					function getVidTime(){
-						that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
-					}
-
-					that.froogaloop.addEvent('play', function(data) {
-						that.timeInt=setInterval(function(){getVidTime()},1000/24);
-						console.log("play");
-						if (that.onPlay) { that.onPlay(); }
-					});
+					$f(fVideo).addEvent('ready', ready);
 					
-					that.froogaloop.addEvent('playProgress', function(data) {
-					});
-					
-					that.froogaloop.addEvent('pause', function(data) {
-						console.log("pause");
-
-						if (that.timeInt) {
-							window.clearInterval(that.timeInt);
-							that.timeInt = null;
+					function ready(player_id) {
+						
+						that.froogaloop = $f(player_id);
+	
+						function tick(videoTime, videoPercent) {
+							that.videoTime = parseFloat(videoTime);
+							that.videoPercent = parseFloat(videoPercent);
+							if (that.onTick) { that.onTick(that.videoTime, that.videoPercent); }
 						}
-						if ( (that.videoTime < (that.duration-1)) && that.onPause) { that.onPause(); }
-					});
-					
-					that.froogaloop.addEvent('seek', function(data) { 
-						tick(data.seconds, data.percent);
-					});
-					
-					that.froogaloop.addEvent('finish', function(data) {
-						if (that.onFinish) { that.onFinish(); }
-					});
-					
-					that.froogaloop.api('getDuration', function (value, player_id) {
-						that.duration = parseFloat(value);
-						if(that.onDuration) {that.onDuration(that.duration); }
-					});
-					
-                }
+	
+						// Keep a reference to Froogaloop for this player
+						function getVidTime(){
+							that.froogaloop.api('getCurrentTime', function(value, player_id) {tick(value,(value/that.duration)); });
+						}
+	
+						that.froogaloop.addEvent('play', function(data) {
+							that.timeInt=setInterval(function(){getVidTime()},1000/24);
+							if (that.onPlay) { that.onPlay(); }
+						});
+						
+						that.froogaloop.addEvent('playProgress', function(data) {
+						});
+						
+						that.froogaloop.addEvent('pause', function(data) {
+	
+							if (that.timeInt) {
+								window.clearInterval(that.timeInt);
+								that.timeInt = null;
+							}
+							if ( (that.videoTime < (that.duration-1)) && that.onPause) { that.onPause(); }
+						});
+						
+						that.froogaloop.addEvent('seek', function(data) { 
+							tick(data.seconds, data.percent);
+						});
+						
+						that.froogaloop.addEvent('finish', function(data) {
+							if (that.onFinish) { that.onFinish(); }
+						});
+						
+						that.froogaloop.api('getDuration', function (value, player_id) {
+							that.duration = parseFloat(value);
+							if(that.onDuration) {that.onDuration(that.duration); }
+						});
+						
+					}
+				}
+				this.setUpVid(playerId);
 				
 				this.play = function() {
 					if (this.froogaloop) { this.froogaloop.api("play"); }
@@ -575,7 +573,6 @@
 				}
 				
 				this.seekToPercent = function(perCent) {
-					console.log("seeking to " + perCent + " of " + this.duration);
 					if (this.froogaloop) {  this.froogaloop.api('seekTo', perCent*this.duration); }
 				}
 				
@@ -731,7 +728,6 @@
 				video.onTick = function(timestamp, videoPercent) {
 					progress.setPercent(videoPercent*100);
 					if (!currentStory || !currentStory.containsTime(timestamp)) {
-						console.log("change" + timestamp)
 						currentStory = content.currentContent(timestamp);
 						storyMarker.repaint();
 					}
@@ -867,7 +863,7 @@
 					}
 					displayMosaic();
 					progress.progressIndicator.style("width","0%")
-					//sizeVid();
+					video.setUpVid("conceptVideo")
 				}
 				
 				mosaicButton.onClick = function(isMosaicShowing){
