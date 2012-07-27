@@ -11,12 +11,17 @@
 			
 			.bold{font-family: Interstate-Bold, Verdana, sans-serif;}
 			
+			a {color: #6ABCC3; text-decoration: none;}
+			a:hover {text-decoration: underline;}
+			
             body {margin: 20px 0px 0px 0px; padding: 0;}
 			
-			.credit-source{ color: 6ABCC3; cursor: pointer; width: 70%; margin: 0px auto; background-color: #fff; padding: 4%; font-family: Interstate-Light, verdana, sans-serif;}
+			.creditsource {color: #6ABCC3; cursor: pointer; font-family: Interstate-Light, verdana, sans-serif;}
+			
+			.csDimmerText {width: 70%; margin: 0px auto; background-color: #fff; padding: 4%;}
 			.csDimmerText a{ word-break: break-all }
 
-
+			.closebtn {max-width: 2%; position: absolute; top: 1.5%; right: 1.5%; .cursor: pointer;}
 
             iframe {display:block; border:0;}
 			
@@ -293,8 +298,12 @@
 							d3.select(".csDimmerText").remove()
 						})
 						
-					this.storyDivs.append("img")
-						.call(styleX)
+					this.storyDivs.append("img")//ADDS X BUTTON
+						.attr("src","graphics/x.png")
+						.attr("class","closebtn")
+						.on("click",function(d){
+							that.deactivateStory()
+						})
 					
 					var creditSource = this.storyDivs.append("div")
 					creditSource
@@ -402,21 +411,6 @@
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
 							.style("display","none")
-					}
-					
-					function styleX(){
-						this
-							.attr("src","graphics/x.png")
-							.attr("class","closebtn")
-							.style("max-width","2%")
-							.style("position","absolute")
-							.style("top","1.5%")
-							.style("right","1.5%")
-							.style("cursor","pointer")
-							.on("click",function(d){
-								that.deactivateStory()
-							})
-							.html("X")
 					}
 					
 				}
@@ -1043,11 +1037,11 @@
 			<div id="bot-links" style="position: relative; margin: 0px; color: white; font-family: Interstate-Light, verdana, sans-serif; font-size: 15px;">
 				<div id="bot-left">
 					<div id="bleft" style="float: left; text-align: bottom;">
-						<a id="howview">HOW TO VIEW</a>
+						<span id="howview">HOW TO VIEW</span>
 					</div>
 					<div id="bright" style="float: right;">
-						<a id="why100" style="bottom: 0px;">WHY 100 GALLONS?</a>
-						<a id="aboutLink" style="bottom: 0px; margin: 0px 15px;">ABOUT</a>
+						<span id="why100" style="bottom: 0px;">WHY 100 GALLONS?</span>
+						<span id="aboutLink" style="bottom: 0px; margin: 0px 15px;">ABOUT</span>
 					</div>
 				</div>
 				<div class="clear"></div>
