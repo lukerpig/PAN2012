@@ -77,14 +77,7 @@
 			    for(var key in contentData) {
 				    this[key] = contentData[key];
 				}
-				
-				this.getVidFrameWidth = function(vidWidth) {
-					if(this.level == 2)	return .70*vidWidth;
-					if(this.level == 3)	return .85*vidWidth;
-
-					return this.level * .25 * vidWidth;
-				}
-				
+								
 				this.containsTime = function(timeInNillis) {
 					return this.cuePointMillis() <= timeInNillis && timeInNillis < this.nextCuePointMillis();
 				}
@@ -116,7 +109,6 @@
 				this.inheritFrom = ContentItem;
 				this.inheritFrom(captionData);
 			}
-
 
 			function Story(storyData) {
 				this.inheritFrom = ContentItem;
@@ -163,16 +155,7 @@
 					this.all[i-1].nextCuePoint = this.all[i].cuePoint;
 				}
 				
-				this.all[this.all.length-1].nextCuePoint = Number.MAX_VALUE;
-				
-				this.getTotalMarkerSlots = function() {
-					var markerSlots = 0;
-					for(var i in this.stories) {
-						markerSlots += this.stories[i].getMarkerSlots();
-					}
-					return markerSlots;
-				}
-				
+				this.all[this.all.length-1].nextCuePoint = Number.MAX_VALUE;			
 				
 				this.currentContent = function(videoTime){
 		
@@ -204,11 +187,6 @@
 				this.parentElement = parentElement;
 				this.duration = 143;
 
-				this.marginSize = 1;
-				this.marginCount = this.content.stories.length -1;
-				this.markerSpace = 100 - (this.marginCount*this.marginSize);
-				this.markerSize = this.markerSpace/this.content.getTotalMarkerSlots();
-
 				function markerChooser(d, i) {
 					if (that.markerSelector) {
 						return that.markerSelector(d,i);
@@ -216,8 +194,6 @@
 						return "1bubble.png";
 					}
 				}
-				
-				
 				
 			    this.create = function() {
 					this.markers = this.parentElement.selectAll("div").data(content.storiesWithMarkers,function(d){return d.id});
