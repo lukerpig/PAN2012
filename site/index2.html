@@ -462,12 +462,12 @@
 				this.hideStory = function(story,isDeactivating){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
-					var hidenStory = d3.select("#"+story.id+"-reveal")
-					hidenStory.select("iframe").attr("src","about:blank")
-					hidenStory.transition().duration(750)
+					var hiddenStory = d3.select("#"+story.id+"-reveal")
+					hiddenStory.transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
-						d3.select("#"+story.id+"-reveal").style("display",function(d){
+						hiddenStory.select("iframe").attr("src","about:blank")
+						hiddenStory.style("display",function(d){
 								if(d.name=="sizingupwater"){
 									return "block"
 								} else {
