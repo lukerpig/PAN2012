@@ -282,7 +282,7 @@
 						.style("margin", that.margin+"% 0%" + that.margin+"%" + that.margin+"%")
 						.style("width","96%")
 						.style("height","88%")
-						.attr("src",function(d,i){return d.url})
+						.attr("src","about:blank")
 					this.storyDivs.append("div")
 						.attr("class","csDimmer")
 						.attr("id",function(d,i){ return d.name+"-dim"})
@@ -413,13 +413,7 @@
 							.style("z-index","10")
 							.style("left",that.margin+"%")
 							.style("width",(100-(that.margin*2))+"%")
-							.style("display",function(d){
-								if(d.name=="sizingupwater"){
-									return "block"
-								} else {
-									return "none"
-								}
-							})
+							.style("display","none")
 					}
 					
 				}
@@ -456,7 +450,9 @@
 					this.onShow(story);
 					var vidWidth = this.vidWidth;
 					var selectedStory = d3.select("#"+story.id+"-reveal")
-					selectedStory.style("display","block")
+					selectedStory.select("iframe").attr("src",story.url)
+					selectedStory
+						.style("display","block")
 						.transition()
 							.duration(duration)
 							.delay(delay)
@@ -466,7 +462,9 @@
 				this.hideStory = function(story,isDeactivating){
 					this.onHide(story);
 					var vidWidth = this.vidWidth;
-					d3.select("#"+story.id+"-reveal").transition().duration(750)
+					var hidenStory = d3.select("#"+story.id+"-reveal")
+					hidenStory.select("iframe").attr("src","about:blank")
+					hidenStory.transition().duration(750)
 					.style("top", storyTop)
 					.each("end", function(d){
 						d3.select("#"+story.id+"-reveal").style("display",function(d){
@@ -509,13 +507,7 @@
 				var oldStory;
 				this.swapVis = function(currentStory){
 					d3.select("#"+currentStory.id).style("display","block")
-					if(oldStory) d3.select("#"+this.oldStory.id).style("display",function(d){
-								if(d.name=="sizingupwater"){
-									return "block"
-								} else {
-									return "none"
-								}
-							})
+					if(oldStory) d3.select("#"+this.oldStory.id).style("display","none")
 					this.oldStory=currentStory;
 				}
 				
@@ -709,7 +701,7 @@
 				var videoContainer=d3.select("#vid");
 				var videoOffset = document.getElementById("conceptVideo");
 				var vidContainerOffset = document.getElementById("vid");
-				var mosaicTable = d3.select("#mosaic");
+				var mosaicTable = d3.select("#mosaicTable");
 				var moslink = d3.select("#moslink");
 				var markersDiv=d3.select("#storyMarker");
 				var vidDiv = d3.select("#vid")
@@ -815,7 +807,9 @@
 					if(activeBlock=="video"){
 						window.setTimeout(function(){
 							video.play()
-						},300);
+						},300)
+					} else if (activeBlock=="mosaic"){
+						window.location.hash="mosaic"	
 					}
 				}
 				
@@ -898,6 +892,7 @@
 								mosaicTable.style("display","table")
 								moslink.attr("src","graphics/mos-linka.png")
 							} else if (activeBlock=="mosaic"){
+								d3.select("#credit-source").style("display","")
 								activeBlock = "video";
 								mosaicButton.turnOff();
 								videoFrame.style("display","block")
@@ -934,28 +929,27 @@
 				
 				sizeVid(videoOffset.offsetWidth, vidContainerOffset.offsetWidth);
 				function sizeVid(vidSize, vidContainerSize){
-					container.style("width","80%")
 					videoFrame
 						.style("height", vidSize*9/16+"px")
 					var vidBot = videoOffset.getBoundingClientRect().bottom;
 					var vidH = Math.round(vidContainerSize*9/16);
 					var vidFromBottom = wh-vidBot;
 					if(wh-vidBot < 60){
+						container.style("width","80%")
 						console.log("WRONGSIZE")
 						var dif = 60-vidFromBottom;
 						var newHeight = Math.abs(vidH-dif);
 						videoFrame.style("height", newHeight+"px")
 						container.style("width", newHeight*16/9+"px")
+						vidSize = newHeight;
 					} else {
+						container.style("width","80%")
 						console.log("RIGHTSIZE")
-						videoFrame
-							.style("height", vidSize*9/16+"px")
-						container.style("width", function(){
-								return videoOffset.offsetWidth+"px"	
-						})
+						videoFrame.style("height", vidContainerSize*9/16+"px")
+						container.style("width", "80%")
 					}
 					mosaicTable
-						.style("height", vidSize*9/16+"px");
+						.style("height", vidContainerSize*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
 					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
@@ -1050,7 +1044,7 @@
 				<div id="vid" style="position: relative; overflow: hidden;">
 					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
 					<iframe id="conceptVideo" src="http://player.vimeo.com/video/46397237?api=1&amp;player_id=conceptVideo" width="1280px" height="720px" frameborder="0" style="display: block; width: 100%;"></iframe>
-					<table id="mosaic" style="display: none; width: 100%; height: 50px;">
+					<table id="mosaicTable" style="display: none; width: 100%; height: 50px;">
 						<tr>
 							<td id="isitsafetodrinkTd" style="background-image:url(mosaic/isitsafetodrink.jpg); background-size: 100% 100%;" class="mosTd"></td>
 							<td id="whatdoes100gallonscostTd" style="background-image:url(mosaic/whatdoes100gallonscost.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
@@ -1089,7 +1083,7 @@
 				<tr>
 					<td style="width: 2%;"><img src="playbtn.png" id="playBtn"/></td>
 					<td><div id="progressBar" style="overflow: hidden; border: 1px solid #fff; height: 6px;"><div id="progressIndicator" style="width:0%; background-color: #ffffff; height:6px;"></div></td>
-					<td id="mosaic" style="width: 2%;"><img src="moslink.png" id="mosLink"/></td>
+					<td id="mosaicBtn" style="width: 2%;"><img src="moslink.png" id="mosLink"/></td>
 				</tr>
 				<tr>
 					<td style="width: 2%;"></td>
