@@ -324,7 +324,6 @@
 						.style("max-width",svgOpt.maxW+"px")
 						
 			var svgElem = document.getElementById("svg-box");
-			console.log (svg.style("width") +" " + svgElem.offsetWidth);
 			g= svg.append("g").attr("class","zoomer").attr("transform","translate("+marginLeft+")");
 			progressSvg(0);
 			var svgContain = d3.select("#svgContain").style("max-width",svgOpt.maxW+"px");
@@ -341,7 +340,6 @@
 			function svgHeight(){
 				svgW = document.getElementById("svgContain").offsetWidth;
 				svgH = svgW*ratH/ratW;
-				console.log(svgW + " Wid");
 				svg.style("height",svgH+"px");
                                 
 			}
@@ -371,7 +369,6 @@
 		function progressSvg(direction) {
 			var oldScale = scale;
 			if(!(activeSvg == 0 && direction < 0) && !(activeSvg==data.length-1 && direction > 0)) activeSvg += direction;
-			console.log("oldScale: "+oldScale+" activeSVG: " + activeSvg + " direction " + direction);
 			setScale(desHeight/data[activeSvg].h());
 			var activeX = data[activeSvg].x*scale;
 			if(direction == 0){
@@ -396,6 +393,6 @@
 <div id="my-slider" class="dragdealer">
 	<div class="red-bar handle" style="font-family: Interstate-ExtraLight, verdana, sans-serif;">Drag</div>
 </div>
-
+http://localhost:8888/site/story/sizingupwater.html
 </body>
 </html>
