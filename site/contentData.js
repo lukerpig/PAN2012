@@ -490,7 +490,7 @@ var contentData = [
 	{
 		id : "howtoview",
 		captionTitle: "How to View",
-		captionContent: "Pause at any time during the centerpiece video to explore each moment.<br/> The white bubbles beneath the progress bar indicate our more in-depth stories. <br/>If you miss something, don't worry &mdash; all content is featured at the end.",
+		captionContent: "Enjoy the main video to the end or pause at any time to explore each moment.<br/> The white bubbles beneath the progress bar indicate our more in-depth stories. <br/>If you choice to watch the video all the way through, don't worry - all content will be revealed at the end.",
 		level: 1,
 		cuePoint: -1,
 	},

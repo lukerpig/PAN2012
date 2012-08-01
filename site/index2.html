@@ -37,13 +37,14 @@
 					url("../fonts/Interstate-Lightitalic.ttf");
 			}
 			
+            body {margin: 20px 0px 0px 0px; padding: 0;}
+			
 			.bold{font-family: Interstate-Bold, Verdana, sans-serif;}
 			
 			a {color: #6ABCC3; text-decoration: none;}
 			a:hover {text-decoration: underline;}
 			
-            body {margin: 20px 0px 0px 0px; padding: 0;}
-			
+	
 			.markerbubble { position: absolute; cursor: pointer}
 			
 			.creditsource {color: #6ABCC3; cursor: pointer; font-family: Interstate-Light, verdana, sans-serif;}
@@ -191,7 +192,7 @@
 					if (that.markerSelector) {
 						return that.markerSelector(d,i);
 					} else {
-						return "1bubble.png";
+						return "bubble.png";
 					}
 				}
 				
@@ -203,6 +204,7 @@
 						.attr("src",markerChooser)
 						.attr("class","markerbubble")
 						.attr("id",function(d,i){return d.id+"-marker"})
+						.attr("height","9px")
 						.style("left",function(d){
 							return (d.cuePointMillis()/that.duration)*100+"%";
 						})
@@ -934,25 +936,27 @@
 					var vidBot = videoOffset.getBoundingClientRect().bottom;
 					var vidH = Math.round(vidContainerSize*9/16);
 					var vidFromBottom = wh-vidBot;
+					var newHeight = vidSize*9/16;
 					if(wh-vidBot < 60){
-						container.style("width","80%")
 						console.log("WRONGSIZE")
 						var dif = 60-vidFromBottom;
-						var newHeight = Math.abs(vidH-dif);
+						newHeight = Math.abs(vidH-dif);
 						videoFrame.style("height", newHeight+"px")
 						container.style("width", newHeight*16/9+"px")
-						vidSize = newHeight;
 					} else {
-						container.style("width","80%")
 						console.log("RIGHTSIZE")
+						console.log(vidContainerSize)
+						console.log(vidContainerSize*9)
+						console.log(vidContainerSize*9/16)
 						videoFrame.style("height", vidContainerSize*9/16+"px")
+						videoFrame.style("width", "vidContainerSize")
 						container.style("width", "80%")
 					}
 					mosaicTable
 						.style("height", vidContainerSize*9/16+"px");
 					vidWidth = videoOffset.offsetWidth;
 					vidHeight = videoOffset.offsetHeight;
-					reveal.setSize(videoOffset.offsetWidth, videoOffset.offsetHeight);
+					reveal.setSize(vidContainerOffset.offsetWidth, vidContainerOffset.offsetHeight);
 				}
 				
 			d3.select("#howview").style("cursor","pointer").on("click",function(){
@@ -1044,7 +1048,7 @@
 				<div id="vid" style="position: relative; overflow: hidden;">
 					<div id="dimmerDiv" style="display: none; z-index: 5; opacity:0; background-color: #000; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
 					<iframe id="conceptVideo" src="http://player.vimeo.com/video/46397237?api=1&amp;player_id=conceptVideo" width="1280px" height="720px" frameborder="0" style="display: block; width: 100%;"></iframe>
-					<table id="mosaicTable" style="display: none; width: 100%; height: 50px;">
+					<table id="mosaicTable" style="display: none; width: 100%; height: 53px;">
 						<tr>
 							<td id="isitsafetodrinkTd" style="background-image:url(mosaic/isitsafetodrink.jpg); background-size: 100% 100%;" class="mosTd"></td>
 							<td id="whatdoes100gallonscostTd" style="background-image:url(mosaic/whatdoes100gallonscost.jpg); background-size: 100% 100%;" class="mosTd" rowspan="2"></td>
@@ -1087,7 +1091,7 @@
 				</tr>
 				<tr>
 					<td style="width: 2%;"></td>
-					<td><div id="storyMarker" style="position: relative; margin: -9px 0px;"></div></td>
+					<td><div id="storyMarker" style="position: relative; margin: -7px 0px;"></div></td>
 					<td style="width: 2%;"></td>
 				</tr>
 			</table>
@@ -1107,10 +1111,10 @@
 			<div class="clear"></div>
 			<div id="footer" style="text-align: center;">
 				<div>
-					<img src="graphics/100galbot.png"/>
-					<img src="graphics/uncjomc.png" style="margin-left: 10px; vertical-align: 10px;"/>
-					<img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/>
-					<img src="graphics/carnegie.png" style="margin-left: 10px; vertical-align: 10px;"/>
+					<a href="http://www.100gallons.org"><img src="graphics/100galbot.png"/></a>
+					<a href="http://jomc.unc.edu/"><img src="graphics/uncjomc.png" style="margin-left: 10px; vertical-align: 10px;"/></a>
+					<a href="http://www.knightfoundation.org/"><img src="graphics/knight.png" style="margin-left: 10px; vertical-align: 10px;"/></a>
+					<a href="http://carnegie.org/"><img src="graphics/carnegie.png" style="margin-left: 10px; vertical-align: 10px;"/></a>
 				</div>
 				<div>
 					<p style="vertical-align: 13px; display: inline; margin-top: -113px; font-family: Interstate-Light, verdana, sans-serif; font-size: 12px; color: #edf6f7;">Copyright &copy; 2012 Powering A Nation</p>
